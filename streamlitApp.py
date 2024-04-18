@@ -140,16 +140,21 @@ def parsePlaceActionResponse(apiResponse, id, filterOption, typeFilter, filterDa
         temp3 = df['uri'].tolist()
         temp4 = df['createTime'].tolist()
         temp5 = df['updateTime'].tolist()
-        df = pd.DataFrame(list(zip(temp1, temp2, temp3, temp4, temp5)), columns = ['name', 'placeActionType', 'uri', 'createTime', 'updateTime'])
+        temp6 = df['providerType'].tolist()
+        df = pd.DataFrame(list(zip(temp1, temp2, temp3, temp4, temp5, temp6)), columns = ['name', 'placeActionType', 'uri', 'createTime', 'updateTime', 'providerType'])
         df['createTime'] = df['createTime'].astype(str)
         df['createTime'] = pd.to_datetime(df['createTime'])
         if filterOption == 'placeActionType':
-            filtered_df = df[df[filterOption] == typeFilter]
+            if typeFilter == 'All':
+                filtered_df = df[df['providerType'] == 'MERCHANT']
+            else:
+                filtered_df = df[df[filterOption] == typeFilter]
         elif filterOption == 'uri':
             filtered_df = filterByKeyText(df, filterData, 'uri')
         elif filterOption == 'createTime':
             filterData = pd.to_datetime(filterData).date()
             filtered_df = filterByDate(df, myRange, 'createTime', filterData)
+            
         retList = []
         for i in range(len(filtered_df)):
             locName = 'locations/' + str(id) + '/placeActionLinks/'
