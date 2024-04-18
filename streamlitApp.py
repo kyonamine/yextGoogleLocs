@@ -179,9 +179,8 @@ def deleteLink(locationId, placeActionIdList, heads):
     return df
 
 def filterByDate(df, option, columnName, filterData):
-    
     filterData = pd.to_datetime(filterData).date()
-    print('Using ' + str(filterData))
+    # print('Using ' + str(filterData))
     if option == 'Before':
         filtered_df = df[df[columnName].dt.date < filterData]
     elif option == 'On or Before':
@@ -193,10 +192,10 @@ def filterByDate(df, option, columnName, filterData):
     return filtered_df
 
 def writeLogs(name, dfLog):
-    os.write(1,  f"writing logs\n".encode())
+    # os.write(1,  f"writing logs\n".encode())
     # logCsv = dfLog.to_csv(name, index = False)
     logCsv = dfLog.to_csv(index = False)
-    os.write(1,  f"{logCsv}\n".encode())
+    # os.write(1,  f"{logCsv}\n".encode())
     return logCsv
 
 def progress():
@@ -288,6 +287,6 @@ if __name__ == "__main__":
             logCsv = writeLogs(fileName, dfLog)
 
             # st.text('Complete! Check your computer for a file called ' + fileName)
-            # st.download_button("Press to Download", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
+            st.download_button("Press to Download", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
 
         # streamlit_analytics.stop_tracking()
