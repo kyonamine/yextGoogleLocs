@@ -192,8 +192,8 @@ def filterByDate(df, option, columnName, filterData):
         filtered_df = df[df[columnName].dt.date >= filterData]
     return filtered_df
 
-def writeLogs(name):
-    logCsv = dfLog.to_csv(name, index = False).encode("utf-8")
+def writeLogs(name, dfLog):
+    logCsv = dfLog.to_csv(name, index = False).encode('utf-8')
     return logCsv
 
 def progress():
@@ -279,7 +279,7 @@ if __name__ == "__main__":
                     # locationLog = 
                     
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput'
-            logCsv = writeLogs(fileName)
+            logCsv = writeLogs(fileName, dfLog)
 
             # st.text('Complete! Check your computer for a file called ' + fileName)
             st.download_button("Press to Download", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
