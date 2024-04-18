@@ -257,7 +257,7 @@ if __name__ == "__main__":
             form_submitted = st.form_submit_button("Update Locations")
  
         if form_submitted:
-            os.write(field)
+            os.write(1,  f"{field}\n".encode())
             listYextIds, listGoogleIds = parseFile(frame)
             dfLog = pd.DataFrame()
 
