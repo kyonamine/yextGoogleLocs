@@ -154,7 +154,7 @@ def parsePlaceActionResponse(apiResponse, id, filterOption, typeFilter, filterDa
         elif filterOption == 'createTime':
             filterData = pd.to_datetime(filterData).date()
             filtered_df = filterByDate(df, myRange, 'createTime', filterData)
-            
+
         retList = []
         for i in range(len(filtered_df)):
             locName = 'locations/' + str(id) + '/placeActionLinks/'
@@ -207,6 +207,7 @@ def progress():
     return
 
 if __name__ == "__main__":
+    print('Launching')
     st.set_page_config(
         page_title = "Google Location Updates"
     )
