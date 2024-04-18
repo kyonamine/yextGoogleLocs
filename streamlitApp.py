@@ -203,7 +203,6 @@ def progress():
         my_bar.progress(percent_complete + 1, text=progress_text)
     time.sleep(1)
     my_bar.empty()
-    # st.button("Rerun")
     return
 
 if __name__ == "__main__":
