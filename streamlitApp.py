@@ -193,7 +193,7 @@ def filterByDate(df, option, columnName, filterData):
     return filtered_df
 
 def writeLogs(name):
-    logCsv = dfLog.to_csv(name, index = False).encode('utf-8')
+    logCsv = dfLog.to_csv(name, index = False)
     return logCsv
 
 def progress():
@@ -282,6 +282,6 @@ if __name__ == "__main__":
             logCsv = writeLogs(fileName)
 
             # st.text('Complete! Check your computer for a file called ' + fileName)
-            st.download_button("Press to Download", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
+            st.download_button("Press to Download", logCsv, file_name = fileName, mime='application/octet-stream', key = 'Download Logs')
 
         # streamlit_analytics.stop_tracking()
