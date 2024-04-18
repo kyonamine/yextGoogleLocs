@@ -208,6 +208,10 @@ def progress():
     my_bar.empty()
     return
 
+def downloadButton(csvFile, name, thisKey):
+    st.download_button("Click to Download Logs", csvFile, file_name = name, mime = "text/csv", key = thisKey)
+    return
+
 if __name__ == "__main__":
     # streamlit_analytics.stop_tracking()
 
@@ -279,8 +283,9 @@ if __name__ == "__main__":
             # os.write(1,  f"{dfLog}\n".encode())
             logCsv = writeLogs(fileName, dfLog)
             
-            downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
-            if downloadButton:
+            # downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
+            if st.button('Click to Download Logs'):
+                downloadButton(logCsv, fileName, 'Download Logs')
                 st.toast('Complete! Check your computer for a file called ' + fileName)
 
         # streamlit_analytics.stop_tracking()
