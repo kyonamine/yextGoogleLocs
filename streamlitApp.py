@@ -282,6 +282,6 @@ if __name__ == "__main__":
             logCsv = writeLogs(fileName)
 
             # st.text('Complete! Check your computer for a file called ' + fileName)
-            st.download_button("Press to Download", logCsv, fileName, "text/csv", key = 'Download Logs')
+            st.download_button("Press to Download", logCsv, file_name = fileName, key = 'Download Logs')
 
         # streamlit_analytics.stop_tracking()
