@@ -281,6 +281,7 @@ if __name__ == "__main__":
                     # locationLog = 
                     
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
+            print(dfLog)
             logCsv = writeLogs(fileName, dfLog)
 
             # st.text('Complete! Check your computer for a file called ' + fileName)
