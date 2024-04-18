@@ -269,6 +269,7 @@ if __name__ == "__main__":
                     placeActionsToDel = parsePlaceActionResponse(response, i, filterOption, placeActionTypeFilter, filterData, daterange)
                     # print(placeActionsToDel)
                     locationLog = deleteLink(i, placeActionsToDel, headers)
+                    print(locationLog)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
                     print(dfLog)
                     
