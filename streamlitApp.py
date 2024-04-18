@@ -257,7 +257,6 @@ if __name__ == "__main__":
             form_submitted = st.form_submit_button("Update Locations")
  
         if form_submitted:
-            # os.write(1,  f"{field}\n".encode())
             listYextIds, listGoogleIds = parseFile(frame)
             dfLog = pd.DataFrame()
 
@@ -267,26 +266,21 @@ if __name__ == "__main__":
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, 'placeActionLinks', i, headers)
                     placeActionsToDel = parsePlaceActionResponse(response, i, filterOption, placeActionTypeFilter, filterData, daterange)
-                    # print(placeActionsToDel)
                     locationLog = deleteLink(i, placeActionsToDel, headers)
-                    print(locationLog)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
-                    print(dfLog)
                     
             elif field == 'Social Posts':
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
                     postsToDel = parseLocalPostsResponse(googleAccountNum, response, i, filterOption, filterData, daterange)
-                    # print(filterData)
-                    # print(daterange)
-                    print(postsToDel)    
-                    # locationLog = 
-                    
-            fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
-            os.write(1,  f"{dfLog}\n".encode())
-            logCsv = writeLogs(fileName, dfLog)
+                    print(postsToDel) 
 
-            # st.text('Complete! Check your computer for a file called ' + fileName)
-            st.download_button("Press to Download", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
+            fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
+            # os.write(1,  f"{dfLog}\n".encode())
+            logCsv = writeLogs(fileName, dfLog)
+            
+            downloadButton = st.download_button("Press to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
+            if downloadButton:
+                st.toast('Complete! Check your computer for a file called ' + fileName)
 
         # streamlit_analytics.stop_tracking()
