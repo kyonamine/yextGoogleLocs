@@ -240,7 +240,7 @@ if __name__ == "__main__":
             elif filterOption == 'placeActionType':
                 placeActionTypeFilter = st.radio(
                     "Select place action type",
-                    ('APPOINTMENT', 'DINING_RESERVATION', 'FOOD_TAKEOUT', 'ONLINE_APPOINTMENT', 'SHOP_ONLINE', 'FOOD_ORDERING', 'FOOD_DELIVERY'))
+                    ('All', 'APPOINTMENT', 'DINING_RESERVATION', 'FOOD_TAKEOUT', 'ONLINE_APPOINTMENT', 'SHOP_ONLINE', 'FOOD_ORDERING', 'FOOD_DELIVERY'))
             else: 
                 filterData = st.text_input("Enter filter (this is case sensitive):")
 
