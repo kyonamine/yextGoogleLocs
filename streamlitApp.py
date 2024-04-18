@@ -257,7 +257,7 @@ if __name__ == "__main__":
             form_submitted = st.form_submit_button("Update Locations")
  
         if form_submitted:
-            os.write(1,  f"{field}\n".encode())
+            # os.write(1,  f"{field}\n".encode())
             listYextIds, listGoogleIds = parseFile(frame)
             dfLog = pd.DataFrame()
 
@@ -283,7 +283,7 @@ if __name__ == "__main__":
                     # locationLog = 
                     
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
-            print(dfLog)
+            os.write(1,  f"{dfLog}\n".encode())
             logCsv = writeLogs(fileName, dfLog)
 
             # st.text('Complete! Check your computer for a file called ' + fileName)
