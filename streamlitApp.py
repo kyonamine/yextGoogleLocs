@@ -193,8 +193,8 @@ def filterByDate(df, option, columnName, filterData):
     return filtered_df
 
 def writeLogs(name):
-    dfLog.to_csv(name, index = False)
-    return
+    logCsv = dfLog.to_csv(name, index = False)
+    return logCsv
 
 def progress():
     progress_text = "Operation in progress. Please wait."
@@ -279,8 +279,9 @@ if __name__ == "__main__":
                     # locationLog = 
                     
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput'
-            writeLogs(fileName)
+            logCsv = writeLogs(fileName)
 
-            st.text('Complete! Check your computer for a file called ' + fileName)
+            # st.text('Complete! Check your computer for a file called ' + fileName)
+            st.download_button("Press to Download", logCsv, fileName, "text/csv", key = 'Download Logs')
 
         # streamlit_analytics.stop_tracking()
