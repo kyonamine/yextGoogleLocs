@@ -206,7 +206,6 @@ def progress():
     return
 
 if __name__ == "__main__":
-    print('Launching')
     st.set_page_config(
         page_title = "Google Location Updates"
     )
