@@ -195,7 +195,7 @@ def filterByDate(df, option, columnName, filterData):
 def writeLogs(name, dfLog):
     print('Writing logs')
     logCsv = dfLog.to_csv(name, index = False)
-    print(logCsv)
+    os.write(1,  f"{logCsv}\n".encode())
     return logCsv
 
 def progress():
