@@ -193,7 +193,7 @@ def filterByDate(df, option, columnName, filterData):
     return filtered_df
 
 def writeLogs(name, dfLog):
-    logCsv = dfLog.to_csv(name, index = False).encode('utf-8')
+    logCsv = dfLog.to_csv(name, index = False)
     return logCsv
 
 def progress():
