@@ -278,7 +278,7 @@ if __name__ == "__main__":
                     print(postsToDel)    
                     # locationLog = 
                     
-            fileName = 'Streamlit_' + str(date.today()) + '_LogOutput'
+            fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
             logCsv = writeLogs(fileName, dfLog)
 
             # st.text('Complete! Check your computer for a file called ' + fileName)
