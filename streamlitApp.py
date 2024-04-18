@@ -286,6 +286,6 @@ if __name__ == "__main__":
             # downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
             if st.button('Click to Download Logs'):
                 downloadButton(logCsv, fileName, 'Download Logs')
-                st.toast('Complete! Check your computer for a file called ' + fileName)
+                msg = st.toast('Complete! Check your computer for a file called ' + fileName)
 
         # streamlit_analytics.stop_tracking()
