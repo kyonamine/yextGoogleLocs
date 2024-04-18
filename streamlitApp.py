@@ -283,7 +283,7 @@ if __name__ == "__main__":
             # os.write(1,  f"{dfLog}\n".encode())
             logCsv = writeLogs(fileName, dfLog)
             
-            downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs', on_click = downloadComplete(fileName))
+            downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
             # if downloadButton:
             #     st.text('Complete! Check your computer for a file called ' + fileName)
 
