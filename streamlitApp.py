@@ -74,7 +74,7 @@ def loopThroughIds(accountId, endpoint, id, headers):
 
 def localPostGetCall(accountId, externalId, headers):
     base = 'https://mybusiness.googleapis.com/v4/accounts/' + str(accountId) + '/locations/'
-    end = str(externalId) + '/localPosts/?pageSize=100'
+    end = str(externalId) + '/localPosts?pageSize=100'
     fullApi = base + end
     r_info = requests.get(fullApi, headers = headers)
     responseCode = r_info.status_code
@@ -126,7 +126,7 @@ def filterByKeyText(df, filterData, apiFieldKey):
 
 def placeActionGetCall(id, heads):
     call = 'https://mybusinessplaceactions.googleapis.com/v1/locations/'
-    additional = '/placeActionLinks/?pageSize=100'
+    additional = '/placeActionLinks'
     r_info = requests.get(call + str(id) + additional, headers = heads).json()
     return r_info
 
@@ -140,29 +140,23 @@ def parsePlaceActionResponse(apiResponse, id, filterOption, typeFilter, filterDa
         temp3 = df['uri'].tolist()
         temp4 = df['createTime'].tolist()
         temp5 = df['updateTime'].tolist()
-        temp5 = df['providerType'].tolist()
-        df = pd.DataFrame(list(zip(temp1, temp2, temp3, temp4, temp5)), columns = ['name', 'placeActionType', 'uri', 'createTime', 'updateTime', 'providerType'])
+        df = pd.DataFrame(list(zip(temp1, temp2, temp3, temp4, temp5)), columns = ['name', 'placeActionType', 'uri', 'createTime', 'updateTime'])
         df['createTime'] = df['createTime'].astype(str)
         df['createTime'] = pd.to_datetime(df['createTime'])
-
         if filterOption == 'placeActionType':
-            if typeFilter == 'All':
-                filtered_df = df[df['providerType'] == 'MERCHANT']
-            else:
-                filtered_df = df[df[filterOption] == typeFilter]
+            filtered_df = df[df[filterOption] == typeFilter]
         elif filterOption == 'uri':
             filtered_df = filterByKeyText(df, filterData, 'uri')
         elif filterOption == 'createTime':
             filterData = pd.to_datetime(filterData).date()
             filtered_df = filterByDate(df, myRange, 'createTime', filterData)
-
         retList = []
         for i in range(len(filtered_df)):
             locName = 'locations/' + str(id) + '/placeActionLinks/'
             result_string = filtered_df.iloc[i][0].split(locName)[1]
             retList.append(result_string)
     except: 
-        return -1
+        return 0
     return retList
 
 def deleteLink(locationId, placeActionIdList, heads):
@@ -204,6 +198,7 @@ def progress():
         my_bar.progress(percent_complete + 1, text=progress_text)
     time.sleep(1)
     my_bar.empty()
+    # st.button("Rerun")
     return
 
 if __name__ == "__main__":
@@ -243,10 +238,9 @@ if __name__ == "__main__":
                     ('Before', 'On or Before', 'After', 'On or After'))
                 filterData = st.date_input("What date should we use?", value = None)
             elif filterOption == 'placeActionType':
-                st.text('We are only able to delete links that have the MERCHANT type. Third party links cannot be removed using this tool.')
                 placeActionTypeFilter = st.radio(
                     "Select place action type",
-                    ('All', 'APPOINTMENT', 'DINING_RESERVATION', 'FOOD_TAKEOUT', 'ONLINE_APPOINTMENT', 'SHOP_ONLINE', 'FOOD_ORDERING', 'FOOD_DELIVERY'))
+                    ('APPOINTMENT', 'DINING_RESERVATION', 'FOOD_TAKEOUT', 'ONLINE_APPOINTMENT', 'SHOP_ONLINE', 'FOOD_ORDERING', 'FOOD_DELIVERY'))
             else: 
                 filterData = st.text_input("Enter filter (this is case sensitive):")
 
