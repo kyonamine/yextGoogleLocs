@@ -9,19 +9,12 @@ import sys
 from datetime import date
 import os
 import time
-# impor 
-# @st.cache_data
-# def convert_df(df):
-#     # IMPORTANT: Cache the conversion to prevent computation on every rerun
-#     return df.to_csv().encode('utf-8')
-
-# st.set_option('server.folderWatchBlacklist', [])
 
 def check_password():
     """Returns `True` if the user had the correct password."""
 
     def password_entered():
-        """Checks whether a password entered by the user is correct.""" #the password here is: googleUpdates
+        """Checks whether a password entered by the user is correct."""
         if st.session_state["pw"] == st.secrets["pw"]:
             st.session_state["password_correct"] = True
             del st.session_state["pw"]  # don't store password
