@@ -46,8 +46,8 @@ def uploadFile():
         st.write(dataframe)
         return dataframe
     else:
-        st.error("Provide a file!")
-        return 0
+        # st.error("Provide a file!")
+        return -1
     
 def parseFile(df):
     listGoogleIds = df['Google ID'].tolist()
