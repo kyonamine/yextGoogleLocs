@@ -208,8 +208,9 @@ def progress():
     my_bar.empty()
     return
 
-def downloadComplete(fileName):
-    st.text('Complete! Check your computer for a file called ' + fileName)
+def useWarnings():
+    st.warning('Please be careful, the actions by this tool cannot be undone! This app is for internal use only and should not be shared with customers.', icon = "⚠️")
+    st.warning('In most cases, this tool only checks the first 100 results that Google returns.', icon = "⚠️")
     return
 
 if __name__ == "__main__":
@@ -218,8 +219,7 @@ if __name__ == "__main__":
     st.set_page_config(
         page_title = "Google Location Updates"
     )
-    st.warning('Please be careful, the actions by this tool cannot be undone! This app is for internal use only and should not be shared with customers.', icon = "⚠️")
-    st.warning('In most cases, this tool only checks the first 100 results that Google returns.', icon = "⚠️")
+    useWarnings()
     if check_password():
         
         st.title("Google Location Updates")
@@ -284,7 +284,5 @@ if __name__ == "__main__":
             logCsv = writeLogs(fileName, dfLog)
             
             downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
-            # if downloadButton:
-            #     st.text('Complete! Check your computer for a file called ' + fileName)
 
         # streamlit_analytics.stop_tracking()
