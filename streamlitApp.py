@@ -221,7 +221,6 @@ if __name__ == "__main__":
     )
     useWarnings()
     if check_password():
-        
         st.title("Google Location Updates")
         
         my_dict = {
@@ -280,7 +279,6 @@ if __name__ == "__main__":
                     print(postsToDel) 
 
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
-            # os.write(1,  f"{dfLog}\n".encode())
             logCsv = writeLogs(fileName, dfLog)
             
             downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
