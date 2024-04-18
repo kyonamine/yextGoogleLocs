@@ -159,7 +159,7 @@ def parsePlaceActionResponse(apiResponse, id, filterOption, typeFilter, filterDa
         retList = []
         for i in range(len(filtered_df)):
             locName = 'locations/' + str(id) + '/placeActionLinks/'
-            result_string = filtered_df.iloc[i][0].split(locName)[1]
+            result_string = filtered_df.iloc[i].iloc[0].split(locName)[1]
             retList.append(result_string)
     except: 
         return 0
