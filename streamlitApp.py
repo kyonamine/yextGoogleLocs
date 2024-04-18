@@ -9,6 +9,7 @@ import sys
 from datetime import date
 import os
 import time
+import streamlit_analytics
 
 def check_password():
     """Returns `True` if the user had the correct password."""
@@ -206,6 +207,8 @@ def progress():
     return
 
 if __name__ == "__main__":
+    streamlit_analytics.stop_tracking()
+
     st.set_page_config(
         page_title = "Google Location Updates"
     )
@@ -279,3 +282,5 @@ if __name__ == "__main__":
             writeLogs(fileName)
 
             st.text('Complete! Check your computer for a file called ' + fileName)
+
+        streamlit_analytics.stop_tracking()
