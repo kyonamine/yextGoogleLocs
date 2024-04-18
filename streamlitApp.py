@@ -270,6 +270,7 @@ if __name__ == "__main__":
                     # print(placeActionsToDel)
                     locationLog = deleteLink(i, placeActionsToDel, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                    print(dfLog)
                     
             elif field == 'Social Posts':
                 for i in listGoogleIds:
