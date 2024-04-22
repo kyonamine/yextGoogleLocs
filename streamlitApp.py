@@ -203,13 +203,13 @@ def writeLogs(name, dfLog):
     # os.write(1,  f"{logCsv}\n".encode())
     return logCsv
 
-def progress():
+def progress(numRows):
     progress_text = "Operation in progress. Please wait."
     my_bar = st.progress(0, text = progress_text)
-    for percent_complete in range(100):
+    for percent_complete in range(numRows):
         time.sleep(0.01)
-        my_bar.progress(percent_complete + 1, text=progress_text)
-    time.sleep(1)
+        my_bar.progress((i + 1) / numRows)
+    st.write('Task completed!')
     my_bar.empty()
     return
 
@@ -242,7 +242,7 @@ if __name__ == "__main__":
 
         with st.form("Form"):
             frame = uploadFile()
-
+            frame.dropna(inplace=True)
             filterData = ''
             daterange = ''
             placeActionTypeFilter = ''
@@ -271,7 +271,7 @@ if __name__ == "__main__":
             dfLog = pd.DataFrame()
 
             headers = {"Authorization": "Bearer " + token}
-            # progress()
+            progress(len(frame.index))
             if field == 'Place Action Links':
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, 'placeActionLinks', i, headers)
@@ -291,6 +291,7 @@ if __name__ == "__main__":
                     locationLog = deletePost(googleAccountNum, postsToDel, i, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
+            os.write(1,  f"Done!\n".encode())
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
             logCsv = writeLogs(fileName, dfLog)
             
