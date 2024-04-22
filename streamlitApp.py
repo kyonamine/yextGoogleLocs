@@ -92,7 +92,7 @@ def localPostGetCall(accountId, externalId, headers):
 
 def parseLocalPostsResponse(accountNum, df, externalId, filterType, filterData, myRange):
     accountStr = 'accounts/' + str(accountNum) + '/locations/' + str(externalId) + '/localPosts/'
-    os.write(1,  f"{df}\n".encode())
+    # os.write(1,  f"{df}\n".encode())
     # df['name'] = df['name'].astype(str)
 
     df['name'] = df['name'].str.replace(str(accountStr), '')
