@@ -107,7 +107,8 @@ def parseLocalPostsResponse(accountNum, df, externalId, filterType, filterData, 
 
     # Search for posts that meet the criteria
     if filterType == 'createTime':
-        df['createTime'] = pd.to_datetime(df['createTime']).dt.tz_localize(None)
+        filtered_df = df[df['createTime'].dt.floor('s').dt.date < filterData]
+
         filterData = pd.to_datetime(filterData)
         filtered_df = filterByDate(df, myRange, 'createTime', filterData)
         
