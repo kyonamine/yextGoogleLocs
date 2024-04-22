@@ -96,8 +96,7 @@ def parseLocalPostsResponse(accountNum, df, externalId, filterType, filterData, 
     df['name'] = df['name'].astype(str)
 
     df['name'] = df['name'].str.replace(str(accountStr), '')
-    df['createTime'] = pd.to_datetime(df['createTime'])
-
+    
     temp1 = df['name'].tolist()
     temp2 = df['summary'].tolist()
     temp3 = df['createTime'].tolist()
@@ -108,12 +107,14 @@ def parseLocalPostsResponse(accountNum, df, externalId, filterType, filterData, 
 
     # Search for posts that meet the criteria
     if filterType == 'createTime':
-        
-        filtered_df = df[df['createTime'].dt.floor('s').dt.date < filterData]
+        try:
+            df['createTime'] = pd.to_datetime(df['createTime']).dt.tz_localize(None)
+            filterData = pd.to_datetime(filterData)
+            filtered_df = filterByDate(df, myRange, 'createTime', filterData)
+        except ValueError as e:
+            print("Error:", e)
+            return []
 
-        filterData = pd.to_datetime(filterData)
-        filtered_df = filterByDate(df, myRange, 'createTime', filterData)
-        
     elif filterType == 'Key Text Search':
         filtered_df = filterByKeyText(df, filterData, 'summary')
 
