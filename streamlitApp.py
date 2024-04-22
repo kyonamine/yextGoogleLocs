@@ -187,6 +187,10 @@ def deleteLink(locationId, placeActionIdList, heads):
 
 def filterByDate(df, option, columnName, filterData):
     filterData = pd.to_datetime(filterData).date()
+    df[columnName] = pd.to_datetime(df[columnName])
+    if df[columnName].dt.microsecond.isin([0]).all():
+        df[columnName] = df[columnName].apply(lambda x: x.replace(microsecond=0))
+    
     # print('Using ' + str(filterData))
     if option == 'Before':
         filtered_df = df[df[columnName].dt.date < filterData]
