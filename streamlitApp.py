@@ -120,7 +120,7 @@ def deletePost(accountId, postIdList, externalId, heads):
     # fullApi = baseApi + str(externalId) + '/localPosts/' + str(postId)
     os.write(1,  f"{postIdList}\n".encode())
     for postId in range(len(postIdList)):
-        call = baseApi + str(externalId) + '/localPosts/' + str(postIdList[i])
+        call = baseApi + str(externalId) + '/localPosts/' + str(postId)
         r_info = requests.delete(call, headers = heads)
         response = r_info.status_code
         df.loc[i] = [externalId, postId, response]
