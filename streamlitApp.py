@@ -241,7 +241,7 @@ if __name__ == "__main__":
 
         with st.form("Form"):
             frame = uploadFile()
-            frame.dropna(inplace = True)
+            # frame.dropna(inplace = True)
 
             filterData = ''
             daterange = ''
