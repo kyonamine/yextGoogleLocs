@@ -271,7 +271,7 @@ if __name__ == "__main__":
             dfLog = pd.DataFrame()
 
             headers = {"Authorization": "Bearer " + token}
-            progress()
+            # progress()
             if field == 'Place Action Links':
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, 'placeActionLinks', i, headers)
