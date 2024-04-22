@@ -282,7 +282,7 @@ if __name__ == "__main__":
             elif field == 'Social Posts':
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
-                    if response == 'No localPosts for ' + i:
+                    if not isinstance(response, pd.DataFrame):
                         locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': [200]})
                         dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
                         continue
