@@ -98,7 +98,9 @@ def parseLocalPostsResponse(accountNum, df, externalId, filterType, filterData, 
     temp2 = df['summary'].tolist()
     temp3 = df['createTime'].tolist()
     temp4 = df['topicType'].tolist()
-    df = pd.DataFrame(list(zip(temp1, temp2, temp3, temp4)), columns = ['name', 'summary', 'createTime', 'topicType'])
+    temp5 = df['state'].tolist()
+    temp6 = df['languageCode'].tolist()
+    df = pd.DataFrame(list(zip(temp1, temp2, temp3, temp4, temp5, temp6)), columns = ['name', 'summary', 'createTime', 'topicType', 'state', 'languageCode'])
 
     # Search for posts that meet the criteria
     if filterType == 'createTime':
@@ -115,10 +117,10 @@ def parseLocalPostsResponse(accountNum, df, externalId, filterType, filterData, 
 def deletePost(accountId, postId, externalId, heads):
     baseApi = 'https://mybusiness.googleapis.com/v4/accounts/' + str(accountId) + '/locations/'
     fullApi = baseApi + str(externalId) + '/localPosts/' + str(postId)
-    r_info = requests.delete(fullApi, headers = heads)
-    response = r_info.status_code
-    df = pd.DataFrame(columns = ['Google Location ID', 'localPostId', 'API Response Code'])
-
+    # r_info = requests.delete(fullApi, headers = heads)
+    # response = r_info.status_code
+    # df = pd.DataFrame(columns = ['Google Location ID', 'localPostId', 'API Response Code'])
+    os.write(1,  f"{fullApi}\n".encode())
     return response
 
 def filterByKeyText(df, filterData, apiFieldKey):
@@ -192,8 +194,6 @@ def filterByDate(df, option, columnName, filterData):
     return filtered_df
 
 def writeLogs(name, dfLog):
-    # os.write(1,  f"writing logs\n".encode())
-    # logCsv = dfLog.to_csv(name, index = False)
     logCsv = dfLog.to_csv(index = False)
     # os.write(1,  f"{logCsv}\n".encode())
     return logCsv
@@ -260,6 +260,7 @@ if __name__ == "__main__":
             form_submitted = st.form_submit_button("Update Locations")
  
         if form_submitted:
+            os.write(1,  f"{field}\n".encode())
             listYextIds, listGoogleIds = parseFile(frame)
             dfLog = pd.DataFrame()
 
@@ -277,6 +278,7 @@ if __name__ == "__main__":
                     response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
                     postsToDel = parseLocalPostsResponse(googleAccountNum, response, i, filterOption, filterData, daterange)
                     print(postsToDel) 
+                    locationLog = deletePost(googleAccountNum, postsToDel, i, headers)
 
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
             logCsv = writeLogs(fileName, dfLog)
