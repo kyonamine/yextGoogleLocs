@@ -119,11 +119,11 @@ def deletePost(accountId, postIdList, externalId, heads):
     df = pd.DataFrame(columns = ['Google Location ID', 'localPostId', 'API Response Code'])
     # fullApi = baseApi + str(externalId) + '/localPosts/' + str(postId)
     os.write(1,  f"{postIdList}\n".encode())
-    for postId in range(len(postIdList)):
-        call = baseApi + str(externalId) + '/localPosts/' + str(postIdList[postId])
+    for i in range(len(postIdList)):
+        call = baseApi + str(externalId) + '/localPosts/' + str(postIdList[i])
         r_info = requests.delete(call, headers = heads)
         response = r_info.status_code
-        df.loc[i] = [externalId, str(postIdList[postId]), response]
+        df.loc[i] = [externalId, str(postIdList[i]), response]
     #     os.write(1,  f"{call}\n".encode())
     # os.write(1,  f"{df}\n".encode())
     return df
