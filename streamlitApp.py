@@ -283,7 +283,7 @@ if __name__ == "__main__":
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
                     if response == 'No localPosts for ' + i:
-                        locationLog = [i, response, 200]
+                        locationLog = {'Google Location ID': i, 'localPostId': response, 'API Response Code': 200}
                         dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
                         continue
                     postsToDel = parseLocalPostsResponse(googleAccountNum, response, i, filterOption, filterData, daterange)
