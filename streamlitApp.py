@@ -93,7 +93,7 @@ def localPostGetCall(accountId, externalId, headers):
 def parseLocalPostsResponse(accountNum, df, externalId, filterType, filterData, myRange):
     accountStr = 'accounts/' + str(accountNum) + '/locations/' + str(externalId) + '/localPosts/'
     os.write(1,  f"{df}\n".encode())
-    df['name'] = df['name'].astype(str)
+    # df['name'] = df['name'].astype(str)
 
     df['name'] = df['name'].str.replace(str(accountStr), '')
     
@@ -112,7 +112,7 @@ def parseLocalPostsResponse(accountNum, df, externalId, filterType, filterData, 
             filterData = pd.to_datetime(filterData)
             filtered_df = filterByDate(df, myRange, 'createTime', filterData)
         except ValueError as e:
-            print("Error:", e)
+            # print("Error:", e)
             return []
 
     elif filterType == 'Key Text Search':
@@ -124,7 +124,7 @@ def parseLocalPostsResponse(accountNum, df, externalId, filterType, filterData, 
 def deletePost(accountId, postIdList, externalId, heads):
     baseApi = 'https://mybusiness.googleapis.com/v4/accounts/' + str(accountId) + '/locations/'
     df = pd.DataFrame(columns = ['Google Location ID', 'localPostId', 'API Response Code'])
-    # os.write(1,  f"{postIdList}\n".encode())
+    os.write(1,  f"{postIdList}\n".encode())
     for i in range(len(postIdList)):
         call = baseApi + str(externalId) + '/localPosts/' + str(postIdList[i])
         r_info = requests.delete(call, headers = heads)
