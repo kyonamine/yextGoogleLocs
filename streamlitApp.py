@@ -206,7 +206,7 @@ def writeLogs(name, dfLog):
 def progress(numRows):
     progress_text = "Operation in progress. Please wait."
     my_bar = st.progress(0, text = progress_text)
-    for percent_complete in range(numRows):
+    for i in range(numRows):
         time.sleep(0.01)
         my_bar.progress((i + 1) / numRows)
     st.write('Task completed!')
