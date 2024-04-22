@@ -121,12 +121,12 @@ def deletePost(accountId, postIdList, externalId, heads):
     os.write(1,  f"{postIdList}\n".encode())
     for postId in range(len(postIdList)):
         call = baseApi + str(externalId) + '/localPosts/' + str(postIdList[postId])
-        # r_info = requests.delete(call, headers = heads)
-        # response = r_info.status_code
-        # df.loc[i] = [externalId, postId, response]
-        os.write(1,  f"{call}\n".encode())
-    os.write(1,  f"{df}\n".encode())
-    return response
+        r_info = requests.delete(call, headers = heads)
+        response = r_info.status_code
+        df.loc[i] = [externalId, postId, response]
+    #     os.write(1,  f"{call}\n".encode())
+    # os.write(1,  f"{df}\n".encode())
+    return df
 
 def filterByKeyText(df, filterData, apiFieldKey):
     filtered_df = df[df[apiFieldKey].str.contains(filterData)]
@@ -282,8 +282,9 @@ if __name__ == "__main__":
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
                     postsToDel = parseLocalPostsResponse(googleAccountNum, response, i, filterOption, filterData, daterange)
-                    print(postsToDel) 
+                    # print(postsToDel) 
                     locationLog = deletePost(googleAccountNum, postsToDel, i, headers)
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
             logCsv = writeLogs(fileName, dfLog)
