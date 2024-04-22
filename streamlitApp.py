@@ -262,7 +262,7 @@ if __name__ == "__main__":
                 filterData = st.text_input("Enter filter (this is case sensitive):")
 
             token = st.text_input("Enter Google API Authorization token (No 'Bearer' included. Should start with 'ya29.'):")
-            form_submitted = st.form_submit_button("Update Locations")
+            form_submitted = st.form_submit_button("Delete " +  field + "s")
  
         if form_submitted:
             os.write(1,  f"{field}\n".encode())
