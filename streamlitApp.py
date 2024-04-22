@@ -96,7 +96,8 @@ def parseLocalPostsResponse(accountNum, df, externalId, filterType, filterData, 
     df['name'] = df['name'].astype(str)
 
     df['name'] = df['name'].str.replace(str(accountStr), '')
-    
+    df['createTime'] = pd.to_datetime(df['createTime'])
+
     temp1 = df['name'].tolist()
     temp2 = df['summary'].tolist()
     temp3 = df['createTime'].tolist()
@@ -107,6 +108,7 @@ def parseLocalPostsResponse(accountNum, df, externalId, filterType, filterData, 
 
     # Search for posts that meet the criteria
     if filterType == 'createTime':
+        
         filtered_df = df[df['createTime'].dt.floor('s').dt.date < filterData]
 
         filterData = pd.to_datetime(filterData)
