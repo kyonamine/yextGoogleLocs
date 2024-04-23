@@ -260,6 +260,7 @@ def useWarnings():
     return
 
 if __name__ == "__main__":
+    queryDB(1)
     # streamlit_analytics.stop_tracking()
 
     st.set_page_config(
