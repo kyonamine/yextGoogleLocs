@@ -284,7 +284,7 @@ if __name__ == "__main__":
                 googleAccountNum = 0
             if filterOption == 'createTime':
                 daterange = st.radio(
-                    "Select place action type",
+                    "Select time filter",
                     ('Before', 'On or Before', 'After', 'On or After'))
                 filterData = st.date_input("What date should we use?", value = None)
             elif filterOption == 'placeActionType':
