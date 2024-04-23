@@ -14,7 +14,7 @@ import sqlConnect_pymysqlConnection as db
 
 def queryDB(database):
     connection = db.ConnectToYextDB('ops-sql01.tx1.yext.com', user = st.secrets["dbUsername"], password = st.secrets["dbPassword"])
-    result = connection.query_database(allIdsQuery(1))
+    result = connection.query_database(allIdsQuery({'col1': [1, 2], 'col2': [3, 4]}))
     os.write(1,  f"{result}\n".encode())
     connection.close_connection()
     return
