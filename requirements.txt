@@ -1,3 +1,2 @@
 numpy
-pymysql.cursors
 pymysql
