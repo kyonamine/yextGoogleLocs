@@ -48,6 +48,7 @@ def uploadFile():
         return dataframe
     else:
         # st.error("Provide a file!")
+        st.stop()
         return -1
     
 def parseFile(df):
@@ -55,11 +56,18 @@ def parseFile(df):
     listYextIds = df['Yext ID'].tolist()
     return listYextIds, listGoogleIds
 
+def exitApp():
+    st.error('Need authorization token!')
+    st.stop()
+    return
+
 def authErrors(response):
     try:
         if 'invalid authentication credentials' in response['error']['message']:
-            st.error('Need authorization token!')
-            sys.exit(1)
+            exitApp()
+        elif 'Failed for ' in response:
+            os.write(1,  f"{response}\n".encode()) # This should print the external ID that failed
+            exitApp()
     except:
         return 0
 
@@ -138,7 +146,7 @@ def filterByKeyText(df, filterData, apiFieldKey):
 
 def placeActionGetCall(id, heads):
     call = 'https://mybusinessplaceactions.googleapis.com/v1/locations/'
-    additional = '/placeActionLinks'
+    additional = '/placeActionLinks/?pageSize=100'
     r_info = requests.get(call + str(id) + additional, headers = heads).json()
     return r_info
 
