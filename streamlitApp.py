@@ -48,7 +48,7 @@ def uploadFile():
         return dataframe
     else:
         # st.error("Provide a file!")
-        st.stop()
+        # st.stop()
         return -1
     
 def parseFile(df):
