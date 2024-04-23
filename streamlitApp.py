@@ -9,7 +9,7 @@ import sys
 from datetime import date
 import os
 import time
-import sqlConnect_pymysql as db
+import sqlConnect_pymysqlConnection as db
 # import streamlit_analytics
 
 def check_password():
