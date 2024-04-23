@@ -9,6 +9,7 @@ import sys
 from datetime import date
 import os
 import time
+import sqlConnect_pymysql as db
 # import streamlit_analytics
 
 def check_password():
@@ -70,6 +71,10 @@ def authErrors(response):
             exitApp()
     except:
         return 0
+    
+def dfCols(df, *columns):
+    column_data = {col: df[col].values for col in columns}
+    return pd.DataFrame(column_data)
 
 def loopThroughIds(accountId, endpoint, id, headers):
     if endpoint == 'placeActionLinks':
@@ -155,13 +160,25 @@ def parsePlaceActionResponse(apiResponse, id, filterOption, typeFilter, filterDa
         prx = apiResponse['placeActionLinks']
         df = pd.DataFrame(prx)
         
-        temp1 = df['name'].tolist()
-        temp2 = df['placeActionType'].tolist()
-        temp3 = df['uri'].tolist()
-        temp4 = df['createTime'].tolist()
-        temp5 = df['updateTime'].tolist()
-        temp6 = df['providerType'].tolist()
-        df = pd.DataFrame(list(zip(temp1, temp2, temp3, temp4, temp5, temp6)), columns = ['name', 'placeActionType', 'uri', 'createTime', 'updateTime', 'providerType'])
+        # temp1 = df['name'].tolist()
+        # temp2 = df['placeActionType'].tolist()
+        # temp3 = df['uri'].tolist()
+        # temp4 = df['createTime'].tolist()
+        # temp5 = df['updateTime'].tolist()
+        # temp6 = df['providerType'].tolist()
+
+        # df = pd.DataFrame({
+        #     'name': df['name'].values,
+        #     'placeActionType': df['placeActionType'].values,
+        #     'uri': df['uri'].values,
+        #     'createTime': df['createTime'].values,
+        #     'updateTime': df['updateTime'].values,
+        #     'providerType': df['providerType'].values
+        # })
+        df = dfCols(df, 'name', 'placeActionType', 'uri', 'createTime', 'updateTime', 'providerType')
+
+
+        # df = pd.DataFrame(list(zip(temp1, temp2, temp3, temp4, temp5, temp6)), columns = ['name', 'placeActionType', 'uri', 'createTime', 'updateTime', 'providerType'])
         df['createTime'] = df['createTime'].astype(str)
         df['createTime'] = pd.to_datetime(df['createTime'])
         if filterOption == 'placeActionType':
@@ -237,11 +254,11 @@ if __name__ == "__main__":
     # streamlit_analytics.stop_tracking()
 
     st.set_page_config(
-        page_title = "Google Location Updates"
+        page_title = "Google Locations"
     )
     useWarnings()
     if check_password():
-        st.title("Google Location Updates")
+        st.title("Google Locations")
         
         my_dict = {
                 "Place Action Links": ["placeActionType", "uri", "createTime"], 
