@@ -159,11 +159,21 @@ def deletePost(accountId, postIdList, externalId, heads):
     baseApi = 'https://mybusiness.googleapis.com/v4/accounts/' + str(accountId) + '/locations/'
     df = pd.DataFrame(columns = ['Google Location ID', 'localPostId', 'API Response Code'])
     os.write(1,  f"{len(postIdList)}\n".encode())
-    for i in postIdList:
-        call = baseApi + str(externalId) + '/localPosts/' + str(i)
-        r_info = requests.delete(call, headers = heads)
-        response = r_info.status_code
-        df.loc[i] = [externalId, str(i), response]
+
+    with requests.Session() as session:
+        for postId in postIdList:
+            call = f"{baseApi}{externalId}/localPosts/{postId}"
+            r_info = session.delete(call, headers = heads)
+            response = r_info.status_code
+            df.loc[len(df)] = [externalId, str(postId), response]
+
+
+    # for i in postIdList:
+    #     # call = baseApi + str(externalId) + '/localPosts/' + str(i)
+    #     call = f"{baseApi}{externalId}/localPosts/{i}"
+    #     r_info = requests.delete(call, headers = heads)
+    #     response = r_info.status_code
+    #     df.loc[len(df)] = [externalId, str(i), response]
     return df
 
 def filterByKeyText(df, filterData, apiFieldKey):
