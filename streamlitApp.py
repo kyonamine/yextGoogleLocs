@@ -22,12 +22,13 @@ def queryDB(database):
 def allIdsQuery(df):
     tempList = df[df.columns[0]].values.tolist()
     tempList = ', '.join(map(str, tempList))
-    tempList = [4058034]
-    return f"""
+    tempList = [4058034, 4058035]
+    query = f"""
         select tl.location_id, tl.externalId from alpha.tags_listings tl
         where tl.partner_id = 715
         and tl.location_id in ({tempList})
     """
+    return query
 
 def getExternalIds(df):
     return df[df.columns[0]].values.tolist()
