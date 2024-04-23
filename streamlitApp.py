@@ -28,6 +28,7 @@ def allIdsQuery(df):
         where tl.partner_id = 715
         and tl.location_id in ({tempList})
     """
+    os..write(1,  f"{query}\n".encode())
     return query
 
 def getExternalIds(df):
