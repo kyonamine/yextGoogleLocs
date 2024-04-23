@@ -12,6 +12,12 @@ import time
 import sqlConnect_pymysqlConnection as db
 # import streamlit_analytics
 
+def queryDB(database):
+    connection = db.ConnectToYextDB('ops-sql01.tx1.yext.com', user = st.secrets["dbUsername"], password = st.secrets["dbPassword"])
+    os.write(1,  f"{connection}\n".encode())
+    connection.close_connection()
+    return
+
 def check_password():
     """Returns `True` if the user had the correct password."""
 
@@ -110,13 +116,16 @@ def parseLocalPostsResponse(accountNum, df, externalId, filterType, filterData, 
 
     df['name'] = df['name'].str.replace(str(accountStr), '')
     
-    temp1 = df['name'].tolist()
-    temp2 = df['summary'].tolist()
-    temp3 = df['createTime'].tolist()
-    temp4 = df['topicType'].tolist()
-    temp5 = df['state'].tolist()
-    temp6 = df['languageCode'].tolist()
-    df = pd.DataFrame(list(zip(temp1, temp2, temp3, temp4, temp5, temp6)), columns = ['name', 'summary', 'createTime', 'topicType', 'state', 'languageCode'])
+    # temp1 = df['name'].tolist()
+    # temp2 = df['summary'].tolist()
+    # temp3 = df['createTime'].tolist()
+    # temp4 = df['topicType'].tolist()
+    # temp5 = df['state'].tolist()
+    # temp6 = df['languageCode'].tolist()
+
+    df = dfCols(df, 'name', 'summary', 'createTime', 'topicType', 'state', 'languageCode')
+
+    # df = pd.DataFrame(list(zip(temp1, temp2, temp3, temp4, temp5, temp6)), columns = ['name', 'summary', 'createTime', 'topicType', 'state', 'languageCode'])
 
     # Search for posts that meet the criteria
     if filterType == 'createTime':
@@ -137,7 +146,7 @@ def parseLocalPostsResponse(accountNum, df, externalId, filterType, filterData, 
 def deletePost(accountId, postIdList, externalId, heads):
     baseApi = 'https://mybusiness.googleapis.com/v4/accounts/' + str(accountId) + '/locations/'
     df = pd.DataFrame(columns = ['Google Location ID', 'localPostId', 'API Response Code'])
-    os.write(1,  f"{postIdList}\n".encode())
+    os.write(1,  f"{len(postIdList)}\n".encode())
     for i in range(len(postIdList)):
         call = baseApi + str(externalId) + '/localPosts/' + str(postIdList[i])
         r_info = requests.delete(call, headers = heads)
