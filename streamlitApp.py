@@ -351,7 +351,6 @@ if __name__ == "__main__":
                             st.error(response + '! Stopping.')
                             locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': ['Failed']})
                             dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
-                            authErrors(response)
                             break
                         postsToDel = parseLocalPostsResponse(googleAccountNum, response, i, filterOption, filterData, daterange)
                         locationLog = deletePost(googleAccountNum, postsToDel, i, headers)
