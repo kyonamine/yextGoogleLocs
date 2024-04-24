@@ -65,7 +65,7 @@ def check_password():
         return True
 
 def uploadFile():
-    uploaded_file = st.file_uploader("Provide a file with IDs. Make sure the CSV file has headers of \"Yext ID\" and \"Google ID\".")
+    uploaded_file = st.file_uploader("Provide a file with IDs. Make sure the CSV file has headers of \"Yext ID\" (first) and \"Google ID\" (second).")
     if uploaded_file is not None:
         dataframe = pd.read_csv(uploaded_file, dtype = {'Yext ID': str, 'Google ID': str})
         if len(dataframe.columns) != 2:
