@@ -128,13 +128,6 @@ def localPostGetCall(accountId, externalId, headers):
 def parseLocalPostsResponse(accountNum, df, externalId, filterType, filterData, myRange):
     accountStr = 'accounts/' + str(accountNum) + '/locations/' + str(externalId) + '/localPosts/'
     df['name'] = df['name'].str.replace(str(accountStr), '')
-    
-    # temp1 = df['name'].tolist()
-    # temp2 = df['summary'].tolist()
-    # temp3 = df['createTime'].tolist()
-    # temp4 = df['topicType'].tolist()
-    # temp5 = df['state'].tolist()
-    # temp6 = df['languageCode'].tolist()
 
     df = dfCols(df, 'name', 'summary', 'createTime', 'topicType', 'state', 'languageCode')
 
