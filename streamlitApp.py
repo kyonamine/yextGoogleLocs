@@ -283,7 +283,7 @@ if __name__ == "__main__":
         with col2:
             filterOption = st.selectbox("Choose filter option", options = my_dict[field], key = 2)
 
-        with st.form("Form", clear_on_submit = True):
+        with st.form("Form"):
             frame = uploadFile()
             # frame.dropna(inplace = True)
             filterData = ''
