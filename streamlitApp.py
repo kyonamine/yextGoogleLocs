@@ -74,13 +74,13 @@ def uploadFile():
         else:
             expected_columns = ['My ID', 'Other ID']
             if not all(col in dataframe.columns for col in expected_columns):
-                print("Error: Columns should be titled \"Yext ID\" and \"Google ID\".")
+                st.error("Error: Columns should be titled \"Yext ID\" and \"Google ID\".")
                 exitApp(2)
             else:
                 for col in dataframe.columns:
                     if col == 'Yext ID' or col == 'Google ID':
                         if not dataframe[col].apply(lambda x: str(x).isdigit() if pd.notna(x) else True).all():
-                            print(f"Error: Values in column '{col}' should be numbers.")
+                            st.error(f"Error: Values in column '{col}' should be numbers.")
                             exitApp(2)
                             # return None
 
