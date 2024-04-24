@@ -102,6 +102,9 @@ def exitApp(inp):
         sys.exit(1)    
     elif inp == 2:
         sys.exit(1)
+    elif inp == 3:
+        st.error("Need a Google account number!")
+        sys.exit(1)
     return
 
 def authErrors(response):
@@ -339,6 +342,8 @@ if __name__ == "__main__":
             elif field == 'Social Posts':
                 for i in listGoogleIds:
                     os.write(1,  f"{i}\n".encode())
+                    if googleAccountNum == '':
+                        exitApp(3)
                     response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
                     if not isinstance(response, pd.DataFrame):
                         locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': [200]})
