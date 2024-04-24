@@ -75,8 +75,8 @@ def uploadFile():
         else:
             st.write(dataframe)
         return dataframe
-    else:
-        st.error("Provide a file!")
+    # else:
+    #     st.error("Provide a file!")
         # st.stop()
         return -1
     
