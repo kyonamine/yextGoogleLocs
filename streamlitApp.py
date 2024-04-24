@@ -64,16 +64,32 @@ def check_password():
         # Password correct.
         return True
 
-
 def uploadFile():
     uploaded_file = st.file_uploader("Provide a file with IDs. Make sure the CSV file has headers of \"Yext ID\" and \"Google ID\".")
     if uploaded_file is not None:
         dataframe = pd.read_csv(uploaded_file, dtype = {'Yext ID': str, 'Google ID': str})
         if len(dataframe.columns) != 2:
             st.error("CSV file should contain exactly 2 columns.")
-            sys.exit(1)
+            exitApp(2)
         else:
-            st.write(dataframe)
+            expected_columns = ['My ID', 'Other ID']
+            if not all(col in dataframe.columns for col in expected_columns):
+                print("Error: Columns should be titled \"Yext ID\" and \"Google ID\".")
+                exitApp(2)
+            else:
+                for col in dataframe.columns:
+                    if col == 'Yext ID' or col == 'Google ID':
+                        if not dataframe[col].apply(lambda x: str(x).isdigit() if pd.notna(x) else True).all():
+                            print(f"Error: Values in column '{col}' should be numbers.")
+                            exitApp(2)
+                            # return None
+
+                # Drop rows with non-numeric values
+                dataframe['Yext ID'] = pd.to_numeric(dataframe['Yext ID'], errors = 'coerce')
+                dataframe['Google ID'] = pd.to_numeric(dataframe['Google ID'], errors = 'coerce')
+                dataframe = dataframe.dropna()
+
+                st.write(dataframe)
         return dataframe
     # else:
     #     st.error("Provide a file!")
@@ -85,17 +101,21 @@ def parseFile(df):
     listYextIds = df['Yext ID'].tolist()
     return listYextIds, listGoogleIds
 
-def exitApp():
-    sys.exit("Need authorization token!")    
+def exitApp(inp):
+    if inp == 1:
+        st.error("Need authorization token!")
+        sys.exit(1)    
+    elif inp == 2:
+        sys.exit(1)
     return
 
 def authErrors(response):
     try:
         if 'invalid authentication credentials' in response['error']['message']:
-            exitApp()
+            exitApp(1)
         elif 'Failed for ' in response:
             os.write(1,  f"{response}\n".encode()) # This should print the external ID that failed
-            exitApp()
+            exitApp(1)
     except:
         return 0
     
