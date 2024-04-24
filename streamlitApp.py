@@ -80,9 +80,8 @@ def uploadFile():
                 for col in dataframe.columns:
                     if col == 'Yext ID' or col == 'Google ID':
                         if not dataframe[col].apply(lambda x: isinstance(x, int) or (isinstance(x, str) and x.isdigit() and len(str(x)) > 3) if pd.notna(x) else True).all():
-                            st.error(f"Error: Values in column '{col}' should be numbers.")
+                            st.error(f"Error: Values in column '{col}' should be numbers and should all be greater than 3 digits in length.")
                             exitApp(2)
-                            # return None
 
                 # Drop rows with non-numeric values
                 dataframe['Yext ID'] = pd.to_numeric(dataframe['Yext ID'], errors = 'coerce')
@@ -91,10 +90,6 @@ def uploadFile():
 
                 st.write(dataframe)
         return dataframe
-    # else:
-    #     st.error("Provide a file!")
-        # st.stop()
-        return -1
     
 def parseFile(df):
     listGoogleIds = df['Google ID'].tolist()
@@ -305,7 +300,6 @@ if __name__ == "__main__":
 
         with st.form("Form"):
             frame = uploadFile()
-            # frame.dropna(inplace = True)
             filterData = ''
             daterange = ''
             placeActionTypeFilter = ''
