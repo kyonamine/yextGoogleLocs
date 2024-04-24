@@ -345,7 +345,7 @@ if __name__ == "__main__":
                     if googleAccountNum == '':
                         exitApp(3)
                     else:
-                        os.write(1,  f"{i}\n".encode())
+                        # os.write(1,  f"{i}\n".encode())
                         response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
                         if not isinstance(response, pd.DataFrame):
                             st.error(response + '! Stopping.')
