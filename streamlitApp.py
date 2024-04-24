@@ -344,15 +344,16 @@ if __name__ == "__main__":
                     os.write(1,  f"{i}\n".encode())
                     if googleAccountNum == '':
                         exitApp(3)
-                    response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
-                    if not isinstance(response, pd.DataFrame):
-                        locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': [200]})
+                    else:
+                        response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
+                        if not isinstance(response, pd.DataFrame):
+                            locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': [200]})
+                            dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                            authErrors(response)
+                            continue
+                        postsToDel = parseLocalPostsResponse(googleAccountNum, response, i, filterOption, filterData, daterange)
+                        locationLog = deletePost(googleAccountNum, postsToDel, i, headers)
                         dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
-                        authErrors(response)
-                        continue
-                    postsToDel = parseLocalPostsResponse(googleAccountNum, response, i, filterOption, filterData, daterange)
-                    locationLog = deletePost(googleAccountNum, postsToDel, i, headers)
-                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             os.write(1,  f"Done!\n".encode())
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
