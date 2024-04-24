@@ -112,6 +112,7 @@ def authErrors(response):
         if 'invalid authentication credentials' in response['error']['message']:
             exitApp(1)
         elif 'Failed for ' in response:
+            st.error('Need authorization token!')
             os.write(1,  f"{response}\n".encode()) # This should print the external ID that failed
             exitApp(1)
     except:
