@@ -254,8 +254,8 @@ def progress(numRows):
     return
 
 def useWarnings():
-    st.warning('Please be careful, the actions by this tool cannot be undone! This app is for internal use only and should not be shared with customers.', icon = "⚠️")
-    st.warning('In most cases, this tool only checks the first 100 results that Google returns.', icon = "⚠️")
+    st.warning('Please be careful, the actions by this tool cannot be undone! This app is for internal use only and should not be shared with customers. In most cases, this tool only checks the first 100 results that Google returns.', icon = "⚠️")
+    st.write('If you have a problem uploading a file or with using an authoriziation token, check the error messages, refresh the page, and try again.', icon = "⚠️")
     return
 
 if __name__ == "__main__":
