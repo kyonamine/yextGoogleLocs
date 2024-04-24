@@ -11,9 +11,10 @@ import os
 import time
 import sqlConnect_pymysqlConnection as db
 # import streamlit_analytics
-import pymysql.cursors
+
 def queryDB(database):
     connection = db.ConnectToYextDB('ops-sql01.tx1.yext.com', user = st.secrets["dbUsername"], password = st.secrets["dbPassword"])
+    os.write(1,  f"{connection}\n".encode())
     result = connection.query_database(allIdsQuery(pd.DataFrame({'col1': [1, 2]})  ))
     os.write(1,  f"{result}\n".encode())
     connection.close_connection()
