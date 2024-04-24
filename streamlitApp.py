@@ -248,86 +248,86 @@ def useWarnings():
     return
 
 if __name__ == "__main__":
-    queryDB(1)
+    # queryDB(1)
     # streamlit_analytics.stop_tracking()
 
 
 
-    # st.set_page_config(
-    #     page_title = "Google Locations"
-    # )
-    # useWarnings()
-    # if check_password():
-    #     st.title("Google Locations")
+    st.set_page_config(
+        page_title = "Google Locations"
+    )
+    useWarnings()
+    if check_password():
+        st.title("Google Locations")
         
-    #     my_dict = {
-    #             "Place Action Links": ["placeActionType", "uri", "createTime"], 
-    #             # "Hours": ["accessHours", "brunchHours"],
-    #             "Social Posts": ["createTime", "Key Text Search"]
-    #         }
-    #     col1, col2 = st.columns([2, 1])
+        my_dict = {
+                "Place Action Links": ["placeActionType", "uri", "createTime"], 
+                # "Hours": ["accessHours", "brunchHours"],
+                "Social Posts": ["createTime", "Key Text Search"]
+            }
+        col1, col2 = st.columns([2, 1])
 
-    #     with col1:
-    #         field = st.selectbox("Choose field", options = my_dict.keys(), key = 1)
-    #     with col2:
-    #         filterOption = st.selectbox("Choose filter option", options = my_dict[field], key = 2)
+        with col1:
+            field = st.selectbox("Choose field", options = my_dict.keys(), key = 1)
+        with col2:
+            filterOption = st.selectbox("Choose filter option", options = my_dict[field], key = 2)
 
-    #     with st.form("Form"):
-    #         frame = uploadFile()
-    #         # frame.dropna(inplace = True)
-    #         filterData = ''
-    #         daterange = ''
-    #         placeActionTypeFilter = ''
-    #         if field == 'Social Posts':
-    #             googleAccountNum = st.text_input("Enter the Google account number (all locations must be in the same account):")
-    #         else:
-    #             googleAccountNum = 0
-    #         if filterOption == 'createTime':
-    #             daterange = st.radio(
-    #                 "Select time filter",
-    #                 ('Before', 'On or Before', 'After', 'On or After'))
-    #             filterData = st.date_input("What date should we use?", value = None)
-    #         elif filterOption == 'placeActionType':
-    #             placeActionTypeFilter = st.radio(
-    #                 "Select place action type",
-    #                 ('All', 'APPOINTMENT', 'DINING_RESERVATION', 'FOOD_TAKEOUT', 'ONLINE_APPOINTMENT', 'SHOP_ONLINE', 'FOOD_ORDERING', 'FOOD_DELIVERY'))
-    #         else: 
-    #             filterData = st.text_input("Enter filter (this is case sensitive):") # This would be for key text search
+        with st.form("Form"):
+            frame = uploadFile()
+            # frame.dropna(inplace = True)
+            filterData = ''
+            daterange = ''
+            placeActionTypeFilter = ''
+            if field == 'Social Posts':
+                googleAccountNum = st.text_input("Enter the Google account number (all locations must be in the same account):")
+            else:
+                googleAccountNum = 0
+            if filterOption == 'createTime':
+                daterange = st.radio(
+                    "Select time filter",
+                    ('Before', 'On or Before', 'After', 'On or After'))
+                filterData = st.date_input("What date should we use?", value = None)
+            elif filterOption == 'placeActionType':
+                placeActionTypeFilter = st.radio(
+                    "Select place action type",
+                    ('All', 'APPOINTMENT', 'DINING_RESERVATION', 'FOOD_TAKEOUT', 'ONLINE_APPOINTMENT', 'SHOP_ONLINE', 'FOOD_ORDERING', 'FOOD_DELIVERY'))
+            else: 
+                filterData = st.text_input("Enter filter (this is case sensitive):") # This would be for key text search
 
-    #         token = st.text_input("Enter Google API Authorization token (No 'Bearer' included. Should start with 'ya29.'):")
-    #         form_submitted = st.form_submit_button("Delete " +  field)
+            token = st.text_input("Enter Google API Authorization token (No 'Bearer' included. Should start with 'ya29.'):")
+            form_submitted = st.form_submit_button("Delete " +  field)
  
-    #     if form_submitted:
-    #         os.write(1,  f"{field}\n".encode())
-    #         listYextIds, listGoogleIds = parseFile(frame)
-    #         dfLog = pd.DataFrame()
+        if form_submitted:
+            os.write(1,  f"{field}\n".encode())
+            listYextIds, listGoogleIds = parseFile(frame)
+            dfLog = pd.DataFrame()
 
-    #         headers = {"Authorization": "Bearer " + token}
-    #         # progress(len(frame.index))
-    #         if field == 'Place Action Links':
-    #             for i in listGoogleIds:
-    #                 response = loopThroughIds(googleAccountNum, 'placeActionLinks', i, headers)
-    #                 placeActionsToDel = parsePlaceActionResponse(response, i, filterOption, placeActionTypeFilter, filterData, daterange)
-    #                 locationLog = deleteLink(i, placeActionsToDel, headers)
-    #                 dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+            headers = {"Authorization": "Bearer " + token}
+            # progress(len(frame.index))
+            if field == 'Place Action Links':
+                for i in listGoogleIds:
+                    response = loopThroughIds(googleAccountNum, 'placeActionLinks', i, headers)
+                    placeActionsToDel = parsePlaceActionResponse(response, i, filterOption, placeActionTypeFilter, filterData, daterange)
+                    locationLog = deleteLink(i, placeActionsToDel, headers)
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
                     
-    #         elif field == 'Social Posts':
-    #             for i in listGoogleIds:
-    #                 os.write(1,  f"{i}\n".encode())
-    #                 response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
-    #                 if not isinstance(response, pd.DataFrame):
-    #                     locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': [200]})
-    #                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
-    #                     authErrors(response)
-    #                     continue
-    #                 postsToDel = parseLocalPostsResponse(googleAccountNum, response, i, filterOption, filterData, daterange)
-    #                 locationLog = deletePost(googleAccountNum, postsToDel, i, headers)
-    #                 dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+            elif field == 'Social Posts':
+                for i in listGoogleIds:
+                    os.write(1,  f"{i}\n".encode())
+                    response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
+                    if not isinstance(response, pd.DataFrame):
+                        locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': [200]})
+                        dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                        authErrors(response)
+                        continue
+                    postsToDel = parseLocalPostsResponse(googleAccountNum, response, i, filterOption, filterData, daterange)
+                    locationLog = deletePost(googleAccountNum, postsToDel, i, headers)
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
-    #         os.write(1,  f"Done!\n".encode())
-    #         fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
-    #         logCsv = writeLogs(fileName, dfLog)
+            os.write(1,  f"Done!\n".encode())
+            fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
+            logCsv = writeLogs(fileName, dfLog)
             
-    #         downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
+            downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
 
-    #     # streamlit_analytics.stop_tracking()
+        # streamlit_analytics.stop_tracking()
