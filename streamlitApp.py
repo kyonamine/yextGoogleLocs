@@ -69,7 +69,7 @@ def uploadFile():
     if uploaded_file is not None:
         dataframe = pd.read_csv(uploaded_file, dtype = {'Yext ID': str, 'Google ID': str})
         if len(dataframe.columns) != 2:
-            st.error("CSV file should contain exactly 2 columns.")
+            st.error("Error: CSV file should contain exactly 2 columns.")
             exitApp(2)
         else:
             expected_columns = ['Yext ID', 'Google ID']
@@ -152,13 +152,6 @@ def localPostGetCall(accountId, externalId, headers):
 def parseLocalPostsResponse(accountNum, df, externalId, filterType, filterData, myRange):
     accountStr = 'accounts/' + str(accountNum) + '/locations/' + str(externalId) + '/localPosts/'
     df['name'] = df['name'].str.replace(str(accountStr), '')
-    
-    # temp1 = df['name'].tolist()
-    # temp2 = df['summary'].tolist()
-    # temp3 = df['createTime'].tolist()
-    # temp4 = df['topicType'].tolist()
-    # temp5 = df['state'].tolist()
-    # temp6 = df['languageCode'].tolist()
 
     df = dfCols(df, 'name', 'summary', 'createTime', 'topicType', 'state', 'languageCode')
 
