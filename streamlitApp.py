@@ -81,8 +81,7 @@ def parseFile(df):
     return listYextIds, listGoogleIds
 
 def exitApp():
-    st.error('Need authorization token!')
-    st.stop()
+    sys.exit("Need authorization token!")    
     return
 
 def authErrors(response):
@@ -166,14 +165,6 @@ def deletePost(accountId, postIdList, externalId, heads):
             r_info = session.delete(call, headers = heads)
             response = r_info.status_code
             df.loc[len(df)] = [externalId, str(postId), response]
-
-
-    # for i in postIdList:
-    #     # call = baseApi + str(externalId) + '/localPosts/' + str(i)
-    #     call = f"{baseApi}{externalId}/localPosts/{i}"
-    #     r_info = requests.delete(call, headers = heads)
-    #     response = r_info.status_code
-    #     df.loc[len(df)] = [externalId, str(i), response]
     return df
 
 def filterByKeyText(df, filterData, apiFieldKey):
@@ -191,21 +182,6 @@ def parsePlaceActionResponse(apiResponse, id, filterOption, typeFilter, filterDa
         prx = apiResponse['placeActionLinks']
         df = pd.DataFrame(prx)
         
-        # temp1 = df['name'].tolist()
-        # temp2 = df['placeActionType'].tolist()
-        # temp3 = df['uri'].tolist()
-        # temp4 = df['createTime'].tolist()
-        # temp5 = df['updateTime'].tolist()
-        # temp6 = df['providerType'].tolist()
-
-        # df = pd.DataFrame({
-        #     'name': df['name'].values,
-        #     'placeActionType': df['placeActionType'].values,
-        #     'uri': df['uri'].values,
-        #     'createTime': df['createTime'].values,
-        #     'updateTime': df['updateTime'].values,
-        #     'providerType': df['providerType'].values
-        # })
         df = dfCols(df, 'name', 'placeActionType', 'uri', 'createTime', 'updateTime', 'providerType')
 
         df['createTime'] = df['createTime'].astype(str)
@@ -240,7 +216,6 @@ def deleteLink(locationId, placeActionIdList, heads):
         r_info = requests.delete(call, headers = heads)
         response = r_info.status_code
         df.loc[i] = [locationId, placeActionIdList[i], response]
-    # print(df)
     return df
 
 def filterByDate(df, option, columnName, filterData):
@@ -248,7 +223,6 @@ def filterByDate(df, option, columnName, filterData):
     df[columnName] = pd.to_datetime(df[columnName])
     df[columnName] = df[columnName].dt.floor('s')
 
-    # print('Using ' + str(filterData))
     if option == 'Before':
         filtered_df = df[df[columnName].dt.date < filterData]
     elif option == 'On or Before':
@@ -304,7 +278,7 @@ if __name__ == "__main__":
 
         with st.form("Form"):
             frame = uploadFile()
-            # frame.dropna(inplace=True)
+            # frame.dropna(inplace = True)
             filterData = ''
             daterange = ''
             placeActionTypeFilter = ''
@@ -351,7 +325,6 @@ if __name__ == "__main__":
                         authErrors(response)
                         continue
                     postsToDel = parseLocalPostsResponse(googleAccountNum, response, i, filterOption, filterData, daterange)
-                    # print(postsToDel) 
                     locationLog = deletePost(googleAccountNum, postsToDel, i, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
