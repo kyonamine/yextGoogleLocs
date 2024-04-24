@@ -72,7 +72,7 @@ def uploadFile():
             st.error("CSV file should contain exactly 2 columns.")
             exitApp(2)
         else:
-            expected_columns = ['My ID', 'Other ID']
+            expected_columns = ['Yext ID', 'Google ID']
             if not all(col in dataframe.columns for col in expected_columns):
                 st.error("Error: Columns should be titled \"Yext ID\" and \"Google ID\".")
                 exitApp(2)
