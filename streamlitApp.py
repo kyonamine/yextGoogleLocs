@@ -347,10 +347,10 @@ if __name__ == "__main__":
                         os.write(1,  f"{i}\n".encode())
                         response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
                         if not isinstance(response, pd.DataFrame):
-                            locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': [200]})
+                            locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': ['Failed']})
                             dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
                             authErrors(response)
-                            continue
+                            break
                         postsToDel = parseLocalPostsResponse(googleAccountNum, response, i, filterOption, filterData, daterange)
                         locationLog = deletePost(googleAccountNum, postsToDel, i, headers)
                         dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
