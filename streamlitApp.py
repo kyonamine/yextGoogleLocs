@@ -335,7 +335,7 @@ if __name__ == "__main__":
                     if googleAccountNum == '':
                         exitApp(3)
                     else:
-                        # os.write(1,  f"{i}\n".encode())
+                        os.write(1,  f"{i}\n".encode())
                         response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
                         # os.write(1,  f"{response}\n".encode())
                         if isinstance(response, str) and 'No localPosts for' in response:
