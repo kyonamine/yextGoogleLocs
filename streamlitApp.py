@@ -68,7 +68,6 @@ def uploadFile():
     uploaded_file = st.file_uploader("Provide a file with IDs. Make sure the CSV file has headers of \"Yext ID\" (first) and \"Google ID\" (second).")
     if uploaded_file is not None:
         dataframe = pd.read_csv(uploaded_file, dtype = {'Yext ID': str, 'Google ID': str})
-        st.write(dataframe)
         if len(dataframe.columns) != 2:
             st.error("Error: CSV file should contain exactly 2 columns.")
             exitApp(2)
