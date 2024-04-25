@@ -343,6 +343,8 @@ if __name__ == "__main__":
                         os.write(1,  f"{response}\n".encode())
                         if isinstance(response, str) and 'No localPosts for' in response:
                             locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': ['0']})
+                            dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                            continue
                         elif not isinstance(response, pd.DataFrame):
                             st.error(response + '! Stopping.')
                             locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': ['Failed']})
