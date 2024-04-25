@@ -173,7 +173,7 @@ def parseLocalPostsResponse(accountNum, df, externalId, filterType, filterData, 
 def deletePost(accountId, postIdList, externalId, heads):
     baseApi = 'https://mybusiness.googleapis.com/v4/accounts/' + str(accountId) + '/locations/'
     df = pd.DataFrame(columns = ['Google Location ID', 'localPostId', 'API Response Code'])
-    os.write(1,  f"{len(postIdList)}\n".encode())
+    os.write(1,  f"{len(postIdList)} on {externalId}\n".encode())
 
     with requests.Session() as session:
         for postId in postIdList:
