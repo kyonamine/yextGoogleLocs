@@ -84,11 +84,7 @@ def uploadFile():
                             st.error(f"Error: Values in column '{col}' should be numbers and should all be greater than 3 digits in length.")
                             exitApp(2)
 
-                # Drop rows with non-numeric values
-                # dataframe['Yext ID'] = pd.to_numeric(dataframe['Yext ID'], errors = 'coerce')
-                # dataframe['Google ID'] = pd.to_numeric(dataframe['Google ID'], errors = 'coerce')
                 dataframe = dataframe.dropna()
-                # dataframe = dataframe[dataframe['Google ID'].str.contains('') == False]
                 dataframe = dataframe.astype(str)
                 st.write(dataframe)
         return dataframe
@@ -342,7 +338,7 @@ if __name__ == "__main__":
                     else:
                         # os.write(1,  f"{i}\n".encode())
                         response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
-                        os.write(1,  f"{response}\n".encode())
+                        # os.write(1,  f"{response}\n".encode())
                         if isinstance(response, str) and 'No localPosts for' in response:
                             locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': ['0']})
                             dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
