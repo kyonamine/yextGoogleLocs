@@ -340,6 +340,7 @@ if __name__ == "__main__":
                     else:
                         # os.write(1,  f"{i}\n".encode())
                         response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
+                        os.write(1,  f"{response}\n".encode())
                         if isinstance(response, str) and 'No localPosts for' in response:
                             locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': ['0']})
                         elif not isinstance(response, pd.DataFrame):
