@@ -85,8 +85,8 @@ def uploadFile():
                             exitApp(2)
 
                 # Drop rows with non-numeric values
-                dataframe['Yext ID'] = pd.to_numeric(dataframe['Yext ID'], errors = 'coerce')
-                dataframe['Google ID'] = pd.to_numeric(dataframe['Google ID'], errors = 'coerce')
+                # dataframe['Yext ID'] = pd.to_numeric(dataframe['Yext ID'], errors = 'coerce')
+                # dataframe['Google ID'] = pd.to_numeric(dataframe['Google ID'], errors = 'coerce')
                 dataframe = dataframe.dropna()
                 dataframe = dataframe.astype(str)
                 st.write(dataframe)
