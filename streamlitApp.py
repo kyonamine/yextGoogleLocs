@@ -79,7 +79,7 @@ def uploadFile():
             else:
                 for col in dataframe.columns:
                     if col == 'Yext ID' or col == 'Google ID':
-                        if not dataframe[col].apply(lambda x: isinstance(x, int) or (isinstance(x, str) and x.isdigit() and len(str(x)) > 3) if pd.notna(x) else True).all():
+                        if not dataframe[col].apply(lambda x: str(x).isdigit() if pd.notna(x) else True).all():
                             st.error(f"Error: Values in column '{col}' should be numbers and should all be greater than 3 digits in length.")
                             exitApp(2)
 
