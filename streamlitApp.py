@@ -127,8 +127,6 @@ def loopThroughIds(accountId, endpoint, id, headers):
         response  = placeActionGetCall(id, headers)
     elif endpoint == 'Social Posts': # this isn't catching the 401 auth token errors. Place action works because it returns the code, but social post GET is returning a dataframe--- they might be getting caught now, not sure
         response = localPostGetCall(accountId, id, headers)
-        if response == 'No localPosts for ' + str(id):
-            response = pd.DataFrame()
     authStatus = authErrors(response)
     if authStatus == 0:
         return response
@@ -342,7 +340,9 @@ if __name__ == "__main__":
                     else:
                         # os.write(1,  f"{i}\n".encode())
                         response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
-                        if not isinstance(response, pd.DataFrame):
+                        if isinstance(response, str) and 'No localPosts for' in response:
+                            locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': ['0']})
+                        elif not isinstance(response, pd.DataFrame):
                             st.error(response + '! Stopping.')
                             locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': ['Failed']})
                             dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
