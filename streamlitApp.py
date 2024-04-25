@@ -136,6 +136,8 @@ def localPostGetCall(accountId, externalId, headers):
     r_info = requests.get(fullApi, headers = headers)
     responseCode = r_info.status_code
     if responseCode != 200:
+        if responseCode == 404:
+            return 'Could not find location ' + str(externalId)
         return 'Failed for ' + str(externalId)
     response = r_info.json()
     try:
@@ -338,8 +340,11 @@ if __name__ == "__main__":
                         os.write(1,  f"{i}\n".encode())
                         response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
                         # os.write(1,  f"{response}\n".encode())
-                        if isinstance(response, str) and 'No localPosts for' in response:
-                            locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': ['0']})
+                        if isinstance(response, str):
+                            if 'No localPosts for' in response:
+                                locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': ['-1']})
+                            elif 'Could not find location' in response:
+                                locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': ['404']})
                             dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
                             continue
                         elif not isinstance(response, pd.DataFrame):
