@@ -138,6 +138,8 @@ def localPostGetCall(accountId, externalId, headers):
     if responseCode != 200:
         if responseCode == 404:
             return 'Could not find location ' + str(externalId)
+        elif responseCode == 401:
+            return 'Need authorization token for ' + str(externalId) + '!'
         return 'Failed for ' + str(externalId)
     response = r_info.json()
     try:
@@ -173,7 +175,7 @@ def parseLocalPostsResponse(accountNum, df, externalId, filterType, filterData, 
 def deletePost(accountId, postIdList, externalId, heads):
     baseApi = 'https://mybusiness.googleapis.com/v4/accounts/' + str(accountId) + '/locations/'
     df = pd.DataFrame(columns = ['Google Location ID', 'localPostId', 'API Response Code'])
-    os.write(1,  f"{len(postIdList)} on {externalId}\n".encode())
+    os.write(1,  f"{len(postIdList)} posts to delete on location ID: {externalId}, account ID {accountId}\n".encode())
 
     with requests.Session() as session:
         for postId in postIdList:
@@ -339,7 +341,7 @@ if __name__ == "__main__":
                     if googleAccountNum == '':
                         exitApp(3)
                     else:
-                        os.write(1,  f"{i}\n".encode())
+                        # os.write(1,  f"{i}\n".encode())
                         response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
                         # os.write(1,  f"{response}\n".encode())
                         if isinstance(response, str):
