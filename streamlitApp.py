@@ -294,7 +294,7 @@ def getQuestions(id, heads):
     return r_info
 
 def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
-    os.write(1, 'parseQuestions')
+    os.write(1, 'parseQuestions'.encode())
     try:
         df = makeDf('questions', apiResponse)
         df = dfCols(df, 'name', 'text', 'createTime', 'updateTime')
@@ -316,7 +316,7 @@ def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
                 questionName = 'locations/' + str(id) + '/questions'
                 result_string = filtered_df.iloc[i].iloc[0].split(questionName)[1]
                 retList.append(result_string)
-        os.write(1, f'Need to delete: {retList}')
+        os.write(1, f'Need to delete: {retList}'.encode())
 
     except: 
         return 0
