@@ -308,6 +308,8 @@ def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
             filtered_df = filterByDate(df, myRange, 'createTime', filterData)
 
         retList = []
+        os.write(1, f'{filtered_df}'.encode())
+
         for index, row in filtered_df.iterrows():
             currentText = row['text']
 
