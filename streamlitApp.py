@@ -305,6 +305,7 @@ if __name__ == "__main__":
         with col2:
             filterOption = st.selectbox("Choose filter option", options = my_dict[field], key = 2)
         st.write(fieldSpecificInfo(field))
+        
         with st.form("Form"):
             frame = uploadFile()
             filterData = ''
