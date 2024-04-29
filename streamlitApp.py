@@ -308,11 +308,11 @@ def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
             filtered_df = filterByDate(df, myRange, 'createTime', filterData)
 
         retList = []
-        os.write(1, f'{filtered_df['text']}'.encode())
+        os.write(1, f'{filtered_df}'.encode())
 
         for index, row in filtered_df.iterrows():
             currentText = row['text']
-
+            os.write(1, f'{currentText}'.encode())
             if filtered_df[filtered_df['text'] == currentText].shape[0] > 1:
                 questionName = 'locations/' + str(id) + '/questions'
                 result_string = row['text'].split(questionName)[1]
