@@ -319,6 +319,7 @@ def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
                 questionName = 'locations/' + str(id) + '/questions'
                 result_string = row['text'].split(questionName)[1]
                 retList.append(result_string)
+        os.write(1, f'finished\n'.encode())
         os.write(1, f'Need to delete: {retList}\n'.encode())
 
     except: 
