@@ -312,7 +312,7 @@ def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
 
         for index, row in filtered_df.iterrows():
             currentText = row['text']
-            os.write(1, f'{currentText}'.encode())
+            os.write(1, f'{currentText}\n'.encode())
             if filtered_df[filtered_df['text'] == currentText].shape[0] > 1:
                 questionName = 'locations/' + str(id) + '/questions'
                 result_string = row['text'].split(questionName)[1]
