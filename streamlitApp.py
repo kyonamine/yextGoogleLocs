@@ -308,7 +308,7 @@ def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
             filtered_df = filterByDate(df, myRange, 'createTime', filterData)
 
         retList = []
-        os.write(1, f'{filtered_df}'.encode())
+        os.write(1, f'{filtered_df}\n'.encode())
 
         for index, row in filtered_df.iterrows():
             currentText = row['text']
@@ -317,7 +317,7 @@ def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
                 questionName = 'locations/' + str(id) + '/questions'
                 result_string = row['text'].split(questionName)[1]
                 retList.append(result_string)
-        os.write(1, f'Need to delete: {retList}'.encode())
+        os.write(1, f'Need to delete: {retList}\n'.encode())
 
     except: 
         return 0
