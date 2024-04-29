@@ -3,11 +3,11 @@ import pandas as pd
 import numpy as np
 import json
 import requests
-import streamlit_analytics as sa
+import streamlit_analytics
 
 
 def main():
-    with sa.track():
+    with streamlit_analytics.track():
 
         st.button("Reset", type="primary")
         if st.button('Say hello'):
