@@ -320,6 +320,7 @@ def loopAndDelete(externalId, targetIdList, heads, base, additional):
     df = pd.DataFrame(columns = ['Google Location ID', 'Target ID', 'API Response Code'])
     for i in range(len(targetIdList)):
         call = base + str(externalId) + additional + targetIdList[i]
+        os.write(1,  f"{call}\n".encode())
         r_info = requests.delete(call, headers = heads)
         response = r_info.status_code
         df.loc[i] = [externalId, targetIdList[i], response]
@@ -419,6 +420,7 @@ if __name__ == "__main__":
                     dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
                     locationLog = deleteDupeQuestions(i, dupeQuestions, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+
             os.write(1,  f"Done!\n".encode())
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
             logCsv = writeLogs(fileName, dfLog)
