@@ -236,7 +236,6 @@ def parsePlaceActionResponse(apiResponse, id, filterOption, typeFilter, filterDa
 def deleteLink(locationId, placeActionIdList, heads):
     base = 'https://mybusinessplaceactions.googleapis.com/v1/locations/'
     additional = '/placeActionLinks/'
-    df = pd.DataFrame(columns = ['Google Location ID', 'placeActionId', 'API Response Code'])
     df = loopAndDelete(locationId, placeActionIdList, heads, base, additional)
     return df
 
@@ -314,7 +313,6 @@ def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
 def deleteDupeQuestions(locationId, questionIdList, heads):
     base = 'https://mybusinessqanda.googleapis.com/v1/locations/'
     additional = '/questions/'
-    df = pd.DataFrame(columns = ['Google Location ID', 'Question ID', 'API Response Code'])
     df = loopAndDelete(locationId, questionIdList, heads, base, additional)
     return df
 
@@ -419,7 +417,7 @@ if __name__ == "__main__":
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, field, i, headers)
                     dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
-                    locationLog = deleteLink(i, dupeQuestions, headers)
+                    locationLog = deleteDupeQuestions(i, dupeQuestions, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
             os.write(1,  f"Done!\n".encode())
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
