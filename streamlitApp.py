@@ -266,6 +266,13 @@ def progress(numRows):
     my_bar.empty()
     return
 
+def fieldSpecificInfo(field):
+    if field == 'Place Action Links' or 'Social Posts':
+        myStr = f'This will delete {field} that match the filter from each listing.'
+    elif field == 'FAQ':
+        myStr = f'This will ensure that there is not more than 1 of the same FAQ on each listing. It will NOT delete all FAQs.'
+    return myStr
+
 def useWarnings():
     st.warning('Please be careful, the actions by this tool cannot be undone! This app is for internal use only and should not be shared with customers. In most cases, this tool only checks the first 100 results that Google returns.', icon = "⚠️")
     st.info('If you have a problem uploading a file, check the error messages, refresh the page, and try again. If you have an authorization token issue, contact Pubops to get a token.', icon = "ℹ️")
@@ -302,6 +309,7 @@ if __name__ == "__main__":
             daterange = ''
             placeActionTypeFilter = ''
             if field == 'Social Posts':
+                st.write(fieldSpecificInfo(field))
                 googleAccountNum = st.text_input("Enter the Google account number (all locations must be in the same account):")
             else:
                 googleAccountNum = 0
@@ -311,6 +319,7 @@ if __name__ == "__main__":
                     ('Before', 'On or Before', 'After', 'On or After'))
                 filterData = st.date_input("What date should we use?", value = None)
             elif filterOption == 'placeActionType':
+                st.write(fieldSpecificInfo(field))
                 placeActionTypeFilter = st.radio(
                     "Select place action type",
                     ('All', 'APPOINTMENT', 'DINING_RESERVATION', 'FOOD_TAKEOUT', 'ONLINE_APPOINTMENT', 'SHOP_ONLINE', 'FOOD_ORDERING', 'FOOD_DELIVERY'))
