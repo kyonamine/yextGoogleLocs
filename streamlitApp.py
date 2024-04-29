@@ -275,14 +275,13 @@ def useWarnings():
 
 if __name__ == "__main__":
     # queryDB(1)
-    streamlit_analytics.start_tracking()
-
 
     st.set_page_config(
         page_title = "Google Locations"
     )
     useWarnings()
     if check_password():
+        streamlit_analytics.start_tracking()
         st.title("Google Locations")
         
         my_dict = {
@@ -364,5 +363,4 @@ if __name__ == "__main__":
             logCsv = writeLogs(fileName, dfLog)
             
             downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
-
-    streamlit_analytics.stop_tracking()
+        streamlit_analytics.stop_tracking()
