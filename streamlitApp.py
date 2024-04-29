@@ -238,11 +238,12 @@ def deleteLink(locationId, placeActionIdList, heads):
     additional = '/placeActionLinks/'
     df = pd.DataFrame(columns = ['Google Location ID', 'placeActionId', 'API Response Code'])
 
-    for i in range(len(placeActionIdList)):
-        call = base + str(locationId) + additional + placeActionIdList[i]
-        r_info = requests.delete(call, headers = heads)
-        response = r_info.status_code
-        df.loc[i] = [locationId, placeActionIdList[i], response]
+    # for i in range(len(placeActionIdList)):
+    #     call = base + str(locationId) + additional + placeActionIdList[i]
+    #     r_info = requests.delete(call, headers = heads)
+    #     response = r_info.status_code
+    #     df.loc[i] = [locationId, placeActionIdList[i], response]
+    df = loopAndDelete(locationId, placeActionIdList, heads, base, additional)
     return df
 
 def filterByDate(df, option, columnName, filterData):
@@ -294,7 +295,6 @@ def getQuestions(id, heads):
     return r_info
 
 def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
-    # os.write(1, 'parseQuestions'.encode())
     try:
         df = makeDf('questions', apiResponse)
         df = dfCols(df, 'name', 'text', 'createTime', 'updateTime')
@@ -307,19 +307,31 @@ def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
             filterData = pd.to_datetime(filterData).date()
             filtered_df = filterByDate(df, myRange, 'createTime', filterData)
 
-        retList = []
         os.write(1, f'{filtered_df}\n'.encode())
-        # allQuestionsTextList = []
         duplicates = filtered_df[filtered_df.duplicated(subset = ['text'], keep = 'first')]
         dupeVals = duplicates['name'].tolist()
         dupeVals = [value.strip('locations/' + id + '/questions/') for value in dupeVals]
-        # dupeVals = [value.replace(id, '') for value in dupeVals]
         os.write(1, f'{dupeVals}\n'.encode())
-
 
     except: 
         return 0
-    return retList
+    return dupeVals
+
+def deleteDupeQuestions(locationId, questionIdList, heads):
+    base = 'https://mybusinessqanda.googleapis.com/v1/locations/'
+    additional = '/questions/'
+    df = pd.DataFrame(columns = ['Google Location ID', 'Question ID', 'API Response Code'])
+    df = loopAndDelete(locationId, questionIdList, heads, base, additional)
+    return df
+
+def loopAndDelete(externalId, targetIdList, heads, base, additional):
+    df = pd.DataFrame(columns = ['Google Location ID', 'Target ID', 'API Response Code'])
+    for i in range(len(targetIdList)):
+        call = base + str(externalId) + additional + targetIdList[i]
+        r_info = requests.delete(call, headers = heads)
+        response = r_info.status_code
+        df.loc[i] = [externalId, targetIdList[i], response]
+    return df
 
 if __name__ == "__main__":
     # queryDB(1)
@@ -413,7 +425,8 @@ if __name__ == "__main__":
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, field, i, headers)
                     dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
-                    # locati
+                    locationLog = deleteLink(i, dupeQuestions, headers)
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
             os.write(1,  f"Done!\n".encode())
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
             logCsv = writeLogs(fileName, dfLog)
