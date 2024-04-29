@@ -309,21 +309,10 @@ def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
 
         retList = []
         os.write(1, f'{filtered_df}\n'.encode())
-        allQuestionsTextList = []
-        for index, row in filtered_df.iterrows():
-            currentText = row['text']
-            # currentName = row['name']
-            if currentText not in allQuestionsTextList:
-                os.write(1, 'here1\n'.encode())
-                allQuestionsTextList.append(currentText)
-            else:
-                os.write(1, 'here2\n'.encode())
-                questionName = 'locations/' + str(id) + '/questions'
-                result_string = row['text'].split(questionName)[1]
-                retList.append(result_string)
-                os.write(1, f'{retList}\n'.encode())
-            # os.write(1, f'{currentName}\n'.encode())
-        os.write(1, f'{retList}\n'.encode())
+        # allQuestionsTextList = []
+        duplicates = filtered_df[filtered_df.duplicated(subset = ['text'], keep = False)]
+        col1_values_for_duplicates = duplicates['name'].tolist()
+        os.write(1, f'{col1_values_for_duplicates}\n'.encode())
 
     except: 
         return 0
