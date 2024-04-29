@@ -205,8 +205,6 @@ def placeActionGetCall(id, heads):
 
 def parsePlaceActionResponse(apiResponse, id, filterOption, typeFilter, filterData, myRange):
     try:
-        # prx = apiResponse['placeActionLinks']
-        # df = pd.DataFrame(prx)
         df = makeDf('placeActionLinks', apiResponse)
         
         df = dfCols(df, 'name', 'placeActionType', 'uri', 'createTime', 'updateTime', 'providerType')
@@ -292,6 +290,34 @@ def getQuestions(id, heads):
     additional = '/questions?pageSize=10&answersPerQuestion=10'
     r_info = requests.get(call + str(id) + additional, headers = heads).json()
     return r_info
+
+def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
+    try:
+        df = makeDf('questions', apiResponse)
+        df = dfCols(df, 'name', 'text', 'createTime', 'updateTime')
+        df['createTime'] = df['createTime'].astype(str)
+        df['updateTime'] = df['updateTime'].astype(str)
+        df['createTime'] = pd.to_datetime(df['createTime'])
+        df['updateTime'] = pd.to_datetime(df['updateTime'])
+
+        if filterOption == 'createTime':
+            filterData = pd.to_datetime(filterData).date()
+            filtered_df = filterByDate(df, myRange, 'createTime', filterData)
+
+        retList = []
+        for index, row in filtered_df.iterrows():
+            currentText = row['text']
+            # currentQId = row['name']
+
+            if filtered_df[filtered_df['currentText'] == currentText].shape[0] > 1:
+                questionName = 'locations/' + str(id) + '/questions'
+                result_string = filtered_df.iloc[i].iloc[0].split(questionName)[1]
+                retList.append(result_string)
+        os.write(1, f'Need to delete: {retList}')
+
+    except: 
+        return 0
+    return retList
 
 if __name__ == "__main__":
     # queryDB(1)
