@@ -237,12 +237,6 @@ def deleteLink(locationId, placeActionIdList, heads):
     base = 'https://mybusinessplaceactions.googleapis.com/v1/locations/'
     additional = '/placeActionLinks/'
     df = pd.DataFrame(columns = ['Google Location ID', 'placeActionId', 'API Response Code'])
-
-    # for i in range(len(placeActionIdList)):
-    #     call = base + str(locationId) + additional + placeActionIdList[i]
-    #     r_info = requests.delete(call, headers = heads)
-    #     response = r_info.status_code
-    #     df.loc[i] = [locationId, placeActionIdList[i], response]
     df = loopAndDelete(locationId, placeActionIdList, heads, base, additional)
     return df
 
