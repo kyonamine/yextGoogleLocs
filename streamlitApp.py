@@ -323,7 +323,7 @@ def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
                 retList.append(result_string)
             # os.write(1, f'{index}\n'.encode())
             # os.write(1, f'{currentName}\n'.encode())
-        os.write(1, f'Need to delete: {retList}\n'.encode())
+        os.write(1, f'{retList}\n'.encode())
 
     except: 
         return 0
