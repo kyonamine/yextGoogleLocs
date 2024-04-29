@@ -323,6 +323,8 @@ if __name__ == "__main__":
                 placeActionTypeFilter = st.radio(
                     "Select place action type",
                     ('All', 'APPOINTMENT', 'DINING_RESERVATION', 'FOOD_TAKEOUT', 'ONLINE_APPOINTMENT', 'SHOP_ONLINE', 'FOOD_ORDERING', 'FOOD_DELIVERY'))
+            elif filterOption == 'FAQs':
+                st.write('No selections needed.')
             else: 
                 filterData = st.text_input("Enter filter (this is case sensitive):") # This would be for key text search
 
