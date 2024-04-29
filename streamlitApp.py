@@ -280,8 +280,6 @@ def fieldSpecificInfo(field):
 def useWarnings():
     st.warning('Please be careful, the actions by this tool cannot be undone! This app is for internal use only and should not be shared with customers. In most cases, this tool only checks the first 100 results that Google returns.', icon = "⚠️")
     st.info('If you have a problem uploading a file, check the error messages, refresh the page, and try again. If you have an authorization token issue, contact Pubops to get a token.', icon = "ℹ️")
-    # exampleSheet = 'https://docs.google.com/spreadsheets/d/18tJfjrlZFd3qQT5ZTnz3eIw5v6KSILTBN-Ol9G7sFLo/edit#gid=0'
-    # st.info('It\'s recommended to use a Google Sheet [in this format](%s) and download as a CSV.' % exampleSheet, icon = "ℹ️")
     return
 
 if __name__ == "__main__":
