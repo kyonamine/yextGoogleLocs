@@ -119,6 +119,10 @@ def authErrors(response):
     except:
         return 0
     
+def makeDf(firstKey, apiResponse):
+    resp = apiResponse[firstKey]
+    return pd.DataFrame(resp)
+    
 def dfCols(df, *columns):
     column_data = {col: df[col].values for col in columns}
     return pd.DataFrame(column_data)
@@ -201,8 +205,9 @@ def placeActionGetCall(id, heads):
 
 def parsePlaceActionResponse(apiResponse, id, filterOption, typeFilter, filterData, myRange):
     try:
-        prx = apiResponse['placeActionLinks']
-        df = pd.DataFrame(prx)
+        # prx = apiResponse['placeActionLinks']
+        # df = pd.DataFrame(prx)
+        df = makeDf('placeActionLinks', apiResponse)
         
         df = dfCols(df, 'name', 'placeActionType', 'uri', 'createTime', 'updateTime', 'providerType')
 
@@ -282,6 +287,12 @@ def useWarnings():
     st.info('If you have a problem uploading a file, check the error messages, refresh the page, and try again. If you have an authorization token issue, contact Pubops to get a token.', icon = "ℹ️")
     return
 
+def getQuestions(id, heads):
+    call = 'https://mybusinessqanda.googleapis.com/v1/locations/'
+    additional = '/questions?pageSize=10&answersPerQuestion=10'
+    r_info = requests.get(call + str(id) + additional, headers = heads).json()
+    return r_info
+
 if __name__ == "__main__":
     # queryDB(1)
 
@@ -305,7 +316,7 @@ if __name__ == "__main__":
         with col2:
             filterOption = st.selectbox("Choose filter option", options = my_dict[field], key = 2)
         st.write(fieldSpecificInfo(field))
-        
+
         with st.form("Form"):
             frame = uploadFile()
             filterData = ''
