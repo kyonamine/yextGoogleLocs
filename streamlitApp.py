@@ -10,7 +10,7 @@ from datetime import date
 import os
 import time
 import sqlConnect_pymysqlConnection as db
-# import streamlit_analytics
+import streamlit_analytics
 
 def queryDB(database):
     connection = db.ConnectToYextDB('ops-sql01.tx1.yext.com', user = st.secrets["dbUsername"], password = st.secrets["dbPassword"])
@@ -275,8 +275,7 @@ def useWarnings():
 
 if __name__ == "__main__":
     # queryDB(1)
-    # streamlit_analytics.stop_tracking()
-
+    streamlit_analytics.start_tracking()
 
 
     st.set_page_config(
@@ -366,4 +365,4 @@ if __name__ == "__main__":
             
             downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
 
-        # streamlit_analytics.stop_tracking()
+    streamlit_analytics.stop_tracking()
