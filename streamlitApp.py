@@ -321,7 +321,7 @@ def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
                 questionName = 'locations/' + str(id) + '/questions'
                 result_string = row['text'].split(questionName)[1]
                 retList.append(result_string)
-            # os.write(1, f'{index}\n'.encode())
+                os.write(1, f'{retList}\n'.encode())
             # os.write(1, f'{currentName}\n'.encode())
         os.write(1, f'{retList}\n'.encode())
 
