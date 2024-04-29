@@ -294,7 +294,7 @@ def getQuestions(id, heads):
     return r_info
 
 def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
-    os.write(1, 'parseQuestions'.encode())
+    # os.write(1, 'parseQuestions'.encode())
     try:
         df = makeDf('questions', apiResponse)
         df = dfCols(df, 'name', 'text', 'createTime', 'updateTime')
