@@ -304,12 +304,13 @@ if __name__ == "__main__":
             filterOption = st.selectbox("Choose filter option", options = my_dict[field], key = 2)
 
         with st.form("Form"):
+            st.write(fieldSpecificInfo(field))
             frame = uploadFile()
             filterData = ''
             daterange = ''
             placeActionTypeFilter = ''
             if field == 'Social Posts':
-                st.write(fieldSpecificInfo(field))
+                
                 googleAccountNum = st.text_input("Enter the Google account number (all locations must be in the same account):")
             else:
                 googleAccountNum = 0
@@ -319,7 +320,6 @@ if __name__ == "__main__":
                     ('Before', 'On or Before', 'After', 'On or After'))
                 filterData = st.date_input("What date should we use?", value = None)
             elif filterOption == 'placeActionType':
-                st.write(fieldSpecificInfo(field))
                 placeActionTypeFilter = st.radio(
                     "Select place action type",
                     ('All', 'APPOINTMENT', 'DINING_RESERVATION', 'FOOD_TAKEOUT', 'ONLINE_APPOINTMENT', 'SHOP_ONLINE', 'FOOD_ORDERING', 'FOOD_DELIVERY'))
