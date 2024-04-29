@@ -69,7 +69,7 @@ def uploadFile():
     # st.info('It\'s recommended to use a Google Sheet [in this format](%s) and download as a CSV.' % exampleSheet, icon = "ℹ️")
     uploaded_file = st.file_uploader("Provide a file with IDs. Make sure the CSV file has headers of \"Yext ID\" (first) and \"Google ID\" (second).", 
                                     type = ['csv', 'txt'],
-                                    help = 'It\'s recommended to use a Google Sheet [in this format](%s) and download as a CSV.' % exampleSheet, icon = "ℹ️")
+                                    help = 'It\'s recommended to use a Google Sheet [in this format](%s) and download as a CSV.' % exampleSheet)
     if uploaded_file is not None:
         dataframe = pd.read_csv(uploaded_file, dtype = {'Yext ID': str, 'Google ID': str})
         if len(dataframe.columns) != 2:
