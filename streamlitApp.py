@@ -302,15 +302,13 @@ if __name__ == "__main__":
             field = st.selectbox("Choose field", options = my_dict.keys(), key = 1)
         with col2:
             filterOption = st.selectbox("Choose filter option", options = my_dict[field], key = 2)
-
+        st.write(fieldSpecificInfo(field))
         with st.form("Form"):
-            st.write(fieldSpecificInfo(field))
             frame = uploadFile()
             filterData = ''
             daterange = ''
             placeActionTypeFilter = ''
             if field == 'Social Posts':
-                
                 googleAccountNum = st.text_input("Enter the Google account number (all locations must be in the same account):")
             else:
                 googleAccountNum = 0
