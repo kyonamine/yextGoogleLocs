@@ -315,12 +315,12 @@ def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
             currentName = row['name']
             os.write(1, f'{index}\n'.encode())
             os.write(1, f'{currentName}\n'.encode())
-            if filtered_df[filtered_df['text'] == currentText].shape[0] > 0:
-                questionName = 'locations/' + str(id) + '/questions'
-                result_string = row['text'].split(questionName)[1]
-                retList.append(result_string)
-        os.write(1, f'finished\n'.encode())
-        os.write(1, f'Need to delete: {retList}\n'.encode())
+        #     if filtered_df[filtered_df['text'] == currentText].shape[0] > 0:
+        #         questionName = 'locations/' + str(id) + '/questions'
+        #         result_string = row['text'].split(questionName)[1]
+        #         retList.append(result_string)
+        # os.write(1, f'finished\n'.encode())
+        # os.write(1, f'Need to delete: {retList}\n'.encode())
 
     except: 
         return 0
