@@ -310,11 +310,10 @@ def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
         retList = []
         for index, row in filtered_df.iterrows():
             currentText = row['text']
-            # currentQId = row['name']
 
-            if filtered_df[filtered_df['currentText'] == currentText].shape[0] > 1:
+            if filtered_df[filtered_df['text'] == currentText].shape[0] > 1:
                 questionName = 'locations/' + str(id) + '/questions'
-                result_string = filtered_df.iloc[i].iloc[0].split(questionName)[1]
+                result_string = row['text'].split(questionName)[1]
                 retList.append(result_string)
         os.write(1, f'Need to delete: {retList}'.encode())
 
