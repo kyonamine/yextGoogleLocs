@@ -314,6 +314,7 @@ def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
             currentText = row['text']
             # currentName = row['name']
             if currentText not in allQuestionsTextList:
+                os.write(1, 'here\n'.encode())
                 allQuestionsTextList.append(currentText)
             else:
                 questionName = 'locations/' + str(id) + '/questions'
