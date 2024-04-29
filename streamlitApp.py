@@ -311,8 +311,11 @@ def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
         os.write(1, f'{filtered_df}\n'.encode())
         # allQuestionsTextList = []
         duplicates = filtered_df[filtered_df.duplicated(subset = ['text'], keep = 'first')]
-        col1_values_for_duplicates = duplicates['name'].tolist()
-        os.write(1, f'{col1_values_for_duplicates}\n'.encode())
+        dupeVals = duplicates['name'].tolist()
+        dupeVals = [value.strip('locations/').strip('/questions/') for value in dupeVals]
+        dupeVals = [value.replace(id, '') for value in dupeVals]
+        os.write(1, f'{dupeVals}\n'.encode())
+
 
     except: 
         return 0
