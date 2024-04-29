@@ -310,7 +310,7 @@ def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
         retList = []
         os.write(1, f'{filtered_df}\n'.encode())
         # allQuestionsTextList = []
-        duplicates = filtered_df[filtered_df.duplicated(subset = ['text'], keep = False)]
+        duplicates = filtered_df[filtered_df.duplicated(subset = ['text'], keep = 'first')]
         col1_values_for_duplicates = duplicates['name'].tolist()
         os.write(1, f'{col1_values_for_duplicates}\n'.encode())
 
