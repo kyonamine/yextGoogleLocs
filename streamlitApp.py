@@ -300,10 +300,10 @@ def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
             filterData = pd.to_datetime(filterData).date()
             filtered_df = filterByDate(df, myRange, 'createTime', filterData)
 
-        os.write(1, f'{filtered_df}\n'.encode())
+        # os.write(1, f'{filtered_df}\n'.encode())
         duplicates = filtered_df[filtered_df.duplicated(subset = ['text'], keep = 'first')]
         dupeVals = duplicates['name'].tolist()
-        dupeVals = [value.strip('locations/' + id + '/questions/') for value in dupeVals]
+        dupeVals = [value.strip('locations/' + id + '/questions') for value in dupeVals]
         os.write(1, f'{dupeVals}\n'.encode())
 
     except: 
