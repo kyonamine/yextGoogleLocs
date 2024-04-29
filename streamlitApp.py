@@ -296,7 +296,7 @@ if __name__ == "__main__":
         my_dict = {
                 "Place Action Links": ["placeActionType", "uri", "createTime"], 
                 "Social Posts": ["createTime", "Key Text Search"], 
-                "FAQs": []
+                "FAQs": ["createTime"]
             }
         col1, col2 = st.columns([2, 1])
 
