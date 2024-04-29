@@ -363,4 +363,4 @@ if __name__ == "__main__":
             logCsv = writeLogs(fileName, dfLog)
             
             downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
-        streamlit_analytics.stop_tracking()
+        streamlit_analytics.stop_tracking(st.secrets["analyticsPass"])
