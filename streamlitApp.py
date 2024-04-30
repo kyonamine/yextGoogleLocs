@@ -293,8 +293,9 @@ def getQuestions(id, heads):
     df = pd.DataFrame(data)
     
     if nextPageToken:
-        # os.write(1, f'{nextPageToken}\n'.encode())
-        more_data = getQuestions(f'{call}{str(id)}/questions?pageSize=10&pageToken={nextPageToken}&answersPerQuestion=10', heads)
+        url = f'{call}{str(id)}/questions?pageSize=10&pageToken={nextPageToken}&answersPerQuestion=10'
+        os.write(1, f'{url}\n'.encode())
+        more_data = getQuestions(f'{url}', heads)
         df = pd.concat([df, more_data])
     os.write(1, f'{df}\n'.encode())
     return df
