@@ -329,11 +329,14 @@ def deleteDupeQuestions(locationId, questionIdList, heads):
 
 def loopAndDelete(externalId, targetIdList, heads, base, additional):
     df = pd.DataFrame(columns = ['Google Location ID', 'Target ID', 'API Response Code'])
-    for i in range(len(targetIdList)):
-        call = base + str(externalId) + additional + targetIdList[i]
-        r_info = requests.delete(call, headers = heads)
-        response = r_info.status_code
-        df.loc[i] = [externalId, targetIdList[i], response]
+    if len(targetIdList) == 0:
+        df.loc[i] = [externalId, 'None', 0]
+    else:
+        for i in range(len(targetIdList)):
+            call = base + str(externalId) + additional + targetIdList[i]
+            r_info = requests.delete(call, headers = heads)
+            response = r_info.status_code
+            df.loc[i] = [externalId, targetIdList[i], response]
     return df
 
 if __name__ == "__main__":
