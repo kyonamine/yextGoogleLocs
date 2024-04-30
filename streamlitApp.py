@@ -281,17 +281,17 @@ def useWarnings():
     st.info('If you have a problem uploading a file, check the error messages, refresh the page, and try again. If you have an authorization token issue, contact Pubops to get a token.', icon = "ℹ️")
     return
 
-def getQuestions(id, heads , pageToken = None):
+def getQuestions(id, heads):
     call = 'https://mybusinessqanda.googleapis.com/v1/locations/'
     additional = '/questions?pageSize=10&answersPerQuestion=10'
-    response_json = requests.get(call + str(id) + additional, headers = heads).json()
+    response_json = requests.get(f'{call}{str(id)}{additional}', headers = heads).json()
     data = response_json.get('questions', [])
     nextPageToken = response_json.get('nextPageToken')
     df = pd.DataFrame(data)
     os.write(1, f'{df}\n'.encode())
     if nextPageToken:
         # Recursively fetch more data
-        more_data = getQuestions(call + str(id) + additional + '&pageToken=' + nextPageToken, heads)
+        more_data = getQuestions(f'{call}{str(id)}{additional}&pageToken={nextPageToken}', headers = heads)
         df = pd.concat([df, more_data])
     # os.write(1, f'{df}\n'.encode())
     return df
