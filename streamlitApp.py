@@ -299,13 +299,13 @@ def getQuestions(id, heads):
             url = None
     
     df = pd.DataFrame(all_data)
-    os.write(1, f'{df}\n'.encode())
-    os.write(1, f'{df.dtypes}\n'.encode())
+    # os.write(1, f'{df}\n'.encode())
+    # os.write(1, f'{df.dtypes}\n'.encode())
     return df
 
-def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
+def parseQuestions(df, id, filterOption, filterData, myRange):
     try:
-        df = makeDf('questions', apiResponse)
+        # df = makeDf('questions', apiResponse)
         df = dfCols(df, 'name', 'text', 'createTime', 'updateTime')
         df['createTime'] = df['createTime'].astype(str)
         df['updateTime'] = df['updateTime'].astype(str)
