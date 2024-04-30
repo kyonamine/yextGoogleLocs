@@ -291,7 +291,7 @@ def getQuestions(id, heads , currentPageToken = None):
     df = pd.DataFrame(data)
     if currentPageToken:
         # Recursively fetch more data
-        more_data = getQuestions(call + str(id) + additional, heads, params = {'pageToken': currentPageToken})
+        more_data = getQuestions(call + str(id) + additional + '&pageToken=' + currentPageToken, heads)
         df = pd.concat([df, more_data])
     os.write(1, f'{df}\n'.encode())
     return df
