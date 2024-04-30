@@ -330,7 +330,7 @@ def deleteDupeQuestions(locationId, questionIdList, heads):
 def loopAndDelete(externalId, targetIdList, heads, base, additional):
     df = pd.DataFrame(columns = ['Google Location ID', 'Target ID', 'API Response Code'])
     if targetIdList == 0:
-        df.loc[len(df)] = [externalId, f'Failed for {externalId}', -1]
+        df.loc[len(df)] = [externalId, f'No duplicates for {externalId}', -1]
     else:
         for i in range(len(targetIdList)):
             call = base + str(externalId) + additional + targetIdList[i]
