@@ -287,11 +287,15 @@ def getQuestions(id, heads , pageToken = None):
     r_info = requests.get(call + str(id) + additional, headers = heads).json()
     df = pd.DataFrame(r_info['questions'])
     df = df.reset_index()
-    # while True:
-    #     if 'nextPageToken' in r_info:
-    #         pageToken = r_info['nextPageToken']   
-    #         r_info = getQuestions(id, heads, pageToken).json() 
-    #         prx = r_info['response']
+    while True:
+        if 'nextPageToken' in r_info:
+            pageToken = r_info['nextPageToken']   
+            r_info = getQuestions(id, heads, pageToken).json() 
+            prx = r_info['questions']
+            df2 = pd.DataFrame(prx)
+            df = pd.concat([df, df2], axis = 0, ignore_index = True)
+        else:
+            break
     os.write(1, f'{df}\n'.encode())
     return r_info
 
