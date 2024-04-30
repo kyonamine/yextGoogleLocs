@@ -284,14 +284,14 @@ def useWarnings():
 def getQuestions(id, heads):
     call = 'https://mybusinessqanda.googleapis.com/v1/locations/'
     additional = '/questions?pageSize=10&answersPerQuestion=10'
-    response_json = requests.get(f'{call}{str(id)}{additional}', headers = heads).json()
+    response_json = requests.get(f'{call}{str(id)}{additional}', heads).json()
     data = response_json.get('questions', [])
     nextPageToken = response_json.get('nextPageToken')
     df = pd.DataFrame(data)
     os.write(1, f'{df}\n'.encode())
     if nextPageToken:
         # Recursively fetch more data
-        more_data = getQuestions(f'{call}{str(id)}{additional}&pageToken={nextPageToken}', headers = heads)
+        more_data = getQuestions(f'{call}{str(id)}{additional}&pageToken={nextPageToken}', heads)
         df = pd.concat([df, more_data])
     # os.write(1, f'{df}\n'.encode())
     return df
