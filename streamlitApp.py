@@ -286,7 +286,7 @@ def getQuestions(id, heads , pageToken = None):
     additional = '/questions?pageSize=10&answersPerQuestion=10'
     response_json = requests.get(call + str(id) + additional, headers = heads).json()
     # response_json = response.json()
-    data = response_json.get('data', [])
+    data = response_json.get('questions', [])
     nextPageToken = response_json.get('nextPageToken')
     df = pd.DataFrame(data)
     if nextPageToken:
