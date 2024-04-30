@@ -285,7 +285,7 @@ def getQuestions(id, heads , pageToken = None):
     call = 'https://mybusinessqanda.googleapis.com/v1/locations/'
     additional = '/questions?pageSize=10&answersPerQuestion=10'
     r_info = requests.get(call + str(id) + additional, headers = heads).json()
-    df = pd.DataFrame(r_info)
+    df = pd.DataFrame(r_info['questions'])
     df = df.reset_index()
     # while True:
     #     if 'nextPageToken' in r_info:
