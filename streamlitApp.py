@@ -281,10 +281,13 @@ def useWarnings():
     st.info('If you have a problem uploading a file, check the error messages, refresh the page, and try again. If you have an authorization token issue, contact Pubops to get a token.', icon = "ℹ️")
     return
 
-def getQuestions(id, heads):
+def getQuestions(id, heads , pageToken = None):
     call = 'https://mybusinessqanda.googleapis.com/v1/locations/'
     additional = '/questions?pageSize=10&answersPerQuestion=10'
+    if pageToken:
+        additional += f'&pageToken={pageToken}'
     r_info = requests.get(call + str(id) + additional, headers = heads).json()
+    os.write(1, f'{r_info}\n'.encode())
     return r_info
 
 def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
@@ -417,8 +420,9 @@ if __name__ == "__main__":
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, field, i, headers)
                     dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
-                    locationLog = deleteDupeQuestions(i, dupeQuestions, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                    # locationLog = deleteDupeQuestions(i, dupeQuestions, headers)
+                    # dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             os.write(1,  f"Done!\n".encode())
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
