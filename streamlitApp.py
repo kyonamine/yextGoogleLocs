@@ -285,7 +285,9 @@ def getQuestions(id, heads):
     os.write(1, f'{heads}\n'.encode())
     call = 'https://mybusinessqanda.googleapis.com/v1/locations/'
     additional = '/questions?pageSize=10&answersPerQuestion=10'
-    response_json = requests.get(f'{call}{str(id)}{additional}', heads).json()
+    url = f'{call}{str(id)}{additional}'
+    os.write(1, f'{url}\n'.encode())
+    response_json = requests.get(f'{url}', heads).json()
     os.write(1, f'{response_json}\n'.encode())
     data = response_json.get('questions', [])
     nextPageToken = response_json.get('nextPageToken')
