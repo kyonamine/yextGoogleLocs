@@ -370,12 +370,9 @@ if __name__ == "__main__":
 
         with st.form("Form"):
             frame = uploadFile()
-            # filterData = ''
-            sessionStateVars('filterData', '')
-            # daterange = ''
-            sessionStateVars('daterange', '')
-            # placeActionTypeFilter = ''
-            sessionStateVars('placeActionTypeFilter', '')
+            filterData = ''
+            daterange = ''
+            placeActionTypeFilter = ''
             if field == 'Social Posts':
                 googleAccountNum = st.text_input("Enter the Google account number (all locations must be in the same account):")
             else:
