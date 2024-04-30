@@ -316,7 +316,7 @@ def parseQuestions(df, id, filterOption, filterData, myRange):
         duplicates = filtered_df[filtered_df.duplicated(subset = ['text'], keep = 'first')]
         dupeVals = duplicates['name'].tolist()
         dupeVals = [value.replace('locations/' + id + '/questions/', '') for value in dupeVals]
-        os.write(1, f'{dupeVals}\n'.encode())
+        os.write(1, f'Google ID: {id}, {dupeVals}\n'.encode())
     except: 
         return 0
     return dupeVals
