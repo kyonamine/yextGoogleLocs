@@ -285,20 +285,26 @@ def getQuestions(id, heads):
     call = 'https://mybusinessqanda.googleapis.com/v1/locations/'
     additional = '/questions?pageSize=10&answersPerQuestion=10'
     url = f'{call}{str(id)}{additional}'
-    os.write(1, f'{url}\n'.encode())
-    response_json = requests.get(f'{url}', headers = heads).json()
-    # os.write(1, f'{response_json}\n'.encode())
-    data = response_json.get('questions', [])
-    nextPageToken = response_json.get('nextPageToken')
-    df = pd.DataFrame(data)
-    
-    if nextPageToken:
-        url = f'{call}{str(id)}/questions?pageSize=10&pageToken={nextPageToken}&answersPerQuestion=10'
+    all_data = []
+    while url:
         os.write(1, f'{url}\n'.encode())
-        more_data = getQuestions(f'{url}', heads)
-        df = pd.concat([df, more_data])
+        
+        response_json = requests.get(url, headers=heads).json()
+        
+        data = response_json.get('questions', [])
+        nextPageToken = response_json.get('nextPageToken')
+        
+        all_data.extend(data)
+        
+        if nextPageToken:
+            url = f'{call}{str(id)}/questions?pageSize=10&pageToken={nextPageToken}&answersPerQuestion=10'
+        else:
+            url = None
+    
+    df = pd.DataFrame(all_data)
     os.write(1, f'{df}\n'.encode())
     return df
+
 
     # df = pd.DataFrame(data)
 
