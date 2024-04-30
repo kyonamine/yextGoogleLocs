@@ -339,13 +339,13 @@ def loopAndDelete(externalId, targetIdList, heads, base, additional):
             df.loc[len(df)] = [externalId, targetIdList[i], response]
     return df
 
-def sessionStateVars(field, value):
-    if field not in st.session_state:
-        st.session_state[field] = value
-    return 
+# def sessionStateVars(field, value):
+#     if field not in st.session_state:
+#         st.session_state[field] = value
+#     return 
 
 if __name__ == "__main__":
-    # queryDB(1)
+    st.session_state.state_dict = {}
 
     st.set_page_config(
         page_title = "Google Locations"
