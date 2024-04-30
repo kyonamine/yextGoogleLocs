@@ -284,18 +284,16 @@ def useWarnings():
 def getQuestions(id, heads , pageToken = None):
     call = 'https://mybusinessqanda.googleapis.com/v1/locations/'
     additional = '/questions?pageSize=10&answersPerQuestion=10'
-    if pageToken:
-        additional += f'&pageToken={pageToken}'
     r_info = requests.get(call + str(id) + additional, headers = heads).json()
-    questions = r_info.get('questions', [])
-    next_page_token = r_info.get('nextPageToken')
-    if next_page_token:
-        next_page_questions = getQuestions(id, heads, next_page_token)
-        questions.extend(next_page_questions)
-
-    os.write(1, f'{questions}\n'.encode())
-    return questions
-    # return r_info
+    df = pd.DataFrame(r_info)
+    df = df.reset_index()
+    # while True:
+    #     if 'nextPageToken' in r_info:
+    #         pageToken = r_info['nextPageToken']   
+    #         r_info = getQuestions(id, heads, pageToken).json() 
+    #         prx = r_info['response']
+    os.write(1, f'{df}\n'.encode())
+    return r_info
 
 def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
     try:
