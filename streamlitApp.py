@@ -336,7 +336,7 @@ def loopAndDelete(externalId, targetIdList, heads, base, additional):
             call = base + str(externalId) + additional + targetIdList[i]
             r_info = requests.delete(call, headers = heads)
             response = r_info.status_code
-            df.loc[i] = [externalId, targetIdList[i], response]
+            df.loc[len(df)] = [externalId, targetIdList[i], response]
     return df
 
 if __name__ == "__main__":
