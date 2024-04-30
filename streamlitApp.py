@@ -287,7 +287,7 @@ def getQuestions(id, heads):
     additional = '/questions?pageSize=10&answersPerQuestion=10'
     url = f'{call}{str(id)}{additional}'
     os.write(1, f'{url}\n'.encode())
-    response_json = requests.get(f'{url}', heads).json()
+    response_json = requests.get(f'{url}', headers = heads).json()
     os.write(1, f'{response_json}\n'.encode())
     data = response_json.get('questions', [])
     nextPageToken = response_json.get('nextPageToken')
