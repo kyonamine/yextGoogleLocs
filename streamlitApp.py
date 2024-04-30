@@ -291,11 +291,10 @@ def getQuestions(id, heads):
     nextPageToken = response_json.get('nextPageToken')
     df = pd.DataFrame(data)
     os.write(1, f'{df}\n'.encode())
-    if nextPageToken:
-        os.write(1, f'another call\n'.encode())
-        more_data = getQuestions(f'{call}{str(id)}{additional}&pageToken={nextPageToken}', heads)
-        df = pd.concat([df, more_data])
-    # os.write(1, f'{df}\n'.encode())
+    # if nextPageToken:
+    #     os.write(1, f'another call\n'.encode())
+    #     more_data = getQuestions(f'{call}{str(id)}{additional}&pageToken={nextPageToken}', heads)
+    #     df = pd.concat([df, more_data])
     return df
 
     # df = pd.DataFrame(data)
