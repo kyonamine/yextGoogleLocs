@@ -287,8 +287,15 @@ def getQuestions(id, heads , pageToken = None):
     if pageToken:
         additional += f'&pageToken={pageToken}'
     r_info = requests.get(call + str(id) + additional, headers = heads).json()
-    os.write(1, f'{r_info}\n'.encode())
-    return r_info
+    questions = r_info.get('questions', [])
+    next_page_token = r_info.get('nextPageToken')
+    if next_page_token:
+        next_page_questions = getQuestions(id, heads, next_page_token)
+        questions.extend(next_page_questions)
+
+    os.write(1, f'{questions}\n'.encode())
+    return questions
+    # return r_info
 
 def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
     try:
