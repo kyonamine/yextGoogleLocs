@@ -299,13 +299,10 @@ def getQuestions(id, heads):
             url = None
     
     df = pd.DataFrame(all_data)
-    # os.write(1, f'{df}\n'.encode())
-    # os.write(1, f'{df.dtypes}\n'.encode())
     return df
 
 def parseQuestions(df, id, filterOption, filterData, myRange):
     try:
-        # df = makeDf('questions', apiResponse)
         df = dfCols(df, 'name', 'text', 'createTime', 'updateTime')
         df['createTime'] = df['createTime'].astype(str)
         df['updateTime'] = df['updateTime'].astype(str)
@@ -316,12 +313,10 @@ def parseQuestions(df, id, filterOption, filterData, myRange):
             filterData = pd.to_datetime(filterData).date()
             filtered_df = filterByDate(df, myRange, 'createTime', filterData)
 
-        # os.write(1, f'{filtered_df}\n'.encode())
         duplicates = filtered_df[filtered_df.duplicated(subset = ['text'], keep = 'first')]
         dupeVals = duplicates['name'].tolist()
         dupeVals = [value.replace('locations/' + id + '/questions/', '') for value in dupeVals]
         os.write(1, f'{dupeVals}\n'.encode())
-
     except: 
         return 0
     return dupeVals
@@ -433,8 +428,8 @@ if __name__ == "__main__":
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, field, i, headers)
                     dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
-                    # locationLog = deleteDupeQuestions(i, dupeQuestions, headers)
-                    # dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                    locationLog = deleteDupeQuestions(i, dupeQuestions, headers)
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             os.write(1,  f"Done!\n".encode())
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
