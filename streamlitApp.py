@@ -339,6 +339,11 @@ def loopAndDelete(externalId, targetIdList, heads, base, additional):
             df.loc[len(df)] = [externalId, targetIdList[i], response]
     return df
 
+def sessionStateVars(field, value):
+    if field not in st.session_state:
+        st.session_state[field] = value
+    return 
+
 if __name__ == "__main__":
     # queryDB(1)
 
@@ -365,9 +370,12 @@ if __name__ == "__main__":
 
         with st.form("Form"):
             frame = uploadFile()
-            filterData = ''
-            daterange = ''
-            placeActionTypeFilter = ''
+            # filterData = ''
+            sessionStateVars('filterData', '')
+            # daterange = ''
+            sessionStateVars('daterange', '')
+            # placeActionTypeFilter = ''
+            sessionStateVars('placeActionTypeFilter', '')
             if field == 'Social Posts':
                 googleAccountNum = st.text_input("Enter the Google account number (all locations must be in the same account):")
             else:
