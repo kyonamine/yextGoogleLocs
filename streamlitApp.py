@@ -300,6 +300,7 @@ def getQuestions(id, heads):
     
     df = pd.DataFrame(all_data)
     os.write(1, f'{df}\n'.encode())
+    os.write(1, f'{df.dtypes}\n'.encode())
     return df
 
 def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
