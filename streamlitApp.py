@@ -282,6 +282,7 @@ def useWarnings():
     return
 
 def getQuestions(id, heads):
+    os.write(1, f'{heads}\n'.encode())
     call = 'https://mybusinessqanda.googleapis.com/v1/locations/'
     additional = '/questions?pageSize=10&answersPerQuestion=10'
     response_json = requests.get(f'{call}{str(id)}{additional}', heads).json()
