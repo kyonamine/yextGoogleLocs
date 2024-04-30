@@ -287,15 +287,12 @@ def getQuestions(id, heads):
     url = f'{call}{str(id)}{additional}'
     all_data = []
     while url:
-        os.write(1, f'{url}\n'.encode())
-        
         response_json = requests.get(url, headers=heads).json()
         
         data = response_json.get('questions', [])
         nextPageToken = response_json.get('nextPageToken')
         
-        all_data.extend(data)
-        
+        all_data.extend(data)      
         if nextPageToken:
             url = f'{call}{str(id)}/questions?pageSize=10&pageToken={nextPageToken}&answersPerQuestion=10'
         else:
@@ -304,12 +301,6 @@ def getQuestions(id, heads):
     df = pd.DataFrame(all_data)
     os.write(1, f'{df}\n'.encode())
     return df
-
-
-    # df = pd.DataFrame(data)
-
-    # os.write(1, f'{df}\n'.encode())
-    # return r_info
 
 def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
     try:
