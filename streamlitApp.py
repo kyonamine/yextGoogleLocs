@@ -420,7 +420,6 @@ if __name__ == "__main__":
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, field, i, headers)
                     dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
-                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
                     # locationLog = deleteDupeQuestions(i, dupeQuestions, headers)
                     # dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
