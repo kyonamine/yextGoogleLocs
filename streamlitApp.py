@@ -290,7 +290,7 @@ def getQuestions(id, heads):
     df = pd.DataFrame(data)
     os.write(1, f'{df}\n'.encode())
     if nextPageToken:
-        # Recursively fetch more data
+        os.write(1, f'another call\n'.encode())
         more_data = getQuestions(f'{call}{str(id)}{additional}&pageToken={nextPageToken}', heads)
         df = pd.concat([df, more_data])
     # os.write(1, f'{df}\n'.encode())
