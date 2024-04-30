@@ -281,23 +281,25 @@ def useWarnings():
     st.info('If you have a problem uploading a file, check the error messages, refresh the page, and try again. If you have an authorization token issue, contact Pubops to get a token.', icon = "ℹ️")
     return
 
-def getQuestions(id, heads , pageToken = None):
+def getQuestions(id, heads , currentPageToken = None):
     call = 'https://mybusinessqanda.googleapis.com/v1/locations/'
     additional = '/questions?pageSize=10&answersPerQuestion=10'
-    r_info = requests.get(call + str(id) + additional, headers = heads).json()
-    df = pd.DataFrame(r_info['questions'])
-    df = df.reset_index()
-    while True:
-        if 'nextPageToken' in r_info:
-            pageToken = r_info['nextPageToken']   
-            r_info = getQuestions(id, heads, pageToken).json() 
-            prx = r_info['questions']
-            df2 = pd.DataFrame(prx)
-            df = pd.concat([df, df2], axis = 0, ignore_index = True)
-        else:
-            break
+    response = requests.get(call + str(id) + additional, headers = heads, pageToken = currentPageToken).json()
+    response_json = response.json()
+    data = response_json.get('data', [])
+    currentPageToken = response_json.get('nextPageToken')
+    df = pd.DataFrame(data)
+    if currentPageToken:
+        # Recursively fetch more data
+        more_data = getQuestions(call + str(id) + additional, params = {'pageToken': currentPageToken})
+        df = pd.concat([df, more_data])
     os.write(1, f'{df}\n'.encode())
-    return r_info
+    return df
+
+    # df = pd.DataFrame(data)
+
+    # os.write(1, f'{df}\n'.encode())
+    # return r_info
 
 def parseQuestions(apiResponse, id, filterOption, filterData, myRange):
     try:
