@@ -383,14 +383,9 @@ def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
 def deleteMedia(accountId, mediaIdList, externalId, heads):
     baseApi = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/media/'
     df = pd.DataFrame(columns = ['Google Location ID', 'Media ID', 'API Response Code'])
-    # os.write(1,  f"{len(mediaIdList)} posts to delete on location ID: {externalId}, account ID {accountId}\n".encode())
-
-    # with requests.Session() as session:
     for mediaId in mediaIdList:
         call = f"{baseApi}{mediaId}"
         r_info = requests.delete(call, headers = heads)
-        os.write(1,  f"{r_info.status_code}\n".encode())
-        # r_info = session.delete(call, headers = heads)
         response = r_info.status_code
         df.loc[len(df)] = [externalId, str(mediaId), response]
     return df
