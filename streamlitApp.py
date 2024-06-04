@@ -387,7 +387,7 @@ def deleteMedia(accountId, mediaIdList, externalId, heads):
 
     # with requests.Session() as session:
     for mediaId in mediaIdList:
-        call = f"{baseApi}{externalId}/localPosts/{mediaId}"
+        call = f"{baseApi}{mediaId}"
         r_info = requests.delete(call, headers = heads)
         os.write(1,  f"{r_info.status_code}\n".encode())
         # r_info = session.delete(call, headers = heads)
