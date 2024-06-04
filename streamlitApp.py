@@ -270,8 +270,6 @@ def progress(numRows):
     return
 
 def fieldSpecificInfo(field):
-    # if field == 'Place Action Links' or field == 'Social Posts':
-    #     myStr = f'This will delete {field} that match the filter from each listing.'
     if field == 'FAQs':
         myStr = f'This only deletes questions posted by the merchant.\nIt will ensure that there is not more than 1 of the same FAQ on each listing. It will NOT delete all FAQs.'
     else:
