@@ -358,7 +358,8 @@ if __name__ == "__main__":
         my_dict = {
                 "Place Action Links": ["placeActionType", "uri", "createTime"], 
                 "Social Posts": ["createTime", "Key Text Search"], 
-                "FAQs": ["createTime"]
+                "FAQs": ["createTime"],
+                "Photos": ["createTime"]
             }
         col1, col2 = st.columns([2, 1])
 
@@ -373,7 +374,7 @@ if __name__ == "__main__":
             filterData = ''
             daterange = ''
             placeActionTypeFilter = ''
-            if field == 'Social Posts':
+            if field == 'Social Posts' or field == 'Photos':
                 googleAccountNum = st.text_input("Enter the Google account number (all locations must be in the same account):")
             else:
                 googleAccountNum = 0
