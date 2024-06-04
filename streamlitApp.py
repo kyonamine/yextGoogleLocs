@@ -134,6 +134,8 @@ def loopThroughIds(accountId, endpoint, id, headers):
         response = localPostGetCall(accountId, id, headers)
     elif endpoint == 'FAQs':
         response = getQuestions(id, headers)
+    elif endpoint == 'Photos':
+        response = getPhotosCall(accountId, id, headers)
     authStatus = authErrors(response)
     if authStatus == 0:
         return response
@@ -339,10 +341,56 @@ def loopAndDelete(externalId, targetIdList, heads, base, additional):
             df.loc[len(df)] = [externalId, targetIdList[i], response]
     return df
 
-# def sessionStateVars(field, value):
-#     if field not in st.session_state:
-#         st.session_state[field] = value
-#     return 
+def getPhotosCall(accountId, externalId, headers):
+    url = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/media?pageSize=500'
+    r_info = requests.get(url, headers = headers)
+    responseCode = r_info.status_code
+    if responseCode != 200:
+        if responseCode == 404:
+            return 'Could not find location ' + str(externalId)
+        elif responseCode == 401:
+            return 'Need authorization token for ' + str(externalId) + '!'
+        return 'Failed for ' + str(externalId)
+    response = r_info.json()
+    try:
+        temp = response['mediaItems']
+    except: 
+        return 'No mediaItems for ' + str(externalId)
+    
+    df = pd.DataFrame(temp)
+    return df
+
+def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
+    accountStr = 'accounts/' + str(accountNum) + '/locations/' + str(externalId) + '/media/'
+    df['name'] = df['name'].str.replace(str(accountStr), '')
+
+    df = dfCols(df, 'name', 'sourceUrl', 'mediaFormat', 'googleUrl', 'thumbnailUrl', 'createTime')
+
+    # Search for posts that meet the criteria
+    if filterType == 'createTime':
+        try:
+            df['createTime'] = pd.to_datetime(df['createTime']).dt.tz_localize(None)
+            filterData = pd.to_datetime(filterData)
+            filtered_df = filterByDate(df, myRange, 'createTime', filterData)
+        except ValueError as e:
+            # print("Error:", e)
+            return []
+
+    postList = filtered_df['name'].tolist()
+    return postList
+
+def deleteMedia(accountId, mediaIdList, externalId, heads):
+    baseApi = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/media/'
+    df = pd.DataFrame(columns = ['Google Location ID', 'Media ID', 'API Response Code'])
+    # os.write(1,  f"{len(mediaIdList)} posts to delete on location ID: {externalId}, account ID {accountId}\n".encode())
+
+    with requests.Session() as session:
+        for mediaId in mediaIdList:
+            call = f"{baseApi}{externalId}/localPosts/{mediaId}"
+            r_info = session.delete(call, headers = heads)
+            response = r_info.status_code
+            df.loc[len(df)] = [externalId, str(mediaId), response]
+    return df
 
 if __name__ == "__main__":
     st.session_state.state_dict = {}
