@@ -488,6 +488,13 @@ if __name__ == "__main__":
                     locationLog = deleteDupeQuestions(i, dupeQuestions, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
+            elif field == 'Photos':
+                for i in listGoogleIds:
+                    response = loopThroughIds(googleAccountNum, field, i, headers)
+                    photosToDel = parseMedia(googleAccountNum, response, i, filterOption, filterData, daterange)
+                    locationLog = deleteMedia(googleAccountNum, photosToDel, i, headers)
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+
             os.write(1,  f"Done!\n".encode())
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
             logCsv = writeLogs(fileName, dfLog)
