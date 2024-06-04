@@ -377,6 +377,7 @@ def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
             return []
 
     postList = filtered_df['name'].tolist()
+    os.write(1,  f"{len(postList)}".encode())
     return postList
 
 def deleteMedia(accountId, mediaIdList, externalId, heads):
@@ -492,8 +493,8 @@ if __name__ == "__main__":
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, field, i, headers)
                     photosToDel = parseMedia(googleAccountNum, response, i, filterOption, filterData, daterange)
-                    locationLog = deleteMedia(googleAccountNum, photosToDel, i, headers)
-                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                    # locationLog = deleteMedia(googleAccountNum, photosToDel, i, headers)
+                    # dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             os.write(1,  f"Done!\n".encode())
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
