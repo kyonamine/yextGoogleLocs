@@ -406,7 +406,7 @@ if __name__ == "__main__":
                 "Social Posts": ["createTime", "Key Text Search"], 
                 "FAQs": ["createTime"],
                 "Photos": ["createTime"],
-                "moreHours": [None]
+                "moreHours": ["moreHours Type"]
             }
         col1, col2 = st.columns([2, 1])
 
