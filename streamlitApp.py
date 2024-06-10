@@ -450,7 +450,7 @@ if __name__ == "__main__":
             filterData = ''
             daterange = ''
             placeActionTypeFilter = ''
-            if field == 'Social Posts' or field == 'Photos':
+            if field == 'Social Posts' or field == 'Photos' or field == 'moreHours':
                 googleAccountNum = st.text_input("Enter the Google account number (all locations must be in the same account):")
             else:
                 googleAccountNum = 0
@@ -463,7 +463,7 @@ if __name__ == "__main__":
                 placeActionTypeFilter = st.radio(
                     "Select place action type",
                     ('All', 'APPOINTMENT', 'DINING_RESERVATION', 'FOOD_TAKEOUT', 'ONLINE_APPOINTMENT', 'SHOP_ONLINE', 'FOOD_ORDERING', 'FOOD_DELIVERY'))
-            elif filterOption in ('moreHours', 'FAQs'):
+            elif filterOption == 'FAQs':
                 st.write('No selections needed.')
             else: 
                 filterData = st.text_input("Enter filter (this is case sensitive):") # This would be for key text search
