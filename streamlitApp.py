@@ -136,42 +136,19 @@ def loopThroughIds(accountId, endpoint, id, headers):
         response = getQuestions(id, headers)
     elif endpoint == 'Photos':
         response = getPhotosCall(accountId, id, headers)
-    elif endpoint == 'moreHours':
-        response = getMoreHoursCall(id, headers)
     authStatus = authErrors(response)
     if authStatus == 0:
         return response
     return 0
 
-def getMoreHoursCall(externalId, headers):
-    fullApi = f'https://mybusinessbusinessinformation.googleapis.com/v1/locations/{str(externalId)}?readMask=moreHours'
-    r_info = requests.get(fullApi, headers = headers)
-    
-    responseCode = r_info.status_code
-    os.write(1,  f"Calling {responseCode}\n".encode())
-    if responseCode != 200:
-        if responseCode == 404:
-            return 'Could not find location ' + str(externalId)
-        elif responseCode == 401:
-            return 'Need authorization token for ' + str(externalId) + '!'
-        return 'Failed for ' + str(externalId)
-    response = r_info.json()
-    try:
-        temp = response['moreHours'][0]
-    except: 
-        return 'No moreHours for ' + str(externalId)
-    
-    df = pd.DataFrame(temp)
+def deleteHours(externalId, headers):
+    fullApi = f'https://mybusinessbusinessinformation.googleapis.com/v1/locations/{str(externalId)}?updateMask=moreHours'
+    patchData = {'moreHours': []}
+    r_info = requests.patch(fullApi, data = patchData, headers = headers)
+    df = pd.DataFrame(columns = ['Google Location ID', 'API Response Code'])
+    df.loc[0] = [externalId, r_info.status_code]
     os.write(1,  f"{df}\n".encode())
-    # print(df)
     return df
-
-def parseMoreHours(accountNum, df, externalId, filterType, filterData, myRange):
-    # df = dfCols(df, 'name', 'hoursType', 'hours', 'createTime', 'updateTime')
-
-
-    hoursList = filtered_df['name'].tolist()
-    return hoursList
 
 def localPostGetCall(accountId, externalId, headers):
     base = 'https://mybusiness.googleapis.com/v4/accounts/' + str(accountId) + '/locations/'
@@ -438,7 +415,7 @@ if __name__ == "__main__":
                 "Social Posts": ["createTime", "Key Text Search"], 
                 "FAQs": ["createTime"],
                 "Photos": ["createTime"],
-                "moreHours": ["Access", "Breakfast", "Brunch", "Delivery", "Dinner", "Drive Thru", "Happy Hour", "Kitchen", "Takeout", "Senior"]
+                "moreHours": ["All"]
             }
         col1, col2 = st.columns([2, 1])
 
@@ -494,9 +471,7 @@ if __name__ == "__main__":
                     if googleAccountNum == '':
                         exitApp(3)
                     else:
-                        # os.write(1,  f"{i}\n".encode())
                         response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
-                        # os.write(1,  f"{response}\n".encode())
                         if isinstance(response, str):
                             if 'No localPosts for' in response:
                                 locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': ['-1']})
@@ -529,10 +504,9 @@ if __name__ == "__main__":
 
             elif field == 'moreHours':
                 for i in listGoogleIds:
-                    response = loopThroughIds(googleAccountNum, field, i, headers)
-                    # photosToDel = parseMoreHours(googleAccountNum, response, i, filterOption, filterData, daterange)
-                    # locationLog = deleteMedia(googleAccountNum, photosToDel, i, headers)
-                    # dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                    locationLog = deleteHours(i, headers)
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                    
 
             os.write(1,  f"Done!\n".encode())
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
