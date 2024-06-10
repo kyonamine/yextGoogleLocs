@@ -160,7 +160,8 @@ def getMoreHoursCall(externalId, headers):
         return 'No moreHours for ' + str(externalId)
     
     df = pd.DataFrame(temp)
-    print(df)
+    os.write(1,  f"{df}\n".encode())
+    # print(df)
     return df
 
 def parseMoreHours(accountNum, df, externalId, filterType, filterData, myRange):
