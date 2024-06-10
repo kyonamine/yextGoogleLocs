@@ -405,7 +405,8 @@ if __name__ == "__main__":
                 "Place Action Links": ["placeActionType", "uri", "createTime"], 
                 "Social Posts": ["createTime", "Key Text Search"], 
                 "FAQs": ["createTime"],
-                "Photos": ["createTime"]
+                "Photos": ["createTime"],
+                "moreHours": []
             }
         col1, col2 = st.columns([2, 1])
 
