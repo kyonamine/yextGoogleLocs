@@ -146,8 +146,9 @@ def loopThroughIds(accountId, endpoint, id, headers):
 def getMoreHoursCall(externalId, headers):
     fullApi = f'https://mybusinessbusinessinformation.googleapis.com/v1/locations/{str(externalId)}?readMask=moreHours'
     r_info = requests.get(fullApi, headers = headers)
-    os.write(1,  f"Calling {fullApi}\n".encode())
+    
     responseCode = r_info.status_code
+    os.write(1,  f"Calling {responseCode}\n".encode())
     if responseCode != 200:
         if responseCode == 404:
             return 'Could not find location ' + str(externalId)
