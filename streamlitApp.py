@@ -298,8 +298,13 @@ def getQuestions(id, heads):
     url = f'{call}{str(id)}{additional}'
     all_data = []
     while url:
-        response_json = requests.get(url, headers=heads).json()
-        
+        # response_json = requests.get(url, headers=heads).json()
+        response = requests.get(url, headers = heads)
+        response_json = response.json()
+        rStatusCode = response.status_code
+        if rStatusCode == 401:
+            exitApp(1)
+            
         data = response_json.get('questions', [])
         nextPageToken = response_json.get('nextPageToken')
         
@@ -347,6 +352,8 @@ def loopAndDelete(externalId, targetIdList, heads, base, additional):
             call = base + str(externalId) + additional + targetIdList[i]
             r_info = requests.delete(call, headers = heads)
             response = r_info.status_code
+            if response == 401:
+                exitApp(1)
             df.loc[len(df)] = [externalId, targetIdList[i], response]
     return df
 
