@@ -418,12 +418,13 @@ def deleteLogo(accountId, externalId, heads):
 
 def postLogo(accountId, externalId, heads, logoSource):
     baseApi = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/media'
-    df = pd.DataFrame(columns = ['Google Location ID', 'Media ID', 'API Response Code'])
+    df = pd.DataFrame(columns = ['Google Location ID', 'Info', 'API Response Code'])
     body = f'''{{
         "locationAssociation": {{"category": "PROFILE"}},
         "mediaFormat": "PHOTO",
         "sourceUrl": "{logoSource}"
     }}'''
+    os.write(1,  f"{body}\n".encode())
     r_info = requests.post(baseApi, headers = heads, json = body)
     response = r_info.status_code
     response_json = r_info.json()
