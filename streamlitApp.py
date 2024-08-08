@@ -424,7 +424,7 @@ def postLogo(accountId, externalId, heads, logoSource):
     }}'''
     r_info = requests.post(baseApi, headers = heads, json = body)
     response = r_info.status_code
-    df.loc[len(df)] = [externalId, r_info.json()['name'], response]
+    df.loc[len(df)] = [externalId, r_info.json().get('name', 'Failed'), response]
     return df
 
 if __name__ == "__main__":
