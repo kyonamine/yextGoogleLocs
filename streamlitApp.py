@@ -406,6 +406,26 @@ def deleteMedia(accountId, mediaIdList, externalId, heads):
         df.loc[len(df)] = [externalId, str(mediaId), response]
     return df
 
+def deleteLogo(accountId, externalId, heads):
+    baseApi = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/media/profile'
+    df = pd.DataFrame(columns = ['Google Location ID', 'Media ID', 'API Response Code'])
+    r_info = requests.delete(baseApi, headers = heads)
+    response = r_info.status_code
+    df.loc[len(df)] = [externalId, '/profile', response]
+    return df
+
+def postLogo(accountId, externalId, heads, logoSource):
+    baseApi = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/media'
+    df = pd.DataFrame(columns = ['Google Location ID', 'Media ID', 'API Response Code'])
+    body = f'{
+        "locationAssociation": {{"category": "PROFILE"}},
+        "mediaFormat": "PHOTO",
+        "sourceUrl": {logoSource}}'
+    r_info = requests.post(baseApi, headers = heads, json = body)
+    response = r_info.status_code
+    df.loc[len(df)] = [externalId, r_info.json()['name'], response]
+    return df
+
 if __name__ == "__main__":
     st.session_state.state_dict = {}
 
@@ -422,7 +442,8 @@ if __name__ == "__main__":
                 "Social Posts": ["createTime", "Key Text Search"], 
                 "FAQs": ["createTime"],
                 "Photos": ["createTime"],
-                "moreHours": ["All"]
+                "moreHours": ["All"], 
+                "Logo": ["Logo"]
             }
         col1, col2 = st.columns([2, 1])
 
@@ -437,7 +458,7 @@ if __name__ == "__main__":
             filterData = ''
             daterange = ''
             placeActionTypeFilter = ''
-            if field == 'Social Posts' or field == 'Photos':
+            if field == 'Social Posts' or field == 'Photos' or field == 'Logo':
                 googleAccountNum = st.text_input("Enter the Google account number (all locations must be in the same account):")
             else:
                 googleAccountNum = 0
@@ -452,6 +473,8 @@ if __name__ == "__main__":
                     ('All', 'APPOINTMENT', 'DINING_RESERVATION', 'FOOD_TAKEOUT', 'ONLINE_APPOINTMENT', 'SHOP_ONLINE', 'FOOD_ORDERING', 'FOOD_DELIVERY'))
             elif filterOption == 'FAQs':
                 st.write('No selections needed.')
+            elif filterOption == 'Logo':
+                logoSourceUrl = st.text_input("Enter the URL of the logo you want to upload:")
             else: 
                 if field != 'moreHours':
                     filterData = st.text_input("Enter filter (this is case sensitive):") # This would be for key text search
@@ -514,6 +537,12 @@ if __name__ == "__main__":
                     locationLog = deleteHours(i, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
                     
+            elif field == 'Logo':
+                for i in listGoogleIds:
+                    locationLog = deleteLogo(googleAccountNum, i, headers)
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                    locationLog = postLogo(googleAccountNum, i, headers, logoSourceUrl)
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             os.write(1,  f"Done!\n".encode())
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
