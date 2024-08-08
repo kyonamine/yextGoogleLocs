@@ -426,7 +426,12 @@ def postLogo(accountId, externalId, heads, logoSource):
     }}'''
     r_info = requests.post(baseApi, headers = heads, json = body)
     response = r_info.status_code
-    df.loc[len(df)] = [externalId, r_info.json().get('name', 'Failed'), response]
+    response_json = r_info.json()
+    if response == 200:
+        responseInfo = response_json.get('name', 'Unknown')
+    else:
+        responseInfo = r_info.text
+    df.loc[len(df)] = [externalId, responseInfo, response]
     return df
 
 if __name__ == "__main__":
