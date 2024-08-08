@@ -283,6 +283,8 @@ def progress(numRows):
 def fieldSpecificInfo(field):
     if field == 'FAQs':
         myStr = f'This only deletes questions posted by the merchant.\nIt will ensure that there is not more than 1 of the same FAQ on each listing. It will NOT delete all FAQs.'
+    elif field == 'Logo':
+        myStr = f'This will update logos for the provided IDs.'
     else:
         myStr = f'This will delete {field} that match the filter from each listing.'
     return myStr
@@ -481,7 +483,10 @@ if __name__ == "__main__":
                     filterData = st.text_input("Enter filter (this is case sensitive):") # This would be for key text search
 
             token = st.text_input("Enter Google API Authorization token (No 'Bearer' included. Should start with 'ya29.'):")
-            form_submitted = st.form_submit_button("Delete " +  field)
+            if field == 'Logo':
+                form_submitted = st.form_submit_button("Update Logos")
+            else:
+                form_submitted = st.form_submit_button("Delete " +  field)
  
         if form_submitted:
             os.write(1,  f"{field}\n".encode())
