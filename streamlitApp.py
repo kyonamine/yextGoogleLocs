@@ -9,32 +9,32 @@ import sys
 from datetime import date
 import os
 import time
-import sqlConnect_pymysqlConnection as db
+# import sqlConnect_pymysqlConnection as db
 import streamlit_analytics
 
-def queryDB(database):
-    connection = db.ConnectToYextDB('ops-sql01.tx1.yext.com', user = st.secrets["dbUsername"], password = st.secrets["dbPassword"])
-    os.write(1,  f"{connection}\n".encode())
-    result = connection.query_database(allIdsQuery(pd.DataFrame({'col1': [1, 2]})  ))
-    os.write(1,  f"{result}\n".encode())
-    connection.close_connection()
-    return
+# def queryDB(database):
+#     connection = db.ConnectToYextDB('ops-sql01.tx1.yext.com', user = st.secrets["dbUsername"], password = st.secrets["dbPassword"])
+#     os.write(1,  f"{connection}\n".encode())
+#     result = connection.query_database(allIdsQuery(pd.DataFrame({'col1': [1, 2]})  ))
+#     os.write(1,  f"{result}\n".encode())
+#     connection.close_connection()
+#     return
 
-def allIdsQuery(df):
-    tempList = df[df.columns[0]].values.tolist()
-    tempList = [4058034, 4058035]
-    tempList = ', '.join(map(str, tempList))
+# def allIdsQuery(df):
+#     tempList = df[df.columns[0]].values.tolist()
+#     tempList = [4058034, 4058035]
+#     tempList = ', '.join(map(str, tempList))
     
-    query = f"""
-        select tl.location_id, tl.externalId from alpha.tags_listings tl
-        where tl.partner_id = 715
-        and tl.location_id in ({tempList})
-    """
-    os.write(1,  f"{query}\n".encode())
-    return query
+#     query = f"""
+#         select tl.location_id, tl.externalId from alpha.tags_listings tl
+#         where tl.partner_id = 715
+#         and tl.location_id in ({tempList})
+#     """
+#     os.write(1,  f"{query}\n".encode())
+#     return query
 
-def getExternalIds(df):
-    return df[df.columns[0]].values.tolist()
+# def getExternalIds(df):
+#     return df[df.columns[0]].values.tolist()
 
 def check_password():
     """Returns `True` if the user had the correct password."""
