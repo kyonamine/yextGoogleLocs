@@ -413,7 +413,7 @@ def deleteLogo(accountId, externalId, heads):
     df = pd.DataFrame(columns = ['Google Location ID', 'Media ID', 'API Response Code'])
     r_info = requests.delete(baseApi, headers = heads)
     response = r_info.status_code
-    df.loc[len(df)] = [externalId, '/profile', response]
+    df.loc[len(df)] = [externalId, f'Delete to /profile', response]
     return df
 
 def postLogo(accountId, externalId, heads, logoSource):
@@ -432,7 +432,7 @@ def postLogo(accountId, externalId, heads, logoSource):
         responseInfo = response_json.get('name', 'Unknown')
     else:
         responseInfo = r_info.text
-    df.loc[len(df)] = [externalId, responseInfo, response]
+    df.loc[len(df)] = [externalId, f'Post logo', response]
     return df
 
 if __name__ == "__main__":
