@@ -542,8 +542,9 @@ if __name__ == "__main__":
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             elif field == 'All  FAQs':
-                os.write(1,  f"In the All FAQs section\n".encode())
+                
                 for i in listGoogleIds:
+                    os.write(1,  f"In the All FAQs loop\n".encode())
                     response = loopThroughIds(googleAccountNum, field, i, headers)
                     
                     dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
