@@ -327,7 +327,7 @@ def deleteAllQuestions(df, locationId, heads):
             r_info = requests.delete(f'{base}{questionId}', headers = heads)
             logDf.loc[len(logDf)] = [locationId, f'Deleting question {questionId}', r_info.status_code]
     else:
-        logDf[0] = [locationId, f'No questions to delete', 200]
+        logDf = pd.DataFrame({'Google Location ID': [locationId], 'Question ID': ['No questions to delete'], 'API Response Code': [200]})
     return logDf
 
 def parseQuestions(df, id, filterOption, filterData, myRange):
