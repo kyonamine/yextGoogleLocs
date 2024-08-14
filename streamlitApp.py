@@ -321,7 +321,7 @@ def getQuestions(id, heads):
 def deleteAllQuestions(df, locationId, heads):
     logDf = pd.DataFrame(columns = ['Google Location ID', 'Question ID', 'API Response Code'])
     if df.empty:
-        logDf = logDf.append({'Google Location ID': locationId, 'Question ID': 'No questions to delete', 'API Response Code': 200}, ignore_index=True)
+        logDf = pd.concat([logDf, pd.DataFrame([{'Google Location ID': locationId, 'Question ID': 'No questions to delete', 'API Response Code': 200}])], ignore_index=True)
         return logDf
     base = f'https://mybusinessqanda.googleapis.com/v1/locations/{locationId}/questions/'
     
