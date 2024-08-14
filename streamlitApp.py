@@ -305,6 +305,7 @@ def getQuestions(id, heads):
         # response_json = requests.get(url, headers=heads).json()
         response = requests.get(url, headers = heads)
         response_json = response.json()
+        os.write(1,  f"{response_json}\n".encode())
         rStatusCode = response.status_code
         if rStatusCode == 401:
             exitApp(1)
