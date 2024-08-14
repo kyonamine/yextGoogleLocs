@@ -319,6 +319,7 @@ def getQuestions(id, heads):
     return df
 
 def deleteAllQuestions(df, locationId, heads):
+    os.write(1,  f"Deleting all\n".encode())
     base = f'https://mybusinessqanda.googleapis.com/v1/locations/{locationId}/questions/'
     df = pd.DataFrame(columns = ['Google Location ID', 'Question ID', 'API Response Code'])
     for i in df[df.columns[0]].values.tolist():
@@ -546,7 +547,8 @@ if __name__ == "__main__":
             elif field == 'All FAQs':
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, field, i, headers)
-                    deleteAllQuestions(response, i, headers)
+                    locationLog = deleteAllQuestions(response, i, headers)
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             elif field == 'Photos':
                 for i in listGoogleIds:
