@@ -540,8 +540,9 @@ if __name__ == "__main__":
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, field, i, headers)
                     os.write(1,  f"{response}\n".encode())
-                    # if str(i) == '11742181451714878497':
-                        # return 0
+                    dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
+                    locationLog = deleteDupeQuestions(i, dupeQuestions, headers)
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             elif field == 'Photos':
                 for i in listGoogleIds:
