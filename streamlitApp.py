@@ -455,7 +455,7 @@ if __name__ == "__main__":
                 "Place Action Links": ["placeActionType", "uri", "createTime"], 
                 "Social Posts": ["createTime", "Key Text Search"], 
                 "Dupe FAQs": ["createTime"],
-                "All  FAQs": ["All"],
+                "All FAQs": ["All"],
                 "Photos": ["createTime"],
                 "moreHours": ["All"], 
                 "Logo": ["Logo"]
@@ -489,7 +489,7 @@ if __name__ == "__main__":
             elif filterOption == 'Logo':
                 logoSourceUrl = st.text_input("Enter the URL of the logo you want to upload:")
             else: 
-                if field != 'All  FAQs' and field != 'moreHours':
+                if field != 'All FAQs' and field != 'moreHours':
                     filterData = st.text_input("Enter filter (this is case sensitive):") # This would be for key text search
 
             token = st.text_input("Enter Google API Authorization token (No 'Bearer' included. Should start with 'ya29.'):")
