@@ -326,6 +326,8 @@ def deleteAllQuestions(df, locationId, heads):
             questionId = i.replace(f'locations/{locationId}/questions/', '')
             r_info = requests.delete(f'{base}{questionId}', headers = heads)
             logDf.loc[len(logDf)] = [locationId, f'Deleting question {questionId}', r_info.status_code]
+    else:
+        logDf[0] = [locationId, f'No questions to delete', 200]
     return logDf
 
 def parseQuestions(df, id, filterOption, filterData, myRange):
