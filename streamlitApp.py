@@ -319,15 +319,11 @@ def getQuestions(id, heads):
     return df
 
 def deleteAllQuestions(df, locationId, heads):
-    os.write(1,  f"{df}\n".encode())
     base = f'https://mybusinessqanda.googleapis.com/v1/locations/{locationId}/questions/'
     logDf = pd.DataFrame(columns = ['Google Location ID', 'Question ID', 'API Response Code'])
-    os.write(1,  f"{df[df.columns[0]].values.tolist()}\n".encode())
     for i in df[df.columns[0]].values.tolist():
         questionId = i.replace(f'locations/{locationId}/questions/', '')
-        os.write(1,  f"{base}{questionId}\n".encode())
         r_info = requests.delete(f'{base}{questionId}', headers = heads)
-        os.write(1,  f"{r_info.status_code}\n".encode())
         logDf.loc[len(logDf)] = [locationId, f'Deleting question {questionId}', r_info.status_code]
     return logDf
 
