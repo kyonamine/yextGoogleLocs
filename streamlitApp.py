@@ -129,13 +129,11 @@ def dfCols(df, *columns):
 
 def loopThroughIds(accountId, endpoint, id, headers):
     response = 0
-    os.write(1,  f"First endpoint is {endpoint}\n".encode())
     if endpoint == 'placeActionLinks':
         response  = placeActionGetCall(id, headers)
     elif endpoint == 'Social Posts': # this isn't catching the 401 auth token errors. Place action works because it returns the code, but social post GET is returning a dataframe--- they might be getting caught now, not sure
         response = localPostGetCall(accountId, id, headers)
     elif endpoint == 'All FAQs' or endpoint == 'Dupe FAQs':
-        os.write(1,  f"Second endpoint is: {endpoint}\n".encode())
         response = getQuestions(id, headers)
     elif endpoint == 'Photos':
         response = getPhotosCall(accountId, id, headers)
@@ -150,7 +148,6 @@ def deleteHours(externalId, headers):
     r_info = requests.patch(fullApi, data = patchData, headers = headers)
     df = pd.DataFrame(columns = ['Google Location ID', 'API Response Code'])
     df.loc[0] = [externalId, r_info.status_code]
-    os.write(1,  f"{df}\n".encode())
     return df
 
 def localPostGetCall(accountId, externalId, headers):
@@ -301,13 +298,10 @@ def getQuestions(id, heads):
     call = 'https://mybusinessqanda.googleapis.com/v1/locations/'
     additional = '/questions?pageSize=10&answersPerQuestion=10'
     url = f'{call}{str(id)}{additional}'
-    os.write(1,  f"{url}\n".encode())
     all_data = []
     while url:
-        # response_json = requests.get(url, headers=heads).json()
         response = requests.get(url, headers = heads)
         response_json = response.json()
-        os.write(1,  f"{response_json}\n".encode())
         rStatusCode = response.status_code
         if rStatusCode == 401:
             exitApp(1)
@@ -327,7 +321,7 @@ def getQuestions(id, heads):
 def deleteAllQuestions(df, locationId, heads):
     base = f'https://mybusinessqanda.googleapis.com/v1/locations/{locationId}/questions/'
     df = pd.DataFrame(columns = ['Google Location ID', 'Question ID', 'API Response Code'])
-    for i in df['name']:
+    for i in df[0]:
         questionId = i.replace(f'locations/{locationId}/questions/', '')
         r_info = requests.delete(f'{base}{questionId}', headers = heads)
         df.loc[len(df)] = [locationId, f'Deleting question {questionId}', r_info.status_code]
@@ -348,7 +342,6 @@ def parseQuestions(df, id, filterOption, filterData, myRange):
         duplicates = filtered_df[filtered_df.duplicated(subset = ['text'], keep = 'first')]
         dupeVals = duplicates['name'].tolist()
         dupeVals = [value.replace('locations/' + id + '/questions/', '') for value in dupeVals]
-        os.write(1, f'Google ID: {id}, {len(dupeVals)}\n'.encode())
     except: 
         return 0
     return dupeVals
@@ -438,7 +431,6 @@ def postLogo(accountId, externalId, heads, logoSource):
         "mediaFormat": "PHOTO",
         "sourceUrl": "{logoSource}"
     }}'''
-    # os.write(1,  f"{body}\n".encode())
     r_info = requests.post(baseApi, headers = heads, json = json.loads(body))
     response = r_info.status_code
     response_json = r_info.json()
@@ -553,10 +545,7 @@ if __name__ == "__main__":
             elif field == 'All FAQs':
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, field, i, headers)
-                    os.write(1,  f"{response}\n".encode())
                     deleteAllQuestions(response, i, headers)
-                    # locationLog = deleteDupeQuestions(i, dupeQuestions, headers)
-                    # dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             elif field == 'Photos':
                 for i in listGoogleIds:
