@@ -135,6 +135,7 @@ def loopThroughIds(accountId, endpoint, id, headers):
         response = localPostGetCall(accountId, id, headers)
     elif endpoint == 'All FAQs' or endpoint == 'Dupe FAQs':
         response = getQuestions(id, headers)
+        os.write(1,  f"{response}\n".encode())
     elif endpoint == 'Photos':
         response = getPhotosCall(accountId, id, headers)
     authStatus = authErrors(response)
@@ -540,7 +541,7 @@ if __name__ == "__main__":
             elif field == 'All  FAQs':
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, field, i, headers)
-                    os.write(1,  f"{response}\n".encode())
+                    
                     dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
                     locationLog = deleteDupeQuestions(i, dupeQuestions, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
