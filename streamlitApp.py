@@ -281,7 +281,7 @@ def progress(numRows):
     return
 
 def fieldSpecificInfo(field):
-    if field == 'FAQs':
+    if field == 'Dupe FAQs':
         myStr = f'This only deletes questions posted by the merchant.\nIt will ensure that there is not more than 1 of the same FAQ on each listing. It will NOT delete all FAQs.'
     elif field == 'Logo':
         myStr = f'This will update logos for the provided IDs.'
@@ -449,8 +449,8 @@ if __name__ == "__main__":
         my_dict = {
                 "Place Action Links": ["placeActionType", "uri", "createTime"], 
                 "Social Posts": ["createTime", "Key Text Search"], 
-                "De-Dupe FAQs": ["createTime"],
-                "Delete all  FAQs": ["All"],
+                "Dupe FAQs": ["createTime"],
+                "All  FAQs": ["All"],
                 "Photos": ["createTime"],
                 "moreHours": ["All"], 
                 "Logo": ["Logo"]
@@ -481,7 +481,7 @@ if __name__ == "__main__":
                 placeActionTypeFilter = st.radio(
                     "Select place action type",
                     ('All', 'APPOINTMENT', 'DINING_RESERVATION', 'FOOD_TAKEOUT', 'ONLINE_APPOINTMENT', 'SHOP_ONLINE', 'FOOD_ORDERING', 'FOOD_DELIVERY'))
-            elif filterOption in ('De-Dupe FAQs', 'Delete all  FAQs'):
+            elif filterOption in ('Dupe FAQs', 'All  FAQs'):
                 st.write('No selections needed.')
             elif filterOption == 'Logo':
                 logoSourceUrl = st.text_input("Enter the URL of the logo you want to upload:")
