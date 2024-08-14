@@ -542,6 +542,7 @@ if __name__ == "__main__":
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             elif field == 'All  FAQs':
+                os.write(1,  f"In the All FAQs section\n".encode())
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, field, i, headers)
                     
