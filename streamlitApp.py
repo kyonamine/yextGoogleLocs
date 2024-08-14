@@ -324,7 +324,7 @@ def deleteAllQuestions(df, locationId, heads):
     df = pd.DataFrame(columns = ['Google Location ID', 'Question ID', 'API Response Code'])
     for i in df[df.columns[0]].values.tolist():
         questionId = i.replace(f'locations/{locationId}/questions/', '')
-        
+        os.write(1,  f"{base}{questionId}\n".encode())
         r_info = requests.delete(f'{base}{questionId}', headers = heads)
         os.write(1,  f"{r_info.status_code}\n".encode())
         df.loc[len(df)] = [locationId, f'Deleting question {questionId}', r_info.status_code]
