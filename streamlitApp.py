@@ -486,7 +486,7 @@ if __name__ == "__main__":
             elif filterOption == 'Logo':
                 logoSourceUrl = st.text_input("Enter the URL of the logo you want to upload:")
             else: 
-                if field not in ('moreHours', 'All FAQs'):
+                if field != 'All  FAQs' or field != 'moreHours':
                     filterData = st.text_input("Enter filter (this is case sensitive):") # This would be for key text search
 
             token = st.text_input("Enter Google API Authorization token (No 'Bearer' included. Should start with 'ya29.'):")
