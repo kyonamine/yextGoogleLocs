@@ -319,7 +319,7 @@ def getQuestions(id, heads):
     return df
 
 def deleteAllQuestions(df, locationId, heads):
-    os.write(1,  f"Deleting all\n".encode())
+    os.write(1,  f"{df}\n".encode())
     base = f'https://mybusinessqanda.googleapis.com/v1/locations/{locationId}/questions/'
     df = pd.DataFrame(columns = ['Google Location ID', 'Question ID', 'API Response Code'])
     for i in df[df.columns[0]].values.tolist():
