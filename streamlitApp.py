@@ -481,8 +481,6 @@ if __name__ == "__main__":
                 placeActionTypeFilter = st.radio(
                     "Select place action type",
                     ('All', 'APPOINTMENT', 'DINING_RESERVATION', 'FOOD_TAKEOUT', 'ONLINE_APPOINTMENT', 'SHOP_ONLINE', 'FOOD_ORDERING', 'FOOD_DELIVERY'))
-            # elif filterOption in ('Dupe FAQs', 'All  FAQs'):
-            #     st.write('No selections needed.')
             elif filterOption == 'Logo':
                 logoSourceUrl = st.text_input("Enter the URL of the logo you want to upload:")
             else: 
@@ -537,6 +535,13 @@ if __name__ == "__main__":
                     dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
                     locationLog = deleteDupeQuestions(i, dupeQuestions, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+
+            elif field == 'All  FAQs':
+                for i in listGoogleIds:
+                    response = loopThroughIds(googleAccountNum, field, i, headers)
+                    os.write(1,  f"{response}\n".encode())
+                    if str(i) == '11742181451714878497':
+                        break
 
             elif field == 'Photos':
                 for i in listGoogleIds:
