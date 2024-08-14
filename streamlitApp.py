@@ -449,7 +449,8 @@ if __name__ == "__main__":
         my_dict = {
                 "Place Action Links": ["placeActionType", "uri", "createTime"], 
                 "Social Posts": ["createTime", "Key Text Search"], 
-                "FAQs": ["createTime"],
+                "De-Dupe FAQs": ["createTime"],
+                "Delete all  FAQs": ["All"],
                 "Photos": ["createTime"],
                 "moreHours": ["All"], 
                 "Logo": ["Logo"]
@@ -480,7 +481,7 @@ if __name__ == "__main__":
                 placeActionTypeFilter = st.radio(
                     "Select place action type",
                     ('All', 'APPOINTMENT', 'DINING_RESERVATION', 'FOOD_TAKEOUT', 'ONLINE_APPOINTMENT', 'SHOP_ONLINE', 'FOOD_ORDERING', 'FOOD_DELIVERY'))
-            elif filterOption == 'FAQs':
+            elif filterOption in ('De-Dupe FAQs', 'Delete all  FAQs'):
                 st.write('No selections needed.')
             elif filterOption == 'Logo':
                 logoSourceUrl = st.text_input("Enter the URL of the logo you want to upload:")
@@ -530,7 +531,7 @@ if __name__ == "__main__":
                         locationLog = deletePost(googleAccountNum, postsToDel, i, headers)
                         dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
-            elif field == 'FAQs':
+            elif field == 'De-Dupe FAQs':
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, field, i, headers)
                     dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
