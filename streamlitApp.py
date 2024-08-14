@@ -321,10 +321,11 @@ def getQuestions(id, heads):
 def deleteAllQuestions(df, locationId, heads):
     base = f'https://mybusinessqanda.googleapis.com/v1/locations/{locationId}/questions/'
     logDf = pd.DataFrame(columns = ['Google Location ID', 'Question ID', 'API Response Code'])
-    for i in df[df.columns[0]].values.tolist():
-        questionId = i.replace(f'locations/{locationId}/questions/', '')
-        r_info = requests.delete(f'{base}{questionId}', headers = heads)
-        logDf.loc[len(logDf)] = [locationId, f'Deleting question {questionId}', r_info.status_code]
+    if len(df[df.columns[0]].values.tolist()) > 0:
+        for i in df[df.columns[0]].values.tolist():
+            questionId = i.replace(f'locations/{locationId}/questions/', '')
+            r_info = requests.delete(f'{base}{questionId}', headers = heads)
+            logDf.loc[len(logDf)] = [locationId, f'Deleting question {questionId}', r_info.status_code]
     return logDf
 
 def parseQuestions(df, id, filterOption, filterData, myRange):
