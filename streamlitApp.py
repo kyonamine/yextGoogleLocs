@@ -324,6 +324,14 @@ def getQuestions(id, heads):
     df = pd.DataFrame(all_data)
     return df
 
+def deleteAllQuestions(df, locationId, heads):
+    base = f'https://mybusinessqanda.googleapis.com/v1/locations/{locationId}/questions/'
+    # df = loopAndDelete(locationId, questionIdList, heads, base, additional)
+    for i in df['name']:
+        questionId = i.replace(f'locations/{locationId}/questions/', '')
+        os.write(1,  f"{questionId}\n".encode())
+    return df
+
 def parseQuestions(df, id, filterOption, filterData, myRange):
     try:
         df = dfCols(df, 'name', 'text', 'createTime', 'updateTime')
@@ -543,12 +551,11 @@ if __name__ == "__main__":
 
             elif field == 'All FAQs':
                 for i in listGoogleIds:
-                    
                     response = loopThroughIds(googleAccountNum, field, i, headers)
                     os.write(1,  f"{response}\n".encode())
-                    dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
-                    locationLog = deleteDupeQuestions(i, dupeQuestions, headers)
-                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                    deleteAllQuestions(response, i, headers)
+                    # locationLog = deleteDupeQuestions(i, dupeQuestions, headers)
+                    # dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             elif field == 'Photos':
                 for i in listGoogleIds:
