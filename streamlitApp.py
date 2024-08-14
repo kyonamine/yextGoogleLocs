@@ -481,8 +481,8 @@ if __name__ == "__main__":
                 placeActionTypeFilter = st.radio(
                     "Select place action type",
                     ('All', 'APPOINTMENT', 'DINING_RESERVATION', 'FOOD_TAKEOUT', 'ONLINE_APPOINTMENT', 'SHOP_ONLINE', 'FOOD_ORDERING', 'FOOD_DELIVERY'))
-            elif filterOption in ('Dupe FAQs', 'All  FAQs'):
-                st.write('No selections needed.')
+            # elif filterOption in ('Dupe FAQs', 'All  FAQs'):
+            #     st.write('No selections needed.')
             elif filterOption == 'Logo':
                 logoSourceUrl = st.text_input("Enter the URL of the logo you want to upload:")
             else: 
