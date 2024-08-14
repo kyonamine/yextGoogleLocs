@@ -534,7 +534,7 @@ if __name__ == "__main__":
                         locationLog = deletePost(googleAccountNum, postsToDel, i, headers)
                         dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
-            elif field == 'De-Dupe FAQs':
+            elif field == 'Dupe FAQs':
                 for i in listGoogleIds:
                     response = loopThroughIds(googleAccountNum, field, i, headers)
                     dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
