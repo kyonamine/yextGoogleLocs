@@ -405,7 +405,11 @@ def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
             filterData = pd.to_datetime(filterData)
             filtered_df = filterByDate(df, myRange, 'createTime', filterData)
         except ValueError as e:
-            # print("Error:", e)
+            return []
+    elif filterType == 'sourceUrl':
+        try:
+            filtered_df = filterByKeyText(df, filterData, 'sourceUrl')
+        except ValueError as e:
             return []
 
     mediaList = filtered_df['name'].tolist()
@@ -464,7 +468,7 @@ if __name__ == "__main__":
                 "Social Posts": ["createTime", "Key Text Search"], 
                 "Dupe FAQs": ["createTime"],
                 "All FAQs": ["All"],
-                "Photos": ["createTime"],
+                "Photos": ["createTime", "sourceUrl"],
                 "moreHours": ["All"], 
                 "Logo": ["Logo"]
             }
