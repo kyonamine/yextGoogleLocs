@@ -207,9 +207,9 @@ def deletePost(accountId, postIdList, externalId, heads):
     return df
 
 def filterByKeyText(df, filterData, apiFieldKey):
-    os.write(1,  f"Filtering key text for {filterData}\n{df}\n".encode())
+    # os.write(1,  f"Filtering key text for {filterData}\n{df}\n".encode())
     filtered_df = df[df[apiFieldKey].str.contains(filterData, na = False)]
-    os.write(1,  f"Filtered DF is: {filtered_df}\n".encode())
+    # os.write(1,  f"Filtered DF is: {filtered_df}\n".encode())
     return filtered_df
 
 def placeActionGetCall(id, heads):
@@ -379,7 +379,7 @@ def getPhotosCall(accountId, externalId, headers):
     url = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/media?pageSize=500'
     r_info = requests.get(url, headers = headers)
     responseCode = r_info.status_code
-    os.write(1,  f"{externalId} got {responseCode}\n".encode())
+    # os.write(1,  f"{externalId} got {responseCode}\n".encode())
     if responseCode != 200:
         if responseCode == 404:
             return 'Could not find location ' + str(externalId)
@@ -408,17 +408,17 @@ def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
             df['createTime'] = pd.to_datetime(df['createTime']).dt.tz_localize(None)
             filterData = pd.to_datetime(filterData)
             filtered_df = filterByDate(df, myRange, 'createTime', filterData)
-            os.write(1,  f"{externalId}'s filtered_df:\n{filtered_df}".encode())
+            # os.write(1,  f"{externalId}'s filtered_df:\n{filtered_df}".encode())
         except ValueError as e:
             return []
     elif filterType == 'sourceUrl':
-        os.write(1,  f"In sourcUrl filterType\n".encode())
+        # os.write(1,  f"In sourcUrl filterType\n".encode())
         try:
-            os.write(1,  f"Trying\n".encode())
+            # os.write(1,  f"Trying\n".encode())
             filtered_df = filterByKeyText(df, filterData, 'sourceUrl')
             os.write(1,  f"{externalId}'s filtered_df:\n{filtered_df}".encode())
         except ValueError as e:
-            os.write(1,  f"Except statement\n".encode())
+            # os.write(1,  f"Except statement\n".encode())
             os.write(1, f"ValueError: {str(e)}\n".encode())
             return []
 
