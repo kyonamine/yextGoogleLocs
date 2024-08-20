@@ -207,8 +207,9 @@ def deletePost(accountId, postIdList, externalId, heads):
     return df
 
 def filterByKeyText(df, filterData, apiFieldKey):
-    os.write(1,  f"Filtering key text\n".encode())
+    os.write(1,  f"Filtering key text for {filterData}\n{df}\n".encode())
     filtered_df = df[df[apiFieldKey].str.contains(filterData)]
+    os.write(1,  f"{filtered_df}\n".encode())
     return filtered_df
 
 def placeActionGetCall(id, heads):
@@ -238,7 +239,6 @@ def parsePlaceActionResponse(apiResponse, id, filterOption, typeFilter, filterDa
 
         retList = []
         for i in range(len(filtered_df)):
-            os.write(1,  f"Inside for loop\n".encode())
             locName = 'locations/' + str(id) + '/placeActionLinks/'
             result_string = filtered_df.iloc[i].iloc[0].split(locName)[1]
             retList.append(result_string)
