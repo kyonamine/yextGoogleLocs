@@ -377,6 +377,7 @@ def getPhotosCall(accountId, externalId, headers):
     url = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/media?pageSize=500'
     r_info = requests.get(url, headers = headers)
     responseCode = r_info.status_code
+    os.write(1,  f"{responseCode}".encode())
     if responseCode != 200:
         if responseCode == 404:
             return 'Could not find location ' + str(externalId)
@@ -390,6 +391,7 @@ def getPhotosCall(accountId, externalId, headers):
         return 'No mediaItems for ' + str(externalId)
     
     df = pd.DataFrame(temp)
+    os.write(1,  f"{df}".encode())
     return df
 
 def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
