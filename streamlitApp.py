@@ -209,7 +209,7 @@ def deletePost(accountId, postIdList, externalId, heads):
 def filterByKeyText(df, filterData, apiFieldKey):
     os.write(1,  f"Filtering key text for {filterData}\n{df}\n".encode())
     filtered_df = df[df[apiFieldKey].str.contains(filterData)]
-    os.write(1,  f"{filtered_df}\n".encode())
+    os.write(1,  f"Filtered DF is: {filtered_df}\n".encode())
     return filtered_df
 
 def placeActionGetCall(id, heads):
