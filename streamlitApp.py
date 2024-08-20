@@ -207,6 +207,7 @@ def deletePost(accountId, postIdList, externalId, heads):
     return df
 
 def filterByKeyText(df, filterData, apiFieldKey):
+    os.write(1,  f"Filtering key text".encode())
     filtered_df = df[df[apiFieldKey].str.contains(filterData)]
     return filtered_df
 
@@ -410,8 +411,9 @@ def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
         except ValueError as e:
             return []
     elif filterType == 'sourceUrl':
-        os.write(1,  f"In sourcUrl filterType".encode())
+        os.write(1,  f"In sourcUrl filterType\n".encode())
         try:
+            os.write(1,  f"Trying\n".encode())
             filtered_df = filterByKeyText(df, filterData, 'sourceUrl')
             os.write(1,  f"{externalId}'s filtered_df:\n{filtered_df}".encode())
         except ValueError as e:
