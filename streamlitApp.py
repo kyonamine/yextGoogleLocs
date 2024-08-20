@@ -377,7 +377,7 @@ def getPhotosCall(accountId, externalId, headers):
     url = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/media?pageSize=500'
     r_info = requests.get(url, headers = headers)
     responseCode = r_info.status_code
-    os.write(1,  f"{externalId} got {responseCode}".encode())
+    os.write(1,  f"{externalId} got {responseCode}\n".encode())
     if responseCode != 200:
         if responseCode == 404:
             return 'Could not find location ' + str(externalId)
@@ -391,7 +391,7 @@ def getPhotosCall(accountId, externalId, headers):
         return 'No mediaItems for ' + str(externalId)
     
     df = pd.DataFrame(temp)
-    os.write(1,  f"{externalId}\n{df}".encode())
+    # os.write(1,  f"{externalId}\n{df}".encode())
     return df
 
 def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
@@ -406,6 +406,7 @@ def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
             df['createTime'] = pd.to_datetime(df['createTime']).dt.tz_localize(None)
             filterData = pd.to_datetime(filterData)
             filtered_df = filterByDate(df, myRange, 'createTime', filterData)
+            os.write(1,  f"{externalId}'s filtered_df:\n{filtered_df}".encode())
         except ValueError as e:
             return []
     elif filterType == 'sourceUrl':
