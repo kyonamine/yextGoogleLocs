@@ -419,6 +419,7 @@ def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
             os.write(1,  f"{externalId}'s filtered_df:\n{filtered_df}".encode())
         except ValueError as e:
             os.write(1,  f"Except statement\n".encode())
+            os.write(1, f"ValueError: {str(e)}\n".encode())
             return []
 
     mediaList = filtered_df['name'].tolist()
