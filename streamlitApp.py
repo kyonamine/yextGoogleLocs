@@ -412,6 +412,7 @@ def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
     elif filterType == 'sourceUrl':
         try:
             filtered_df = filterByKeyText(df, filterData, 'sourceUrl')
+            os.write(1,  f"{externalId}'s filtered_df:\n{filtered_df}".encode())
         except ValueError as e:
             return []
 
