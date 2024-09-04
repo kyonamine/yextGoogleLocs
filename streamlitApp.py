@@ -462,6 +462,18 @@ def postLogo(accountId, externalId, heads, logoSource):
     df.loc[len(df)] = [externalId, f'Post logo', response]
     return df
 
+def deleteMenu(accountId, externalId, heads):
+    baseApi = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/menu'
+    df = pd.DataFrame(columns = ['Google Location ID', 'API Response Code'])
+    body = f'''{{
+        "name": "accounts/{accountId}/locations/{externalId}/foodMenus",
+        "menus": []
+    }}'''
+    r_info = requests.patch(baseApi, headers = heads, json = json.loads(body))
+    response = r_info.status_code
+    df.loc[len(df)] = [externalId, f'PATCH empty menu', response]
+    return df
+
 if __name__ == "__main__":
     st.session_state.state_dict = {}
 
@@ -480,7 +492,8 @@ if __name__ == "__main__":
                 "All FAQs": ["All"],
                 "Photos": ["createTime", "sourceUrl"],
                 "moreHours": ["All"], 
-                "Logo": ["Logo"]
+                "Logo": ["Logo"],
+                "Menu": ["All"]
             }
         col1, col2 = st.columns([2, 1])
 
@@ -495,7 +508,7 @@ if __name__ == "__main__":
             filterData = ''
             daterange = ''
             placeActionTypeFilter = ''
-            if field == 'Social Posts' or field == 'Photos' or field == 'Logo':
+            if field == 'Social Posts' or field == 'Photos' or field == 'Logo' or field == 'Menu':
                 googleAccountNum = st.text_input("Enter the Google account number (all locations must be in the same account):")
             else:
                 googleAccountNum = 0
@@ -586,6 +599,11 @@ if __name__ == "__main__":
                     locationLog = deleteLogo(googleAccountNum, i, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
                     locationLog = postLogo(googleAccountNum, i, headers, logoSourceUrl)
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+
+            elif field == 'Menu':   
+                for i in listGoogleIds:
+                    locationLog = deleteMenu(googleAccountNum, i, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             os.write(1,  f"Done!\n".encode())
