@@ -463,7 +463,7 @@ def postLogo(accountId, externalId, heads, logoSource):
     return df
 
 def deleteMenu(accountId, externalId, heads):
-    baseApi = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/menu'
+    baseApi = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/foodMenus'
     df = pd.DataFrame(columns = ['Google Location ID', 'Menu', 'API Response Code'])
     body = f'''{{
         "name": "accounts/{accountId}/locations/{externalId}/foodMenus",
