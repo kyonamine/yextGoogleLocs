@@ -455,6 +455,11 @@ def deleteMenu(accountId, externalId, heads):
     df.loc[len(df)] = [externalId, f'PATCH empty menu', response]
     return df
 
+def varElseNone(var):
+    if var:
+        return var
+    return None
+
 if __name__ == "__main__":
     st.session_state.state_dict = {}
 
@@ -599,10 +604,10 @@ if __name__ == "__main__":
                 "placeActionType": placeActionTypeFilter,
                 "timestamp": datetime.now(),
                 "locationCount": len(frame.index),
-                "filterData": filterData,
-                "daterange": daterange,
-                "googleAccountNum": googleAccountNum,
-                "logoUrl": logoSourceUrl
+                "filterData": varElseNone(filterData),
+                "daterange": varElseNone(daterange),
+                "googleAccountNum": varElseNone(googleAccountNum),
+                "logoUrl": varElseNone(logoSourceUrl)
             })
             
 
