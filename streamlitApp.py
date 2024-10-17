@@ -1,5 +1,4 @@
 import streamlit as st
-# import snowflake.connector
 import pandas as pd
 import numpy as np
 import json
@@ -9,32 +8,13 @@ import sys
 from datetime import date
 import os
 import time
-# import sqlConnect_pymysqlConnection as db
 import streamlit_analytics2 as streamlit_analytics
+from google.cloud import firestore
 
-# def queryDB(database):
-#     connection = db.ConnectToYextDB('ops-sql01.tx1.yext.com', user = st.secrets["dbUsername"], password = st.secrets["dbPassword"])
-#     os.write(1,  f"{connection}\n".encode())
-#     result = connection.query_database(allIdsQuery(pd.DataFrame({'col1': [1, 2]})  ))
-#     os.write(1,  f"{result}\n".encode())
-#     connection.close_connection()
-#     return
-
-# def allIdsQuery(df):
-#     tempList = df[df.columns[0]].values.tolist()
-#     tempList = [4058034, 4058035]
-#     tempList = ', '.join(map(str, tempList))
-    
-#     query = f"""
-#         select tl.location_id, tl.externalId from alpha.tags_listings tl
-#         where tl.partner_id = 715
-#         and tl.location_id in ({tempList})
-#     """
-#     os.write(1,  f"{query}\n".encode())
-#     return query
-
-# def getExternalIds(df):
-#     return df[df.columns[0]].values.tolist()
+# db = firestore.Client.from_service_account_json("firestore-key.json")
+key_dict = json.loads(st.secrets["textkey"])
+creds = service_account.Credentials.from_service_account_info(key_dict)
+db = firestore.Client(credentials=creds, project="tpm-streamlit-analytics")
 
 def check_password():
     """Returns `True` if the user had the correct password."""
@@ -611,4 +591,7 @@ if __name__ == "__main__":
             logCsv = writeLogs(fileName, dfLog)
             
             downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
+            doc_ref = db.collection("appRuns").document("fields")
+            doc_ref.set({"field": field})
+
         streamlit_analytics.stop_tracking(st.secrets["analyticsPass"])
