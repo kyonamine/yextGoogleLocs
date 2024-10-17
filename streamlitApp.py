@@ -596,6 +596,8 @@ if __name__ == "__main__":
             new_doc_ref = db_ref.add({
                 field: filterOption,
                 "timestamp": datetime.now(),
+                "locationCount": len(frame.index)
             })
+            
 
         streamlit_analytics.stop_tracking(st.secrets["analyticsPass"])
