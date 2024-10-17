@@ -594,7 +594,7 @@ if __name__ == "__main__":
             downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
             db_ref = db.collection("appRuns") #.document("fields")
             # subcollection_ref = doc_ref.collection("fields")
-            new_doc_ref = db_ref.add({"field": field})
+            new_doc_ref = db_ref.add({field: filterOption})
 
             # doc_ref.add({"field": field})
 
