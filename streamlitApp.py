@@ -592,9 +592,9 @@ if __name__ == "__main__":
             logCsv = writeLogs(fileName, dfLog)
             
             downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
-            doc_ref = db.collection("appRuns").document("fields")
-            subcollection_ref = doc_ref.collection("fields")
-            new_doc_ref = subcollection_ref.add({"field": field})
+            db_ref = db.collection("appRuns") #.document("fields")
+            # subcollection_ref = doc_ref.collection("fields")
+            new_doc_ref = db_ref.add({"field": field})
 
             # doc_ref.add({"field": field})
 
