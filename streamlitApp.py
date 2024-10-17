@@ -12,7 +12,6 @@ import streamlit_analytics2 as streamlit_analytics
 from google.cloud import firestore
 from google.oauth2 import service_account
 
-# db = firestore.Client.from_service_account_json("firestore-key.json")
 key_dict = json.loads(st.secrets["textkey"])
 creds = service_account.Credentials.from_service_account_info(key_dict)
 db = firestore.Client(credentials=creds, project="tpm-streamlit-analytics")
@@ -592,10 +591,7 @@ if __name__ == "__main__":
             logCsv = writeLogs(fileName, dfLog)
             
             downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
-            db_ref = db.collection("appRuns") #.document("fields")
-            # subcollection_ref = doc_ref.collection("fields")
+            db_ref = db.collection("appRuns")
             new_doc_ref = db_ref.add({field: filterOption})
-
-            # doc_ref.add({"field": field})
 
         streamlit_analytics.stop_tracking(st.secrets["analyticsPass"])
