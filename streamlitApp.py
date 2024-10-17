@@ -10,7 +10,7 @@ from datetime import date
 import os
 import time
 # import sqlConnect_pymysqlConnection as db
-import streamlit_analytics
+import streamlit_analytics2 as streamlit_analytics
 
 # def queryDB(database):
 #     connection = db.ConnectToYextDB('ops-sql01.tx1.yext.com', user = st.secrets["dbUsername"], password = st.secrets["dbPassword"])
