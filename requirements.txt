@@ -1,3 +1,7 @@
 numpy
 pymysql
 streamlit_analytics2
+google-auth
+google-auth-oauthlib
+google-auth-httplib2
+google-cloud-firestore
