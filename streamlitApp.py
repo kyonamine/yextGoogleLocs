@@ -606,8 +606,7 @@ if __name__ == "__main__":
                 "locationCount": len(frame.index),
                 "filterData": varElseNone(filterData),
                 "daterange": varElseNone(daterange),
-                "googleAccountNum": varElseNone(googleAccountNum),
-                "logoUrl": varElseNone(logoSourceUrl)
+                "googleAccountNum": varElseNone(googleAccountNum)
             })
             
 
