@@ -8,6 +8,7 @@ import sys
 from datetime import date
 import os
 import time
+from datetime import datetime
 import streamlit_analytics2 as streamlit_analytics
 from google.cloud import firestore
 from google.oauth2 import service_account
@@ -592,6 +593,9 @@ if __name__ == "__main__":
             
             downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
             db_ref = db.collection("appRuns")
-            new_doc_ref = db_ref.add({field: filterOption})
+            new_doc_ref = db_ref.add({
+                field: filterOption,
+                "timestamp": datetime.now(),
+            })
 
         streamlit_analytics.stop_tracking(st.secrets["analyticsPass"])
