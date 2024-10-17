@@ -593,6 +593,6 @@ if __name__ == "__main__":
             
             downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
             doc_ref = db.collection("appRuns").document("fields")
-            doc_ref.set({"field": field})
+            doc_ref.update({"field": field})
 
         streamlit_analytics.stop_tracking(st.secrets["analyticsPass"])
