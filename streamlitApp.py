@@ -596,8 +596,13 @@ if __name__ == "__main__":
             new_doc_ref = db_ref.add({
                 "field": field,
                 "filter": filterOption,
+                "placeActionType": placeActionTypeFilter,
                 "timestamp": datetime.now(),
-                "locationCount": len(frame.index)
+                "locationCount": len(frame.index),
+                "filterData": filterData,
+                "daterange": daterange,
+                "googleAccountNum": googleAccountNum,
+                "logoUrl": logoSourceUrl
             })
             
 
