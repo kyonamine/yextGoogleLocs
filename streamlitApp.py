@@ -599,13 +599,13 @@ if __name__ == "__main__":
             downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
             db_ref = db.collection("appRuns")
             new_doc_ref = db_ref.add({
-                "field": field,
-                "filter": filterOption,
-                "placeActionType": placeActionTypeFilter,
+                "field": str(field),
+                "filter": str(filterOption),
+                "placeActionType": str(placeActionTypeFilter),
                 "timestamp": datetime.now(),
                 "locationCount": len(frame.index),
                 "filterData": varElseNone(str(filterData)),
-                "daterange": varElseNone(daterange),
+                "daterange": varElseNone(str(daterange)),
                 "googleAccountNum": varElseNone(googleAccountNum)
             })
             
