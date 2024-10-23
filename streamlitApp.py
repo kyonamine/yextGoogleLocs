@@ -600,11 +600,11 @@ if __name__ == "__main__":
             db_ref = db.collection("appRuns")
             new_doc_ref = db_ref.add({
                 "field": field,
-                "filter": str(filterOption),
+                "filter": filterOption,
                 "placeActionType": placeActionTypeFilter,
                 "timestamp": datetime.now(),
                 "locationCount": len(frame.index),
-                "filterData": varElseNone(filterData),
+                "filterData": varElseNone(str(filterData)),
                 "daterange": varElseNone(daterange),
                 "googleAccountNum": varElseNone(googleAccountNum)
             })
