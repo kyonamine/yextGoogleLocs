@@ -602,7 +602,7 @@ if __name__ == "__main__":
                 "field": field,
                 "filter": filterOption,
                 "placeActionType": placeActionTypeFilter,
-                "timestamp": datetime.now(),
+                "timestamp": datetime.datetime.now(),
                 "locationCount": len(frame.index),
                 "filterData": varElseNone(filterData),
                 "daterange": varElseNone(daterange),
