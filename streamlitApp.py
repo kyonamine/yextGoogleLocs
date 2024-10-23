@@ -600,7 +600,7 @@ if __name__ == "__main__":
             db_ref = db.collection("appRuns")
             new_doc_ref = db_ref.add({
                 "field": field,
-                "filter": filterOption,
+                "filter": str(filterOption),
                 "placeActionType": placeActionTypeFilter,
                 "timestamp": datetime.now(),
                 "locationCount": len(frame.index),
