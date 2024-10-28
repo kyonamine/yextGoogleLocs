@@ -3,7 +3,7 @@ import asyncio
 import pandas as pd
 import os
 
-async def deletePost(accountId, postIdList, externalId, heads):
+async def asyncDeletePost(accountId, postIdList, externalId, heads):
     baseApi = f'https://mybusiness.googleapis.com/v4/accounts/{str(accountId)}/locations/'
     df = pd.DataFrame(columns = ['Google Location ID', 'localPostId', 'API Response Code'])
     os.write(1,  f"{len(postIdList)} posts to delete on location ID: {externalId}, account ID {accountId}\n".encode())
