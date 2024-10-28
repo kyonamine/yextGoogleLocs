@@ -530,7 +530,7 @@ async def main():
             # progress(len(frame.index))
             if field == 'Place Action Links':
                 for i in listGoogleIds:
-                    response = loopThroughIds(googleAccountNum, 'placeActionLinks', i, headers)
+                    response = await loopThroughIds(googleAccountNum, 'placeActionLinks', i, headers)
                     placeActionsToDel = parsePlaceActionResponse(response, i, filterOption, placeActionTypeFilter, filterData, daterange)
                     locationLog = deleteLink(i, placeActionsToDel, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
@@ -559,20 +559,20 @@ async def main():
 
             elif field == 'Dupe FAQs':
                 for i in listGoogleIds:
-                    response = loopThroughIds(googleAccountNum, field, i, headers)
+                    response = await loopThroughIds(googleAccountNum, field, i, headers)
                     dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
                     locationLog = deleteDupeQuestions(i, dupeQuestions, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             elif field == 'All FAQs':
                 for i in listGoogleIds:
-                    response = loopThroughIds(googleAccountNum, field, i, headers)
+                    response = await loopThroughIds(googleAccountNum, field, i, headers)
                     locationLog = deleteAllQuestions(response, i, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             elif field == 'Photos':
                 for i in listGoogleIds:
-                    response = loopThroughIds(googleAccountNum, field, i, headers)
+                    response = await loopThroughIds(googleAccountNum, field, i, headers)
                     photosToDel = parseMedia(googleAccountNum, response, i, filterOption, filterData, daterange)
                     locationLog = deleteMedia(googleAccountNum, photosToDel, i, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
