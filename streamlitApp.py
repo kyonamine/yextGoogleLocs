@@ -464,7 +464,7 @@ def varElseNone(var):
         return var
     return None
 
-if __name__ == "__main__":
+async def main():
     st.session_state.state_dict = {}
 
     st.set_page_config(
@@ -542,7 +542,7 @@ if __name__ == "__main__":
                     if googleAccountNum == '':
                         exitApp(3)
                     else:
-                        response = loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
+                        response = await loopThroughIds(googleAccountNum, 'Social Posts', i, headers)
                         if isinstance(response, str):
                             if 'No localPosts for' in response:
                                 locationLog = pd.DataFrame({'Google Location ID': [i], 'localPostId': [response], 'API Response Code': ['-1']})
@@ -615,3 +615,6 @@ if __name__ == "__main__":
             })
             
         streamlit_analytics.stop_tracking(st.secrets["analyticsPass"])
+
+if __name__ == "__main__":
+    main()
