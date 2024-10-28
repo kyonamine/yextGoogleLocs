@@ -13,6 +13,7 @@ import streamlit_analytics2 as streamlit_analytics
 from google.cloud import firestore
 from google.oauth2 import service_account
 from asyncGetPosts import localPostGet
+from asyncDeletePosts import asyncDeletePost
 import asyncio
 import aiohttp
 
@@ -115,8 +116,7 @@ async def loopThroughIds(accountId, endpoint, id, headers):
     response = 0
     if endpoint == 'placeActionLinks':
         response  = placeActionGetCall(id, headers)
-    elif endpoint == 'Social Posts': # this isn't catching the 401 auth token errors. Place action works because it returns the code, but social post GET is returning a dataframe--- they might be getting caught now, not sure
-        # response = localPostGetCall(accountId, id, headers)
+    elif endpoint == 'Social Posts':
         response = await localPostGet(accountId, id, headers)
     elif endpoint == 'All FAQs' or endpoint == 'Dupe FAQs':
         response = getQuestions(id, headers)
@@ -192,9 +192,7 @@ def deletePost(accountId, postIdList, externalId, heads):
     return df
 
 def filterByKeyText(df, filterData, apiFieldKey):
-    # os.write(1,  f"Filtering key text for {filterData}\n{df}\n".encode())
     filtered_df = df[df[apiFieldKey].str.contains(filterData, na = False)]
-    # os.write(1,  f"Filtered DF is: {filtered_df}\n".encode())
     return filtered_df
 
 def placeActionGetCall(id, heads):
@@ -556,7 +554,7 @@ async def main():
                             dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
                             break
                         postsToDel = parseLocalPostsResponse(googleAccountNum, response, i, filterOption, filterData, daterange)
-                        locationLog = deletePost(googleAccountNum, postsToDel, i, headers)
+                        locationLog = await asyncDeletePost(googleAccountNum, postsToDel, i, headers)
                         dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             elif field == 'Dupe FAQs':
