@@ -12,7 +12,7 @@ from datetime import datetime
 import streamlit_analytics2 as streamlit_analytics
 from google.cloud import firestore
 from google.oauth2 import service_account
-from asyncGetPosts import asyncGetPosts
+from asyncGetPosts import localPostGet
 import asyncio
 import aiohttp
 
@@ -117,7 +117,7 @@ async def loopThroughIds(accountId, endpoint, id, headers):
         response  = placeActionGetCall(id, headers)
     elif endpoint == 'Social Posts': # this isn't catching the 401 auth token errors. Place action works because it returns the code, but social post GET is returning a dataframe--- they might be getting caught now, not sure
         # response = localPostGetCall(accountId, id, headers)
-        response = await asyncGetPosts(accountId, id, headers)
+        response = await localPostGet(accountId, id, headers)
     elif endpoint == 'All FAQs' or endpoint == 'Dupe FAQs':
         response = getQuestions(id, headers)
     elif endpoint == 'Photos':
