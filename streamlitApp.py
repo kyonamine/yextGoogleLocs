@@ -617,4 +617,4 @@ async def main():
         streamlit_analytics.stop_tracking(st.secrets["analyticsPass"])
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
