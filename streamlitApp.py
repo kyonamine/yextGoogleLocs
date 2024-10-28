@@ -12,7 +12,7 @@ from datetime import datetime
 import streamlit_analytics2 as streamlit_analytics
 from google.cloud import firestore
 from google.oauth2 import service_account
-import asyncGetPosts
+from asyncGetPosts import asyncGetPosts
 import asyncio
 import aiohttp
 
