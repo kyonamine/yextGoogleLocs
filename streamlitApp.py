@@ -606,8 +606,8 @@ if __name__ == "__main__":
                 "locationCount": len(frame.index),
                 "filterData": varElseNone(str(filterData)),
                 "daterange": varElseNone(str(daterange)),
-                "googleAccountNum": varElseNone(googleAccountNum)
+                "googleAccountNum": varElseNone(googleAccountNum),
+                "appName": "yextgooglelocs"
             })
             
-
         streamlit_analytics.stop_tracking(st.secrets["analyticsPass"])
