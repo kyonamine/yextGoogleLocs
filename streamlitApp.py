@@ -597,9 +597,7 @@ async def main():
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             elif field == 'Get Verification Options':
-                for i in listGoogleIds:
-                    locationLog = await getVOptions(i, headers)
-                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                dfLog = await getVOptions(listGoogleIds, headers)
 
             os.write(1,  f"Done!\n".encode())
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
