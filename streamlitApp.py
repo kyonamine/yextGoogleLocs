@@ -14,6 +14,7 @@ from google.cloud import firestore
 from google.oauth2 import service_account
 from asyncGetPosts import localPostGet
 from asyncDeletePosts import asyncDeletePost
+from asyncGetVOptions import getVOptions
 import asyncio
 import aiohttp
 
@@ -481,7 +482,8 @@ async def main():
                 "Photos": ["createTime", "sourceUrl"],
                 "moreHours": ["All"], 
                 "Logo": ["Logo"],
-                "Menu": ["All"]
+                "Menu": ["All"],
+                "Get Verification Options": ["All"]
             }
         col1, col2 = st.columns([2, 1])
 
@@ -592,6 +594,11 @@ async def main():
             elif field == 'Menu':   
                 for i in listGoogleIds:
                     locationLog = deleteMenu(googleAccountNum, i, headers)
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+
+            elif field == 'Get Verification Options':
+                for i in listGoogleIds:
+                    locationLog = await getVOptions(i, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             os.write(1,  f"Done!\n".encode())
