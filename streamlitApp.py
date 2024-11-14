@@ -520,6 +520,8 @@ async def main():
             token = st.text_input("Enter Google API Authorization token (No 'Bearer' included. Should start with 'ya29.'):")
             if field == 'Logo':
                 form_submitted = st.form_submit_button("Update Logos")
+            elif field == 'Get Verification Options':
+                form_submitted = st.form_submit_button("Get Verification Options")
             else:
                 form_submitted = st.form_submit_button("Delete " +  field)
  
