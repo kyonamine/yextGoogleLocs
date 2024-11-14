@@ -5,7 +5,7 @@ import pandas as pd
 async def getVOption(externalId, headers):
     baseApi = f'https://mybusinessverifications.googleapis.com/v1/locations/{externalId}:fetchVerificationOptions'
     async with aiohttp.ClientSession() as session:
-        async with session.get(baseApi, headers=headers) as r_info:
+        async with session.post(baseApi, headers=headers) as r_info:
             responseCode = r_info.status
             if responseCode != 200:
                 if responseCode == 404:
