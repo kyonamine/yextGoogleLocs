@@ -17,7 +17,14 @@ async def getVOptions(externalId, headers):
             response = await r_info.json()
             try:
                 temp = response['options']
-                df = pd.DataFrame(temp)
+                if not temp or any(not option for option in temp):
+                    df = pd.DataFrame([{'verificationMethod': 0, 'phoneNumber': 0, 'error': 'No valid verification options for ' + str(externalId)}])
+                else:
+                    # Ensure each option has the required fields, with placeholders if necessary
+                    for option in temp:
+                        option.setdefault('verificationMethod', 0)
+                        option.setdefault('phoneNumber', 0)
+                    df = pd.DataFrame(temp)
             except KeyError: 
-                df = pd.DataFrame([{'error': 'No verification options for Google ID: ' + str(externalId)}])
+                df = pd.DataFrame([{'verificationMethod': 0, 'phoneNumber': 0, 'error': 'No verification options for ' + str(externalId)}])
             return df
