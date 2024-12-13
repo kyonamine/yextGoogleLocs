@@ -122,9 +122,7 @@ async def loopThroughIds(accountId, endpoint, id, headers):
     elif endpoint == 'Social Posts':
         response = await localPostGet(accountId, id, headers)
     elif endpoint == 'All FAQs' or endpoint == 'Dupe FAQs':
-        os.write(1,  f"Getting questions inside loopThroughIds\n".encode())
         response = await getQuestions(id, headers)
-        os.write(1,  f"response is: {response}\n".encode())
     elif endpoint == 'Photos':
         response = getPhotosCall(accountId, id, headers)
     authStatus = authErrors(response)
@@ -257,7 +255,6 @@ def filterByDate(df, option, columnName, filterData):
 
 def writeLogs(name, dfLog):
     logCsv = dfLog.to_csv(index = False)
-    # os.write(1,  f"{logCsv}\n".encode())
     return logCsv
 
 def progress(numRows):
@@ -325,7 +322,6 @@ def deleteAllQuestions(df, locationId, heads):
     return logDf
 
 def parseQuestions(df, id, filterOption, filterData, myRange):
-    os.write(1,  f"df is: {df}\n".encode())
     try:
         df = dfCols(df, 'name', 'text', 'createTime', 'updateTime')
         df['createTime'] = df['createTime'].astype(str)
@@ -337,7 +333,6 @@ def parseQuestions(df, id, filterOption, filterData, myRange):
             filterData = pd.to_datetime(filterData).date()
             filtered_df = filterByDate(df, myRange, 'createTime', filterData)
 
-        os.write(1,  f"filtered_df is: {filtered_df}\n".encode())
         duplicates = filtered_df[filtered_df.duplicated(subset = ['text'], keep = 'first')]
         dupeVals = duplicates['name'].tolist()
         dupeVals = [value.replace('locations/' + id + '/questions/', '') for value in dupeVals]
@@ -370,7 +365,6 @@ def getPhotosCall(accountId, externalId, headers):
     url = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/media?pageSize=500'
     r_info = requests.get(url, headers = headers)
     responseCode = r_info.status_code
-    # os.write(1,  f"{externalId} got {responseCode}\n".encode())
     if responseCode != 200:
         if responseCode == 404:
             return 'Could not find location ' + str(externalId)
@@ -384,7 +378,6 @@ def getPhotosCall(accountId, externalId, headers):
         return 'No mediaItems for ' + str(externalId)
     
     df = pd.DataFrame(temp)
-    # os.write(1,  f"{externalId}\n{df}".encode())
     return df
 
 def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
@@ -399,22 +392,16 @@ def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
             df['createTime'] = pd.to_datetime(df['createTime']).dt.tz_localize(None)
             filterData = pd.to_datetime(filterData)
             filtered_df = filterByDate(df, myRange, 'createTime', filterData)
-            # os.write(1,  f"{externalId}'s filtered_df:\n{filtered_df}".encode())
         except ValueError as e:
             return []
     elif filterType == 'sourceUrl':
-        # os.write(1,  f"In sourcUrl filterType\n".encode())
         try:
-            # os.write(1,  f"Trying\n".encode())
             filtered_df = filterByKeyText(df, filterData, 'sourceUrl')
-            os.write(1,  f"{externalId}'s filtered_df:\n{filtered_df}".encode())
         except ValueError as e:
-            # os.write(1,  f"Except statement\n".encode())
             os.write(1, f"ValueError: {str(e)}\n".encode())
             return []
 
     mediaList = filtered_df['name'].tolist()
-    os.write(1,  f"{len(mediaList)}".encode())
     return mediaList
 
 def deleteMedia(accountId, mediaIdList, externalId, heads):
@@ -570,11 +557,8 @@ async def main():
 
             elif field == 'Dupe FAQs':
                 for i in listGoogleIds:
-                    # os.write(1,  f"Looping\n".encode())
                     response = await loopThroughIds(googleAccountNum, field, i, headers)
-                    os.write(1,  f"response is: {response}\n".encode())
                     dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
-                    os.write(1,  f"dupeQuestions is: {dupeQuestions}\n".encode())
                     locationLog = await asyncDeleteFaqs(i, dupeQuestions, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
