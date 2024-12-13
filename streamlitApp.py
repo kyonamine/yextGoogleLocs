@@ -122,6 +122,7 @@ async def loopThroughIds(accountId, endpoint, id, headers):
     elif endpoint == 'Social Posts':
         response = await localPostGet(accountId, id, headers)
     elif endpoint == 'All FAQs' or endpoint == 'Dupe FAQs':
+        os.write(1,  f"Getting questions inside loopThroughIds".encode())
         response = await getQuestions(id, headers)
     elif endpoint == 'Photos':
         response = getPhotosCall(accountId, id, headers)
