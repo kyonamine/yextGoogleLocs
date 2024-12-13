@@ -28,7 +28,7 @@ import os
 #     return df
 
 async def getQuestions(id, heads):
-    os.write(1,  f"Getting questions inside asyncGetFaq".encode())
+    os.write(1,  f"Getting questions inside asyncGetFaq\n".encode())
     call = 'https://mybusinessqanda.googleapis.com/v1/locations/'
     additional = '/questions?pageSize=10&answersPerQuestion=10'
     url = f'{call}{str(id)}{additional}'
