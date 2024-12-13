@@ -41,7 +41,7 @@ async def getQuestions(id, heads):
                 # rStatusCode = response.status
 
                 data = response_json.get('questions', [])
-                os.write(1,  f"data is: {data}".encode())
+                os.write(1,  f"data is: {data}\n".encode())
                 nextPageToken = response_json.get('nextPageToken')
 
                 all_data.extend(data)
@@ -49,5 +49,5 @@ async def getQuestions(id, heads):
                     url = f'{call}{str(id)}/questions?pageSize=10&pageToken={nextPageToken}&answersPerQuestion=10'
                 else:
                     url = None
-    os.write(1,  f"all_data is: {all_data}".encode())
+    os.write(1,  f"all_data is: {all_data}\n".encode())
     return all_data
