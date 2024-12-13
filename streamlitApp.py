@@ -336,6 +336,7 @@ def parseQuestions(df, id, filterOption, filterData, myRange):
             filterData = pd.to_datetime(filterData).date()
             filtered_df = filterByDate(df, myRange, 'createTime', filterData)
 
+        os.write(1,  f"filtered_df is: {filtered_df}\n".encode())
         duplicates = filtered_df[filtered_df.duplicated(subset = ['text'], keep = 'first')]
         dupeVals = duplicates['name'].tolist()
         dupeVals = [value.replace('locations/' + id + '/questions/', '') for value in dupeVals]
@@ -567,7 +568,7 @@ async def main():
 
             elif field == 'Dupe FAQs':
                 for i in listGoogleIds:
-                    os.write(1,  f"Looping\n".encode())
+                    # os.write(1,  f"Looping\n".encode())
                     response = await loopThroughIds(googleAccountNum, field, i, headers)
                     os.write(1,  f"response is: {response}\n".encode())
                     dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
