@@ -15,6 +15,8 @@ from google.oauth2 import service_account
 from asyncGetPosts import localPostGet
 from asyncDeletePosts import asyncDeletePost
 from asyncGetVOptions import getVOptions
+from asyncGetFaq import getQuestions
+from asyncDeleteFaq import asyncDeleteFaqs
 import asyncio
 import aiohttp
 
@@ -120,7 +122,7 @@ async def loopThroughIds(accountId, endpoint, id, headers):
     elif endpoint == 'Social Posts':
         response = await localPostGet(accountId, id, headers)
     elif endpoint == 'All FAQs' or endpoint == 'Dupe FAQs':
-        response = getQuestions(id, headers)
+        response = await getQuestions(id, headers)
     elif endpoint == 'Photos':
         response = getPhotosCall(accountId, id, headers)
     authStatus = authErrors(response)
