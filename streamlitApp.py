@@ -567,7 +567,7 @@ async def main():
                 for i in listGoogleIds:
                     response = await loopThroughIds(googleAccountNum, field, i, headers)
                     dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
-                    locationLog = deleteDupeQuestions(i, dupeQuestions, headers)
+                    locationLog = await asyncDeleteFaqs(i, dupeQuestions, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             elif field == 'All FAQs':
