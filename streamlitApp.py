@@ -341,8 +341,8 @@ def parseQuestions(df, id, filterOption, filterData, myRange):
         duplicates = filtered_df[filtered_df.duplicated(subset = ['text'], keep = 'first')]
         dupeVals = duplicates['name'].tolist()
         dupeVals = [value.replace('locations/' + id + '/questions/', '') for value in dupeVals]
-    except: 
-        os.write(1,  f"Exception!\n".encode())
+    except Exception as e: 
+        os.write(1,  f"Exception! {e}\n".encode())
         return 0
     return dupeVals
 
