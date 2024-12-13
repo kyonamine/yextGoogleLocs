@@ -1,6 +1,7 @@
 import aiohttp
 import asyncio
 import pandas as pd
+import os
 
 # def getQuestions(id, heads):
 #     call = 'https://mybusinessqanda.googleapis.com/v1/locations/'
@@ -46,5 +47,5 @@ async def getQuestions(id, heads):
                     url = f'{call}{str(id)}/questions?pageSize=10&pageToken={nextPageToken}&answersPerQuestion=10'
                 else:
                     url = None
-
+    os.write(1,  f"all_data is: {all_data}".encode())
     return all_data
