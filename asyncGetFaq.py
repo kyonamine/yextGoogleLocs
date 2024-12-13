@@ -41,6 +41,7 @@ async def getQuestions(id, heads):
                 # rStatusCode = response.status
 
                 data = response_json.get('questions', [])
+                os.write(1,  f"data is: {data}".encode())
                 nextPageToken = response_json.get('nextPageToken')
 
                 all_data.extend(data)
