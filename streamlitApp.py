@@ -325,6 +325,7 @@ def deleteAllQuestions(df, locationId, heads):
     return logDf
 
 def parseQuestions(df, id, filterOption, filterData, myRange):
+    os.write(1,  f"df is: {df}\n".encode())
     try:
         df = dfCols(df, 'name', 'text', 'createTime', 'updateTime')
         df['createTime'] = df['createTime'].astype(str)
@@ -341,6 +342,7 @@ def parseQuestions(df, id, filterOption, filterData, myRange):
         dupeVals = duplicates['name'].tolist()
         dupeVals = [value.replace('locations/' + id + '/questions/', '') for value in dupeVals]
     except: 
+        os.write(1,  f"Exception!\n".encode())
         return 0
     return dupeVals
 
