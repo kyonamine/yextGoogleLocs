@@ -282,29 +282,29 @@ def useWarnings():
     st.info('If you have a problem uploading a file, check the error messages, refresh the page, and try again. If you have an authorization token issue, contact Pubops to get a token.', icon = "ℹ️")
     return
 
-def getQuestions(id, heads):
-    call = 'https://mybusinessqanda.googleapis.com/v1/locations/'
-    additional = '/questions?pageSize=10&answersPerQuestion=10'
-    url = f'{call}{str(id)}{additional}'
-    all_data = []
-    while url:
-        response = requests.get(url, headers = heads)
-        response_json = response.json()
-        rStatusCode = response.status_code
-        if rStatusCode == 401:
-            exitApp(1)
+# def getQuestions(id, heads):
+#     call = 'https://mybusinessqanda.googleapis.com/v1/locations/'
+#     additional = '/questions?pageSize=10&answersPerQuestion=10'
+#     url = f'{call}{str(id)}{additional}'
+#     all_data = []
+#     while url:
+#         response = requests.get(url, headers = heads)
+#         response_json = response.json()
+#         rStatusCode = response.status_code
+#         if rStatusCode == 401:
+#             exitApp(1)
             
-        data = response_json.get('questions', [])
-        nextPageToken = response_json.get('nextPageToken')
+#         data = response_json.get('questions', [])
+#         nextPageToken = response_json.get('nextPageToken')
         
-        all_data.extend(data)      
-        if nextPageToken:
-            url = f'{call}{str(id)}/questions?pageSize=10&pageToken={nextPageToken}&answersPerQuestion=10'
-        else:
-            url = None
+#         all_data.extend(data)      
+#         if nextPageToken:
+#             url = f'{call}{str(id)}/questions?pageSize=10&pageToken={nextPageToken}&answersPerQuestion=10'
+#         else:
+#             url = None
     
-    df = pd.DataFrame(all_data)
-    return df
+#     df = pd.DataFrame(all_data)
+#     return df
 
 def deleteAllQuestions(df, locationId, heads):
     logDf = pd.DataFrame(columns = ['Google Location ID', 'Question ID', 'API Response Code'])
