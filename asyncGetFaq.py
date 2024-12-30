@@ -4,6 +4,7 @@ import pandas as pd
 import os
 
 async def getQuestions(id, heads):
+    os.write(1,  f"Getting for Location ID: {id}".encode())
     call = 'https://mybusinessqanda.googleapis.com/v1/locations/'
     additional = '/questions?pageSize=10&answersPerQuestion=10'
     url = f'{call}{str(id)}{additional}'

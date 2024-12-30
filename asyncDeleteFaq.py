@@ -1,8 +1,10 @@
-import pandas as pd
-import asyncio
 import aiohttp
+import asyncio
+import pandas as pd
+import os 
 
 async def asyncDeleteFaqs(locationId, questionIdList, heads):
+    os.write(1,  f"Deleting for Location ID: {id}".encode())
     base = 'https://mybusinessqanda.googleapis.com/v1/locations/'
     additional = '/questions/'
     df = await loopAndDelete(locationId, questionIdList, heads, base, additional)
