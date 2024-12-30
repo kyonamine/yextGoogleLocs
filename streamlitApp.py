@@ -459,6 +459,10 @@ def varElseNone(var):
 
 async def main():
     st.session_state.state_dict = {}
+    if 'session_counts' not in st.session_state:
+        st.session_state.session_counts = 0
+    else:
+        st.session_state.session_counts += 1
 
     st.set_page_config(
         page_title = "Google Locations"
