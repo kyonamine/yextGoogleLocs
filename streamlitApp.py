@@ -372,12 +372,12 @@ def getPhotosCall(accountId, externalId, headers):
             return 'Need authorization token for ' + str(externalId) + '!'
         return 'Failed for ' + str(externalId)
     response = r_info.json()
-     if 'mediaItems' in response:
+    if 'mediaItems' in response:
         df = pd.DataFrame(response['mediaItems'])
     else:
         df = pd.DataFrame()  # Return an empty DataFrame
     return df
-    
+
     # try:
     #     temp = response['mediaItems']
     # except: 
