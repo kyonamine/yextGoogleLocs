@@ -124,7 +124,9 @@ async def loopThroughIds(accountId, endpoint, id, headers):
     elif endpoint == 'All FAQs' or endpoint == 'Dupe FAQs':
         response = await getQuestions(id, headers)
     elif endpoint == 'Photos':
+        print('getting photo IDs')
         response = getPhotosCall(accountId, id, headers)
+        print(f'response status = {response.status}')
     authStatus = authErrors(response)
     if authStatus == 0:
         return response
