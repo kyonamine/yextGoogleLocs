@@ -594,6 +594,7 @@ async def main():
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             elif field == 'Photos':
+                print('starting photos flow')
                 for i in listGoogleIds:
                     print('getting IDs')
                     response = await loopThroughIds(googleAccountNum, field, i, headers)
