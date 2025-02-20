@@ -125,7 +125,6 @@ async def loopThroughIds(accountId, endpoint, id, headers):
         response = await getQuestions(id, headers)
     elif endpoint == 'Photos':
         response = getPhotosCall(accountId, id, headers)
-        print(f"Response from getPhotosCall: {response}")
     authStatus = authErrors(response)
     if authStatus == 0:
         return response
@@ -424,6 +423,7 @@ def deleteMedia(accountId, mediaIdList, externalId, heads):
             call = f"{baseApi}{mediaId}"
             r_info = requests.delete(call, headers = heads)
             response = r_info.status_code
+            print(f'media deletion status: {response} for mediaId: {mediaId}')
             df.loc[len(df)] = [externalId, str(mediaId), response]
     return df
 
