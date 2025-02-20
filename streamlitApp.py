@@ -126,7 +126,7 @@ async def loopThroughIds(accountId, endpoint, id, headers):
     elif endpoint == 'Photos':
         print('getting photo IDs')
         response = getPhotosCall(accountId, id, headers)
-        print(response)
+        print(f'response = {response}')
     authStatus = authErrors(response)
     if authStatus == 0:
         return response
