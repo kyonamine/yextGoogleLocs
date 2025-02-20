@@ -383,7 +383,8 @@ def getPhotosCall(accountId, externalId, headers):
 def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
     accountStr = 'accounts/' + str(accountNum) + '/locations/' + str(externalId) + '/media/'
     df['name'] = df['name'].str.replace(str(accountStr), '')
-    print(df['name'])
+
+    print(f'printLogName = {df['name']})
     
     df = dfCols(df, 'name', 'sourceUrl', 'mediaFormat', 'googleUrl', 'thumbnailUrl', 'createTime')
 
