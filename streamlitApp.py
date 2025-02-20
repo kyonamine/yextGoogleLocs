@@ -418,7 +418,9 @@ def deleteMedia(accountId, mediaIdList, externalId, heads):
     baseApi = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/media/'
     df = pd.DataFrame(columns = ['Google Location ID', 'Media ID', 'API Response Code'])
     if mediaIdList:
+        print('deleting media')
         for mediaId in mediaIdList:
+            print(f'deleting media id: {mediaId}')
             call = f"{baseApi}{mediaId}"
             r_info = requests.delete(call, headers = heads)
             response = r_info.status_code
