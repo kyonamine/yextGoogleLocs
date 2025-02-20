@@ -125,6 +125,7 @@ async def loopThroughIds(accountId, endpoint, id, headers):
         response = await getQuestions(id, headers)
     elif endpoint == 'Photos':
         response = getPhotosCall(accountId, id, headers)
+        print(f"Response from getPhotosCall: {response}")
     authStatus = authErrors(response)
     if authStatus == 0:
         return response
@@ -372,7 +373,7 @@ def getPhotosCall(accountId, externalId, headers):
             return 'Need authorization token for ' + str(externalId) + '!'
         return 'Failed for ' + str(externalId)
     response = r_info.json()
-    print(response)
+
     if 'mediaItems' in response:
         df = pd.DataFrame(response['mediaItems'])
     else:
