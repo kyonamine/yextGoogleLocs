@@ -372,6 +372,7 @@ def getPhotosCall(accountId, externalId, headers):
             return 'Need authorization token for ' + str(externalId) + '!'
         return 'Failed for ' + str(externalId)
     response = r_info.json()
+    print(response)
     if 'mediaItems' in response:
         df = pd.DataFrame(response['mediaItems'])
     else:
@@ -391,7 +392,7 @@ def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
 
     if df.empty:
         return
-        
+
     df['name'] = df['name'].str.replace(str(accountStr), '')
     
     df = dfCols(df, 'name', 'sourceUrl', 'mediaFormat', 'googleUrl', 'thumbnailUrl', 'createTime')
