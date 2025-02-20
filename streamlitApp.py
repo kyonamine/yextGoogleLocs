@@ -124,9 +124,7 @@ async def loopThroughIds(accountId, endpoint, id, headers):
     elif endpoint == 'All FAQs' or endpoint == 'Dupe FAQs':
         response = await getQuestions(id, headers)
     elif endpoint == 'Photos':
-        print('getting photo IDs')
         response = getPhotosCall(accountId, id, headers)
-        print(f'response = {response}')
     authStatus = authErrors(response)
     if authStatus == 0:
         return response
@@ -374,7 +372,6 @@ def getPhotosCall(accountId, externalId, headers):
             return 'Need authorization token for ' + str(externalId) + '!'
         return 'Failed for ' + str(externalId)
     response = r_info.json()
-
     if 'mediaItems' in response:
         df = pd.DataFrame(response['mediaItems'])
     else:
@@ -391,11 +388,10 @@ def getPhotosCall(accountId, externalId, headers):
 
 def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
     accountStr = 'accounts/' + str(accountNum) + '/locations/' + str(externalId) + '/media/'
-    print(f'df = {df.head()}')
-    if df.empty:
-        print('no media in df')
-        return
 
+    if df.empty:
+        return
+        
     df['name'] = df['name'].str.replace(str(accountStr), '')
     
     df = dfCols(df, 'name', 'sourceUrl', 'mediaFormat', 'googleUrl', 'thumbnailUrl', 'createTime')
@@ -416,25 +412,16 @@ def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
             return []
 
     mediaList = filtered_df['name'].tolist()
-    print(f'media list = {mediaList}')
     return mediaList
 
 def deleteMedia(accountId, mediaIdList, externalId, heads):
     baseApi = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/media/'
     df = pd.DataFrame(columns = ['Google Location ID', 'Media ID', 'API Response Code'])
-    
-    if not mediaIdList:
-        print('no media to delete')
-        return df
-
-    else: # make sure there is media to delete
-        for mediaId in mediaIdList:
-            print(f'deleting {mediaId}')
-            call = f"{baseApi}{mediaId}"
-            r_info = requests.delete(call, headers = heads)
-            response = r_info.status_code
-            printf('response = {response}')
-            df.loc[len(df)] = [externalId, str(mediaId), response]
+    for mediaId in mediaIdList:
+        call = f"{baseApi}{mediaId}"
+        r_info = requests.delete(call, headers = heads)
+        response = r_info.status_code
+        df.loc[len(df)] = [externalId, str(mediaId), response]
     return df
 
 def deleteLogo(accountId, externalId, heads):
@@ -544,9 +531,7 @@ async def main():
                 form_submitted = st.form_submit_button("Get Verification Options")
             else:
                 form_submitted = st.form_submit_button("Delete " +  field)
-        
-        print(f"form_submitted = {form_submitted}")  # Add this line
-
+ 
         if form_submitted:
             os.write(1,  f"{field}\n".encode())
             listYextIds, listGoogleIds = parseFile(frame)
@@ -554,7 +539,6 @@ async def main():
 
             headers = {"Authorization": "Bearer " + token}
             # progress(len(frame.index))
-            print(f'field = {field}')
             if field == 'Place Action Links':
                 for i in listGoogleIds:
                     response = await loopThroughIds(googleAccountNum, 'placeActionLinks', i, headers)
@@ -598,13 +582,9 @@ async def main():
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             elif field == 'Photos':
-                print('starting photos flow')
                 for i in listGoogleIds:
-                    print('getting IDs')
                     response = await loopThroughIds(googleAccountNum, field, i, headers)
-                    print('gettingPhotosToDelete')
                     photosToDel = parseMedia(googleAccountNum, response, i, filterOption, filterData, daterange)
-                    print('deletingMedia')
                     locationLog = deleteMedia(googleAccountNum, photosToDel, i, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
