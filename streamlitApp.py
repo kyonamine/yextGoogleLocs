@@ -377,6 +377,7 @@ def getPhotosCall(accountId, externalId, headers):
         df = pd.DataFrame(response['mediaItems'])
     else:
         df = pd.DataFrame()  # Return an empty DataFrame
+    print(f'mediaItems returned: {df.head}')
     return df
 
     # try:
@@ -594,8 +595,11 @@ async def main():
 
             elif field == 'Photos':
                 for i in listGoogleIds:
+                    print('getting IDs')
                     response = await loopThroughIds(googleAccountNum, field, i, headers)
+                    print('gettingPhotosToDelete')
                     photosToDel = parseMedia(googleAccountNum, response, i, filterOption, filterData, daterange)
+                    print('deletingMedia')
                     locationLog = deleteMedia(googleAccountNum, photosToDel, i, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
