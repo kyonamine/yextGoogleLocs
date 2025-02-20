@@ -382,12 +382,11 @@ def getPhotosCall(accountId, externalId, headers):
 
 def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
     accountStr = 'accounts/' + str(accountNum) + '/locations/' + str(externalId) + '/media/'
-   
-    print(f'account str + {accountStr}')
-    print(f"printLogNameBefore = {df['name']}")
-    df['name'] = df['name'].str.replace(str(accountStr), '')
 
-    print(f"printLogNameAfter = {df['name']}")
+    for index, row in df.iterrows():
+        if not isinstance(row['name'], str):
+            print(f"Non-string value at index {index}: {row['name']}, type: {type(row['name'])}")
+    df['name'] = df['name'].str.replace(str(accountStr), '')
     
     df = dfCols(df, 'name', 'sourceUrl', 'mediaFormat', 'googleUrl', 'thumbnailUrl', 'createTime')
 
