@@ -391,6 +391,7 @@ def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
     accountStr = 'accounts/' + str(accountNum) + '/locations/' + str(externalId) + '/media/'
     print(f'df = {df.head()}')
     if df.empty:
+        print('no media in df')
         return
 
     df['name'] = df['name'].str.replace(str(accountStr), '')
@@ -418,6 +419,11 @@ def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
 def deleteMedia(accountId, mediaIdList, externalId, heads):
     baseApi = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/media/'
     df = pd.DataFrame(columns = ['Google Location ID', 'Media ID', 'API Response Code'])
+    
+    if not mediaIdList:
+        print('no media to delete')
+        return df
+
     if mediaIdList: # make sure it is not null
         for mediaId in mediaIdList:
             call = f"{baseApi}{mediaId}"
