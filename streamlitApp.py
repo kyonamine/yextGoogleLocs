@@ -424,12 +424,13 @@ def deleteMedia(accountId, mediaIdList, externalId, heads):
         print('no media to delete')
         return df
 
-    if mediaIdList: # make sure it is not null
+    else: # make sure there is media to delete
         for mediaId in mediaIdList:
+            print(f'deleting {mediaId}')
             call = f"{baseApi}{mediaId}"
             r_info = requests.delete(call, headers = heads)
             response = r_info.status_code
-            print(f'media deletion status: {response} for mediaId: {mediaId}')
+            printf('response = {response}')
             df.loc[len(df)] = [externalId, str(mediaId), response]
     return df
 
