@@ -414,7 +414,7 @@ def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
             return []
 
     mediaList = filtered_df['name'].tolist()
-    print(f'media list = {}')
+    print(f'media list = {mediaList}')
     return mediaList
 
 def deleteMedia(accountId, mediaIdList, externalId, heads):
