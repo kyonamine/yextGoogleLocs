@@ -126,7 +126,7 @@ async def loopThroughIds(accountId, endpoint, id, headers):
     elif endpoint == 'Photos':
         print('getting photo IDs')
         response = getPhotosCall(accountId, id, headers)
-        print(f'response status = {response.status}')
+        print(response)
     authStatus = authErrors(response)
     if authStatus == 0:
         return response
@@ -379,7 +379,6 @@ def getPhotosCall(accountId, externalId, headers):
         df = pd.DataFrame(response['mediaItems'])
     else:
         df = pd.DataFrame()  # Return an empty DataFrame
-    print(f'mediaItems returned: {df.head}')
     return df
 
     # try:
