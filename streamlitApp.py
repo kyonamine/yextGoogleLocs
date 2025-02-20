@@ -417,11 +417,12 @@ def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
 def deleteMedia(accountId, mediaIdList, externalId, heads):
     baseApi = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/media/'
     df = pd.DataFrame(columns = ['Google Location ID', 'Media ID', 'API Response Code'])
-    for mediaId in mediaIdList:
-        call = f"{baseApi}{mediaId}"
-        r_info = requests.delete(call, headers = heads)
-        response = r_info.status_code
-        df.loc[len(df)] = [externalId, str(mediaId), response]
+    if mediaIdList:
+        for mediaId in mediaIdList:
+            call = f"{baseApi}{mediaId}"
+            r_info = requests.delete(call, headers = heads)
+            response = r_info.status_code
+            df.loc[len(df)] = [externalId, str(mediaId), response]
     return df
 
 def deleteLogo(accountId, externalId, heads):
