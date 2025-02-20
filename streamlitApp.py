@@ -389,7 +389,7 @@ def getPhotosCall(accountId, externalId, headers):
 
 def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
     accountStr = 'accounts/' + str(accountNum) + '/locations/' + str(externalId) + '/media/'
-
+    print(f'df = {df.head()}')
     if df.empty:
         return
 
