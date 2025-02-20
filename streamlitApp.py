@@ -552,6 +552,7 @@ async def main():
 
             headers = {"Authorization": "Bearer " + token}
             # progress(len(frame.index))
+            print(f'field = {field}')
             if field == 'Place Action Links':
                 for i in listGoogleIds:
                     response = await loopThroughIds(googleAccountNum, 'placeActionLinks', i, headers)
