@@ -125,6 +125,7 @@ async def loopThroughIds(accountId, endpoint, id, headers):
         response = await getQuestions(id, headers)
     elif endpoint == 'Photos':
         response = getPhotosCall(accountId, id, headers)
+        print(f'photos to delete = {response}')
     authStatus = authErrors(response)
     if authStatus == 0:
         return response
@@ -412,6 +413,7 @@ def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
             return []
 
     mediaList = filtered_df['name'].tolist()
+    print(f'parse media returns filtered df: {filtered df}')
     return mediaList
 
 def deleteMedia(accountId, mediaIdList, externalId, heads):
