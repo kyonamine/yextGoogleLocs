@@ -544,7 +544,9 @@ async def main():
                 form_submitted = st.form_submit_button("Get Verification Options")
             else:
                 form_submitted = st.form_submit_button("Delete " +  field)
- 
+        
+        print(f"form_submitted = {form_submitted}")  # Add this line
+
         if form_submitted:
             os.write(1,  f"{field}\n".encode())
             listYextIds, listGoogleIds = parseFile(frame)
