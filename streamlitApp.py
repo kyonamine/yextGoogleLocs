@@ -52,7 +52,8 @@ def check_password():
         st.text_input(
             "Password", type="password", on_change = password_entered, key = "pw"
         )
-        st.error("😕 Password incorrect")
+        if "pw" in st.session_state and not st.session_state["password_correct"]:
+            st.error("😕 Password incorrect")
         return False
     else:
         # Password correct.
