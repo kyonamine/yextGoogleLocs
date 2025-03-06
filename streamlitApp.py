@@ -424,6 +424,7 @@ def deleteMedia(accountId, mediaIdList, externalId, heads):
             print(f'deleting media id: {mediaId}')
             call = f"{baseApi}{mediaId}"
             r_info = requests.delete(call, headers = heads)
+            os.write(1, f"Delete Media Status Code: {r_info.status_code()}\n".encode())
             response = r_info.status_code
             df.loc[len(df)] = [externalId, str(mediaId), response]
     return df
