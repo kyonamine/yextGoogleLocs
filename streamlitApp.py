@@ -496,45 +496,45 @@ async def main():
                 "Menu": ["All"],
                 "Get Verification Options": ["All"]
             }
-        col1, col2 = st.columns([2, 1])
+    col1, col2 = st.columns([2, 1])
 
-        with col1:
-            field = st.selectbox("Choose field", options = my_dict.keys(), key = 1)
-        with col2:
-            filterOption = st.selectbox("Choose filter option", options = my_dict[field], key = 2)
-        st.write(fieldSpecificInfo(field))
+    with col1:
+        field = st.selectbox("Choose field", options = my_dict.keys(), key = 1)
+    with col2:
+        filterOption = st.selectbox("Choose filter option", options = my_dict[field], key = 2)
+    st.write(fieldSpecificInfo(field))
 
-        with st.form("Form"):
-            frame = uploadFile()
-            filterData = ''
-            daterange = ''
-            placeActionTypeFilter = ''
-            if field == 'Social Posts' or field == 'Photos' or field == 'Logo' or field == 'Menu':
-                googleAccountNum = st.text_input("Enter the Google account number (all locations must be in the same account):")
-            else:
-                googleAccountNum = 0
-            if filterOption == 'createTime':
-                daterange = st.radio(
-                    "Select time filter",
-                    ('Before', 'On or Before', 'After', 'On or After'))
-                filterData = st.date_input("What date should we use? (You can use a date in the future):", value = None)
-            elif filterOption == 'placeActionType':
-                placeActionTypeFilter = st.radio(
-                    "Select place action type",
-                    ('All', 'APPOINTMENT', 'DINING_RESERVATION', 'FOOD_TAKEOUT', 'ONLINE_APPOINTMENT', 'SHOP_ONLINE', 'FOOD_ORDERING', 'FOOD_DELIVERY'))
-            elif filterOption == 'Logo':
-                logoSourceUrl = st.text_input("Enter the URL of the logo you want to upload:")
-            else: 
-                if field != 'All FAQs' and field != 'moreHours' and field != 'Menu' and field != 'Get Verification Options':
-                    filterData = st.text_input("Enter filter (this is case sensitive):") # This would be for key text search
+    with st.form("Form"):
+        frame = uploadFile()
+        filterData = ''
+        daterange = ''
+        placeActionTypeFilter = ''
+        if field == 'Social Posts' or field == 'Photos' or field == 'Logo' or field == 'Menu':
+            googleAccountNum = st.text_input("Enter the Google account number (all locations must be in the same account):")
+        else:
+            googleAccountNum = 0
+        if filterOption == 'createTime':
+            daterange = st.radio(
+                "Select time filter",
+                ('Before', 'On or Before', 'After', 'On or After'))
+            filterData = st.date_input("What date should we use? (You can use a date in the future):", value = None)
+        elif filterOption == 'placeActionType':
+            placeActionTypeFilter = st.radio(
+                "Select place action type",
+                ('All', 'APPOINTMENT', 'DINING_RESERVATION', 'FOOD_TAKEOUT', 'ONLINE_APPOINTMENT', 'SHOP_ONLINE', 'FOOD_ORDERING', 'FOOD_DELIVERY'))
+        elif filterOption == 'Logo':
+            logoSourceUrl = st.text_input("Enter the URL of the logo you want to upload:")
+        else: 
+            if field != 'All FAQs' and field != 'moreHours' and field != 'Menu' and field != 'Get Verification Options':
+                filterData = st.text_input("Enter filter (this is case sensitive):") # This would be for key text search
 
-            token = st.text_input("Enter Google API Authorization token (No 'Bearer' included. Should start with 'ya29.'):")
-            if field == 'Logo':
-                form_submitted = st.form_submit_button("Update Logos")
-            elif field == 'Get Verification Options':
-                form_submitted = st.form_submit_button("Get Verification Options")
-            else:
-                form_submitted = st.form_submit_button("Delete " +  field)
+        token = st.text_input("Enter Google API Authorization token (No 'Bearer' included. Should start with 'ya29.'):")
+        if field == 'Logo':
+            form_submitted = st.form_submit_button("Update Logos")
+        elif field == 'Get Verification Options':
+            form_submitted = st.form_submit_button("Get Verification Options")
+        else:
+            form_submitted = st.form_submit_button("Delete " +  field)
 
     if check_password():
         streamlit_analytics.start_tracking()
