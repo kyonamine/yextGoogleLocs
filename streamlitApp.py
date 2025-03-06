@@ -365,6 +365,7 @@ def getPhotosCall(accountId, externalId, headers):
     url = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/media?pageSize=500'
     r_info = requests.get(url, headers = headers)
     responseCode = r_info.status_code
+    os.write(1, f"GET Media Status Code: {responseCode}\n".encode())
     if responseCode != 200:
         if responseCode == 404:
             return 'Could not find location ' + str(externalId)
