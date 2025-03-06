@@ -53,7 +53,7 @@ def check_password():
         return False
     
 
-st.text_input("Password", type="password", on_change=password_entered, key="pw")
+st.text_input("Password", type="password", on_change=check_password.password_entered(), key="pw")
 
 
 def uploadFile():
