@@ -20,6 +20,12 @@ from asyncDeleteFaq import asyncDeleteFaqs
 import asyncio
 import aiohttp
 
+# --- Page Configuration and Session State Initialization ---
+st.set_page_config(page_title="Google Locations")
+
+if 'password_correct' not in st.session_state:
+    st.session_state.password_correct = False  # Initialize to False
+
 key_dict = json.loads(st.secrets["textkey"])
 creds = service_account.Credentials.from_service_account_info(key_dict)
 db = firestore.Client(credentials=creds, project="tpm-streamlit-analytics")
@@ -474,20 +480,12 @@ def varElseNone(var):
     return None
 
 async def main():
-    st.session_state.state_dict = {}
-    if 'count' not in st.session_state:
-        st.session_state.count = 0
-
-
-    st.set_page_config(
-        page_title = "Google Locations"
-    )
+    # st.set_page_config(
+    #     page_title = "Google Locations"
+    # )
     useWarnings()
-    if check_password():
-        streamlit_analytics.start_tracking()
-        st.title("Google Locations")
-        
-        my_dict = {
+
+    my_dict = {
                 "Place Action Links": ["placeActionType", "uri", "createTime"], 
                 "Social Posts": ["createTime", "Key Text Search"], 
                 "Dupe FAQs": ["createTime"],
@@ -537,6 +535,10 @@ async def main():
                 form_submitted = st.form_submit_button("Get Verification Options")
             else:
                 form_submitted = st.form_submit_button("Delete " +  field)
+
+    if check_password():
+        streamlit_analytics.start_tracking()
+        st.title("Google Locations")
  
         if form_submitted:
             os.write(1,  f"{field}\n".encode())
@@ -635,4 +637,4 @@ async def main():
         streamlit_analytics.stop_tracking(st.secrets["analyticsPass"])
 
 if __name__ == "__main__":
-    pass 
+    pass
