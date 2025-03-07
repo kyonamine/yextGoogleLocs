@@ -34,27 +34,18 @@ creds = service_account.Credentials.from_service_account_info(key_dict)
 db = firestore.Client(credentials=creds, project="tpm-streamlit-analytics")
 
 
-def password_entered():
-        """Checks whether a password entered by the user is correct."""
-        if st.session_state['pw'] == st.secrets["pw"]:
-            st.session_state['password_correct'] = True
-            # del st.session_state["pw"]  # don't store password
-        else:
-            st.session_state['password_correct'] = False
-
 def check_password():
-    """Returns `True` if the user had the correct password."""
-
-    if st.session_state['password_correct']:
-        # Password correct.
-        return True
+    """Checks the entered password and updates session state."""
+    if st.session_state.pw == st.secrets["pw"]:
+        st.session_state.password_correct = True
     else:
-        # Password not correct, show error.
-        if st.session_state['pw'] and not st.session_state['password_correct']: # Check if a password HAS been entered
-          st.error("😕 Password incorrect")
-        return False
-    
-st.text_input("Password", type="password", on_change=password_entered(), key="pw")
+        st.session_state.password_correct = False
+        if st.session_state.pw:  # Only show error if something was entered
+            st.error("😕 Password incorrect")
+
+    return st.session_state.password_correct  # Return the boolean directly
+
+st.text_input("Password", type="password", on_change=check_password(), key="pw")
 
 def uploadFile():
     exampleSheet = 'https://docs.google.com/spreadsheets/d/18tJfjrlZFd3qQT5ZTnz3eIw5v6KSILTBN-Ol9G7sFLo/edit#gid=0'
