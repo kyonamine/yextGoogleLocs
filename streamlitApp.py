@@ -35,7 +35,7 @@ db = firestore.Client(credentials=creds, project="tpm-streamlit-analytics")
 
 
 def password_entered():
-        print(st.session_state['pw'])
+        os.write(1,  f"{st.session_state['pw']}\n".encode())
         """Checks whether a password entered by the user is correct."""
         if st.session_state.pw == st.secrets["pw"]:
             st.session_state.password_correct = True
