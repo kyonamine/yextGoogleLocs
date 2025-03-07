@@ -9,7 +9,8 @@ from datetime import date
 import os
 import time
 from datetime import datetime
-import streamlit_analytics2 as streamlit_analytics
+# import streamlit_analytics2 as streamlit_analytics
+import streamlit_analytics
 from google.cloud import firestore
 from google.oauth2 import service_account
 from asyncGetPosts import localPostGet
@@ -19,6 +20,10 @@ from asyncGetFaq import getQuestions
 from asyncDeleteFaq import asyncDeleteFaqs
 import asyncio
 import aiohttp
+
+# Initialize 'password_correct' in session state.  Crucial!
+if "password_correct" not in st.session_state:
+    st.session_state["password_correct"] = False
 
 key_dict = json.loads(st.secrets["textkey"])
 creds = service_account.Credentials.from_service_account_info(key_dict)
@@ -257,15 +262,15 @@ def writeLogs(name, dfLog):
     logCsv = dfLog.to_csv(index = False)
     return logCsv
 
-def progress(numRows):
-    progress_text = "Operation in progress. Please wait."
-    my_bar = st.progress(0, text = progress_text)
-    for i in range(numRows):
-        time.sleep(0.01)
-        my_bar.progress((i + 1) / numRows)
-    st.write('Task completed!')
-    my_bar.empty()
-    return
+# def progress(numRows):
+#     progress_text = "Operation in progress. Please wait."
+#     my_bar = st.progress(0, text = progress_text)
+#     for i in range(numRows):
+#         time.sleep(0.01)
+#         my_bar.progress((i + 1) / numRows)
+#     st.write('Task completed!')
+#     my_bar.empty()
+#     return
 
 def fieldSpecificInfo(field):
     if field == 'Dupe FAQs':
@@ -459,7 +464,7 @@ def varElseNone(var):
     return None
 
 async def main():
-    st.session_state.state_dict = {}
+    # st.session_state.state_dict = {}
     if 'count' not in st.session_state:
         st.session_state.count = 0
 
@@ -468,6 +473,8 @@ async def main():
         page_title = "Google Locations"
     )
     useWarnings()
+
+    
     if check_password():
         streamlit_analytics.start_tracking()
         st.title("Google Locations")
