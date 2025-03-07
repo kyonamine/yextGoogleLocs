@@ -37,13 +37,13 @@ db = firestore.Client(credentials=creds, project="tpm-streamlit-analytics")
 def check_password():
     """Checks the entered password and updates session state."""
     if st.session_state.pw == st.secrets["pw"]:
-        st.session_state.password_correct = True
+        st.session_state['password_correct']= True
     else:
-        st.session_state.password_correct = False
+        st.session_state['password_correct'] = False
         if st.session_state.pw:  # Only show error if something was entered
             st.error("😕 Password incorrect")
 
-    return st.session_state.password_correct  # Return the boolean directly
+    return st.session_state['password_correct']  # Return the boolean directly
 
 st.text_input("Password", type="password", on_change=check_password(), key="pw")
 
