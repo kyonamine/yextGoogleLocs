@@ -28,4 +28,3 @@ async def delete_single_faq(session, call, heads, externalId, targetId, df):
     async with session.delete(call, headers=heads) as r_info:
         response = r_info.status
         df.loc[len(df)] = [externalId, targetId, response]
-        os.write(1, f"FAQ deletion status: {response}\n".encode())

@@ -20,34 +20,37 @@ from asyncDeleteFaq import asyncDeleteFaqs
 import asyncio
 import aiohttp
 
-# --- Page Configuration and Session State Initialization ---
-st.set_page_config(page_title="Google Locations")
-
-if 'password_correct' not in st.session_state:
-    st.session_state['password_correct']= False
-if 'pw' not in st.session_state:
-    st.session_state['pw'] = ''
-
-# --- Secrets Loading (Do this ONCE, at the top) ---
 key_dict = json.loads(st.secrets["textkey"])
 creds = service_account.Credentials.from_service_account_info(key_dict)
 db = firestore.Client(credentials=creds, project="tpm-streamlit-analytics")
 
-
 def check_password():
-    """Checks the entered password and updates session state."""
-    if st.session_state.pw == st.secrets["pw"]:
-        st.session_state.password_correct = True
+    """Returns `True` if the user had the correct password."""
+
+    def password_entered():
+        """Checks whether a password entered by the user is correct."""
+        if st.session_state["pw"] == st.secrets["pw"]:
+            st.session_state["password_correct"] = True
+            del st.session_state["pw"]  # don't store password
+        else:
+            st.session_state["password_correct"] = False
+
+    if "password_correct" not in st.session_state:
+        # First run, show input for password.
+        st.text_input(
+            "Password", type="password", on_change = password_entered, key = "pw"
+        )
+        return False
+    elif not st.session_state["password_correct"]:
+        # Password not correct, show input + error.
+        st.text_input(
+            "Password", type="password", on_change = password_entered, key = "pw"
+        )
+        st.error("😕 Password incorrect")
+        return False
     else:
-        st.session_state.password_correct = False
-        if st.session_state.pw:  # Only show if password was entered
-            st.error("😕 Password incorrect")
-    return st.session_state.password_correct
-
-
-
-# --- Password Input ---
-st.text_input("Password", type="password", on_change=check_password, key="pw") # Corrected on_change
+        # Password correct.
+        return True
 
 def uploadFile():
     exampleSheet = 'https://docs.google.com/spreadsheets/d/18tJfjrlZFd3qQT5ZTnz3eIw5v6KSILTBN-Ol9G7sFLo/edit#gid=0'
@@ -362,7 +365,6 @@ def getPhotosCall(accountId, externalId, headers):
     url = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/media?pageSize=500'
     r_info = requests.get(url, headers = headers)
     responseCode = r_info.status_code
-    os.write(1, f"GET Media Status Code: {responseCode}\n".encode())
     if responseCode != 200:
         if responseCode == 404:
             return 'Could not find location ' + str(externalId)
@@ -410,21 +412,16 @@ def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
             return []
 
     mediaList = filtered_df['name'].tolist()
-    print(f'parse media returns: {mediaList}')
     return mediaList
 
 def deleteMedia(accountId, mediaIdList, externalId, heads):
     baseApi = f'https://mybusiness.googleapis.com/v4/accounts/{accountId}/locations/{externalId}/media/'
     df = pd.DataFrame(columns = ['Google Location ID', 'Media ID', 'API Response Code'])
-    if mediaIdList:
-        print('deleting media')
-        for mediaId in mediaIdList:
-            print(f'deleting media id: {mediaId}')
-            call = f"{baseApi}{mediaId}"
-            r_info = requests.delete(call, headers = heads)
-            os.write(1, f"Delete Media Status Code: {r_info.status_code()}\n".encode())
-            response = r_info.status_code
-            df.loc[len(df)] = [externalId, str(mediaId), response]
+    for mediaId in mediaIdList:
+        call = f"{baseApi}{mediaId}"
+        r_info = requests.delete(call, headers = heads)
+        response = r_info.status_code
+        df.loc[len(df)] = [externalId, str(mediaId), response]
     return df
 
 def deleteLogo(accountId, externalId, heads):
@@ -471,12 +468,20 @@ def varElseNone(var):
     return None
 
 async def main():
-    # st.set_page_config(
-    #     page_title = "Google Locations"
-    # )
-    useWarnings()
+    st.session_state.state_dict = {}
+    if 'count' not in st.session_state:
+        st.session_state.count = 0
 
-    my_dict = {
+
+    st.set_page_config(
+        page_title = "Google Locations"
+    )
+    useWarnings()
+    if check_password():
+        streamlit_analytics.start_tracking()
+        st.title("Google Locations")
+        
+        my_dict = {
                 "Place Action Links": ["placeActionType", "uri", "createTime"], 
                 "Social Posts": ["createTime", "Key Text Search"], 
                 "Dupe FAQs": ["createTime"],
@@ -487,49 +492,45 @@ async def main():
                 "Menu": ["All"],
                 "Get Verification Options": ["All"]
             }
-    col1, col2 = st.columns([2, 1])
+        col1, col2 = st.columns([2, 1])
 
-    with col1:
-        field = st.selectbox("Choose field", options = my_dict.keys(), key = 1)
-    with col2:
-        filterOption = st.selectbox("Choose filter option", options = my_dict[field], key = 2)
-    st.write(fieldSpecificInfo(field))
+        with col1:
+            field = st.selectbox("Choose field", options = my_dict.keys(), key = 1)
+        with col2:
+            filterOption = st.selectbox("Choose filter option", options = my_dict[field], key = 2)
+        st.write(fieldSpecificInfo(field))
 
-    with st.form("Form"):
-        frame = uploadFile()
-        filterData = ''
-        daterange = ''
-        placeActionTypeFilter = ''
-        if field == 'Social Posts' or field == 'Photos' or field == 'Logo' or field == 'Menu':
-            googleAccountNum = st.text_input("Enter the Google account number (all locations must be in the same account):")
-        else:
-            googleAccountNum = 0
-        if filterOption == 'createTime':
-            daterange = st.radio(
-                "Select time filter",
-                ('Before', 'On or Before', 'After', 'On or After'))
-            filterData = st.date_input("What date should we use? (You can use a date in the future):", value = None)
-        elif filterOption == 'placeActionType':
-            placeActionTypeFilter = st.radio(
-                "Select place action type",
-                ('All', 'APPOINTMENT', 'DINING_RESERVATION', 'FOOD_TAKEOUT', 'ONLINE_APPOINTMENT', 'SHOP_ONLINE', 'FOOD_ORDERING', 'FOOD_DELIVERY'))
-        elif filterOption == 'Logo':
-            logoSourceUrl = st.text_input("Enter the URL of the logo you want to upload:")
-        else: 
-            if field != 'All FAQs' and field != 'moreHours' and field != 'Menu' and field != 'Get Verification Options':
-                filterData = st.text_input("Enter filter (this is case sensitive):") # This would be for key text search
+        with st.form("Form"):
+            frame = uploadFile()
+            filterData = ''
+            daterange = ''
+            placeActionTypeFilter = ''
+            if field == 'Social Posts' or field == 'Photos' or field == 'Logo' or field == 'Menu':
+                googleAccountNum = st.text_input("Enter the Google account number (all locations must be in the same account):")
+            else:
+                googleAccountNum = 0
+            if filterOption == 'createTime':
+                daterange = st.radio(
+                    "Select time filter",
+                    ('Before', 'On or Before', 'After', 'On or After'))
+                filterData = st.date_input("What date should we use? (You can use a date in the future):", value = None)
+            elif filterOption == 'placeActionType':
+                placeActionTypeFilter = st.radio(
+                    "Select place action type",
+                    ('All', 'APPOINTMENT', 'DINING_RESERVATION', 'FOOD_TAKEOUT', 'ONLINE_APPOINTMENT', 'SHOP_ONLINE', 'FOOD_ORDERING', 'FOOD_DELIVERY'))
+            elif filterOption == 'Logo':
+                logoSourceUrl = st.text_input("Enter the URL of the logo you want to upload:")
+            else: 
+                if field != 'All FAQs' and field != 'moreHours' and field != 'Menu' and field != 'Get Verification Options':
+                    filterData = st.text_input("Enter filter (this is case sensitive):") # This would be for key text search
 
-        token = st.text_input("Enter Google API Authorization token (No 'Bearer' included. Should start with 'ya29.'):")
-        if field == 'Logo':
-            form_submitted = st.form_submit_button("Update Logos")
-        elif field == 'Get Verification Options':
-            form_submitted = st.form_submit_button("Get Verification Options")
-        else:
-            form_submitted = st.form_submit_button("Delete " +  field)
-
-    if check_password():
-        streamlit_analytics.start_tracking()
-        st.title("Google Locations")
+            token = st.text_input("Enter Google API Authorization token (No 'Bearer' included. Should start with 'ya29.'):")
+            if field == 'Logo':
+                form_submitted = st.form_submit_button("Update Logos")
+            elif field == 'Get Verification Options':
+                form_submitted = st.form_submit_button("Get Verification Options")
+            else:
+                form_submitted = st.form_submit_button("Delete " +  field)
  
         if form_submitted:
             os.write(1,  f"{field}\n".encode())
@@ -628,4 +629,4 @@ async def main():
         streamlit_analytics.stop_tracking(st.secrets["analyticsPass"])
 
 if __name__ == "__main__":
-    pass
+    asyncio.run(main())
