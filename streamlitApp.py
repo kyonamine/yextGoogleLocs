@@ -9,8 +9,8 @@ from datetime import date
 import os
 import time
 from datetime import datetime
-# import streamlit_analytics2 as streamlit_analytics
-import streamlit_analytics
+import streamlit_analytics2 as streamlit_analytics
+# import streamlit_analytics
 from google.cloud import firestore
 from google.oauth2 import service_account
 from asyncGetPosts import localPostGet
@@ -474,7 +474,7 @@ async def main():
     )
     useWarnings()
 
-    
+
     if check_password():
         streamlit_analytics.start_tracking()
         st.title("Google Locations")
