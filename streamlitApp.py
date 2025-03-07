@@ -24,7 +24,7 @@ import aiohttp
 st.set_page_config(page_title="Google Locations")
 
 if 'password_correct' not in st.session_state:
-    st.session_state.password_correct = False
+    st.session_state['password_correct']= False
 if 'pw' not in st.session_state:
     st.session_state['pw'] = ''
 
@@ -37,20 +37,20 @@ db = firestore.Client(credentials=creds, project="tpm-streamlit-analytics")
 def password_entered():
         """Checks whether a password entered by the user is correct."""
         if st.session_state['pw'] == st.secrets["pw"]:
-            st.session_state.password_correct = True
+            st.session_state['password_correct'] = True
             # del st.session_state["pw"]  # don't store password
         else:
-            st.session_state.password_correct = False
+            st.session_state['password_correct'] = False
 
 def check_password():
     """Returns `True` if the user had the correct password."""
 
-    if st.session_state.password_correct:
+    if st.session_state['password_correct']:
         # Password correct.
         return True
     else:
         # Password not correct, show error.
-        if st.session_state['pw'] and not st.session_state.password_correct: # Check if a password HAS been entered
+        if st.session_state['pw'] and not st.session_state['password_correct']: # Check if a password HAS been entered
           st.error("😕 Password incorrect")
         return False
     
