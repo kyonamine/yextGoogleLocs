@@ -20,6 +20,10 @@ from asyncDeleteFaq import asyncDeleteFaqs
 import asyncio
 import aiohttp
 
+if 'password_correct' not in st.session_state:
+    st.session_state.password_correct = False
+if 'pw' not in st.session_state:
+    st.session_state.pw = ''
 
 key_dict = json.loads(st.secrets["textkey"])
 creds = service_account.Credentials.from_service_account_info(key_dict)
@@ -28,9 +32,6 @@ db = firestore.Client(credentials=creds, project="tpm-streamlit-analytics")
 # --- Page Configuration and Session State Initialization ---
 st.set_page_config(page_title="Google Locations")
 
-key_dict = json.loads(st.secrets["textkey"])
-creds = service_account.Credentials.from_service_account_info(key_dict)
-db = firestore.Client(credentials=creds, project="tpm-streamlit-analytics")
 
 def password_entered():
         """Checks whether a password entered by the user is correct."""
