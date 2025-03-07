@@ -26,7 +26,7 @@ st.set_page_config(page_title="Google Locations")
 if 'password_correct' not in st.session_state:
     st.session_state.password_correct = False
 if 'pw' not in st.session_state:
-    st.session_state.pw = ''
+    st.session_state['pw'] = ''
 
 # --- Secrets Loading (Do this ONCE, at the top) ---
 key_dict = json.loads(st.secrets["textkey"])
@@ -35,9 +35,8 @@ db = firestore.Client(credentials=creds, project="tpm-streamlit-analytics")
 
 
 def password_entered():
-        os.write(1,  f"{st.session_state['pw']}\n".encode())
         """Checks whether a password entered by the user is correct."""
-        if st.session_state.pw == st.secrets["pw"]:
+        if st.session_state['pw'] == st.secrets["pw"]:
             st.session_state.password_correct = True
             # del st.session_state["pw"]  # don't store password
         else:
@@ -51,7 +50,7 @@ def check_password():
         return True
     else:
         # Password not correct, show error.
-        if st.session_state.pw and not st.session_state.password_correct: # Check if a password HAS been entered
+        if st.session_state['pw'] and not st.session_state.password_correct: # Check if a password HAS been entered
           st.error("😕 Password incorrect")
         return False
     
