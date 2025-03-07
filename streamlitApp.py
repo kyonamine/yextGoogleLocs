@@ -469,7 +469,7 @@ async def main():
     )
     useWarnings()
     if check_password():
-        # streamlit_analytics.start_tracking()
+        streamlit_analytics.start_tracking()
         st.title("Google Locations")
         
         my_dict = {
@@ -617,7 +617,7 @@ async def main():
                 "appName": "yextgooglelocs"
             })
             
-        # streamlit_analytics.stop_tracking(st.secrets["analyticsPass"])
+        streamlit_analytics.stop_tracking(st.secrets["analyticsPass"])
 
 if __name__ == "__main__":
     asyncio.run(main())
