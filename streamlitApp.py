@@ -42,7 +42,7 @@ def check_password():
         return False
 
 # Password input *AFTER* check_password definition. This is CORRECT.
-st.text_input("Password", type="password", on_change=password_entered, key="pw")
+st.text_input("Password", type="password", on_change=check_password().password_entered, key="pw")
 
 if check_password():
     st.write("Password correct!  This is where your main app would go.")
