@@ -55,7 +55,7 @@ def check_password():
           st.error("😕 Password incorrect")
         return False
     
-st.text_input("Password", type="password", on_change=password_entered, key="pw")
+st.text_input("Password", type="password", on_change=password_entered(), key="pw")
 
 def uploadFile():
     exampleSheet = 'https://docs.google.com/spreadsheets/d/18tJfjrlZFd3qQT5ZTnz3eIw5v6KSILTBN-Ol9G7sFLo/edit#gid=0'
