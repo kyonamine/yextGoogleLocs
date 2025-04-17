@@ -9,7 +9,7 @@ async def getQuestions(id, heads):
     additional = '/questions?pageSize=10&answersPerQuestion=10'
     url = f'{call}{str(id)}{additional}'
     all_data = []
-
+    os.write(1,  f"URL is: {url}\n".encode())
     async with aiohttp.ClientSession() as session:
         while url:
             async with session.get(url, headers=heads) as response:
