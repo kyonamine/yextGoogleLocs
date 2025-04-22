@@ -9,7 +9,7 @@ from datetime import date
 import os
 import time
 from datetime import datetime
-import streamlit_analytics2 as streamlit_analytics
+# import streamlit_analytics2 as streamlit_analytics
 # import streamlit_analytics
 from google.cloud import firestore
 from google.oauth2 import service_account
@@ -479,7 +479,7 @@ async def main():
 
 
     if check_password():
-        streamlit_analytics.start_tracking()
+        # streamlit_analytics.start_tracking()
         st.title("Google Locations")
         
         my_dict = {
@@ -636,7 +636,7 @@ async def main():
                 "appName": "yextgooglelocs"
             })
             
-        streamlit_analytics.stop_tracking(st.secrets["analyticsPass"])
+        # streamlit_analytics.stop_tracking(st.secrets["analyticsPass"])
 
 if __name__ == "__main__":
     asyncio.run(main())
