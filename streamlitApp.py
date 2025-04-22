@@ -477,7 +477,7 @@ async def main():
     )
     useWarnings()
 
-
+    locationLog = 0
     if check_password():
         # streamlit_analytics.start_tracking()
         st.title("Google Locations")
