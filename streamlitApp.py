@@ -24,6 +24,7 @@ import aiohttp
 # Initialize 'password_correct' in session state.  Crucial!
 if "password_correct" not in st.session_state:
     st.session_state["password_correct"] = False
+st.write(st.session_state.password_correct)
 
 key_dict = json.loads(st.secrets["textkey"])
 creds = service_account.Credentials.from_service_account_info(key_dict)
