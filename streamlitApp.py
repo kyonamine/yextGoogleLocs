@@ -24,7 +24,7 @@ import aiohttp
 # Initialize 'password_correct' in session state.  Crucial!
 if "password_correct" not in st.session_state:
     st.session_state["password_correct"] = False
-st.write(st.session_state.password_correct)
+# st.write(st.session_state.password_correct)
 if "session_data" not in st.session_state:
     st.session_state["session_data"] = {}
 
