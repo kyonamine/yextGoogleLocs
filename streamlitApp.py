@@ -569,11 +569,18 @@ async def main():
             elif field == 'Dupe FAQs':
                 for i in listGoogleIds:
                     response = await loopThroughIds(googleAccountNum, field, i, headers)
-                    # os.write(1,  f"{response}!\n".encode())
-                    dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
-                    os.write(1,  f"{dupeQuestions}\n".encode())
-                    locationLog = await asyncDeleteFaqs(i, dupeQuestions, headers)
-                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                    first_col_str = response[response.columns[0]].astype(str)
+                    mask = first_col_str.str.contains("Failed starting with location", na=False)
+                    if mask.any():
+                            # failure_string_found = first_col_str[mask].iloc[0]
+                            locationLog.loc[len(locationLog)] = [i, f'Failed for {i}. Restart Streamlit and include this ID', -1]
+                            dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                            break
+                    else:
+                        dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
+                        os.write(1,  f"{dupeQuestions}\n".encode())
+                        locationLog = await asyncDeleteFaqs(i, dupeQuestions, headers)
+                        dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             elif field == 'All FAQs':
                 for i in listGoogleIds:

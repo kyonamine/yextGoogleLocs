@@ -13,6 +13,11 @@ async def getQuestions(id, heads):
     async with aiohttp.ClientSession() as session:
         while url:
             async with session.get(url, headers=heads) as response:
+                if response.status == 401:
+                    os.write(1,  f"401 Unauthorized for Location ID: {id}\n".encode())
+                    authCode = [f'Failed starting with location ID: {id}']
+                    all_data.append(authCode)
+                    break
                 response_json = await response.json()
                 data = response_json.get('questions', [])
                 nextPageToken = response_json.get('nextPageToken')
