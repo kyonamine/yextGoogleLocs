@@ -576,7 +576,7 @@ async def main():
                     mask = first_col_str.str.contains("Failed starting with location", na=False)
                     if mask.any():
                             # failure_string_found = first_col_str[mask].iloc[0]
-                            locationLog.loc[len(locationLog)] = [i, f'Failed for {i}. Restart Streamlit and include this ID', -1]
+                            locationLog.loc[len(locationLog)] = [i, f'Error for {i}. Check the logs and restart Streamlit.', -1]
                             dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
                             break
                     else:

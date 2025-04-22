@@ -18,6 +18,17 @@ async def getQuestions(id, heads):
                     authCode = [f'Failed starting with location ID: {id}']
                     all_data.append(authCode)
                     break
+                elif response.status == 404:
+                    os.write(1,  f"404 Not found for Location ID: {id}\n".encode())
+                    authCode = [f'Failed starting with location ID: {id}']
+                    all_data.append(authCode)
+                    break
+                elif response.status != 200:
+                    os.write(1,  f"Error for Location ID: {id}\n".encode())
+                    authCode = [f'Failed starting with location ID: {id}']
+                    all_data.append(authCode)
+                    break
+
                 response_json = await response.json()
                 data = response_json.get('questions', [])
                 nextPageToken = response_json.get('nextPageToken')
