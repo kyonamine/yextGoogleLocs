@@ -623,18 +623,18 @@ async def main():
             logCsv = writeLogs(fileName, dfLog)
             
             downloadButton = st.download_button("Click to Download Logs", logCsv, file_name = fileName, mime = "text/csv", key = 'Download Logs')
-            db_ref = db.collection("appRuns")
-            new_doc_ref = db_ref.add({
-                "field": str(field),
-                "filter": str(filterOption),
-                "placeActionType": str(placeActionTypeFilter),
-                "timestamp": datetime.now(),
-                "locationCount": len(frame.index),
-                "filterData": varElseNone(str(filterData)),
-                "daterange": varElseNone(str(daterange)),
-                "googleAccountNum": varElseNone(googleAccountNum),
-                "appName": "yextgooglelocs"
-            })
+            # db_ref = db.collection("appRuns")
+            # new_doc_ref = db_ref.add({
+            #     "field": str(field),
+            #     "filter": str(filterOption),
+            #     "placeActionType": str(placeActionTypeFilter),
+            #     "timestamp": datetime.now(),
+            #     "locationCount": len(frame.index),
+            #     "filterData": varElseNone(str(filterData)),
+            #     "daterange": varElseNone(str(daterange)),
+            #     "googleAccountNum": varElseNone(googleAccountNum),
+            #     "appName": "yextgooglelocs"
+            # })
             
         # streamlit_analytics.stop_tracking(st.secrets["analyticsPass"])
 
