@@ -477,7 +477,7 @@ async def main():
     )
     useWarnings()
 
-    locationLog = 0
+    locationLog = pd.DataFrame()
     if check_password():
         # streamlit_analytics.start_tracking()
         st.title("Google Locations")
