@@ -572,19 +572,43 @@ async def main():
             elif field == 'Dupe FAQs':
                 for i in listGoogleIds:
                     response = await loopThroughIds(googleAccountNum, field, i, headers)
+                    error_detected = False
                     first_col_str = response[response.columns[0]].astype(str)
                     mask = first_col_str.str.contains("Failed starting with location", na=False)
-                    if mask.any():
+                    if 'error_message' in response.columns:
+                        mask = response['error_message'].astype(str).str.contains("Failed starting with location", na=False)
+                        if mask.any():
+                            error_detected = True
+
+                    if error_detected:
+                            error_info = response.loc[mask, 'error_message'].iloc[0] if mask.any() else f'Error for {i}. Check the logs and restart Streamlit.'
                             locationLog = pd.DataFrame(columns=['ID','Info','Code'])
-                            locationLog.loc[len(locationLog)] = [i, f'Error for {i}. Check the logs and restart Streamlit.', -1]
+                            locationLog.loc[len(locationLog)] = [i, error_info, -1] # Use detected error info
                             dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
-                            st.write(f'Error for {i}. Remove earlier rows and restart Streamlit')
-                            break
+                            st.write(f'Error detected for {i}: {error_info}. Remove earlier rows and restart Streamlit')
+                            break # Stop processing further IDs on error
                     else:
+                        # Proceed only if no error was detected during fetch
                         dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
-                        os.write(1,  f"{dupeQuestions}\n".encode())
-                        locationLog = await asyncDeleteFaqs(i, dupeQuestions, headers)
-                        dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                        if dupeQuestions is not None: # Check if parseQuestions returned successfully
+                            os.write(1,  f"Duplicate questions to delete for {i}: {dupeQuestions}\n".encode())
+                            locationLog = await asyncDeleteFaqs(i, dupeQuestions, headers)
+                            dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                        else:
+                            # os.write(1, f"No duplicate questions found or parsing error for {i}.\n".encode())
+                            locationLog = pd.DataFrame([{'ID': i, 'Info': 'No duplicates found or parsing error', 'Code': 0}])
+                            dfLog = pd.concat([dfLog, locationLog], ignore_index = True)       
+                    # if mask.any():
+                    #         locationLog = pd.DataFrame(columns=['ID','Info','Code'])
+                    #         locationLog.loc[len(locationLog)] = [i, f'Error for {i}. Check the logs and restart Streamlit.', -1]
+                    #         dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                    #         st.write(f'Error for {i}. Remove earlier rows and restart Streamlit')
+                    #         break
+                    # else:
+                    #     dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
+                    #     os.write(1,  f"{dupeQuestions}\n".encode())
+                    #     locationLog = await asyncDeleteFaqs(i, dupeQuestions, headers)
+                    #     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             elif field == 'All FAQs':
                 for i in listGoogleIds:
