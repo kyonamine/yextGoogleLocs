@@ -486,7 +486,7 @@ async def main():
                 "Place Action Links": ["placeActionType", "uri", "createTime"], 
                 "Social Posts": ["createTime", "Key Text Search"], 
                 "Dupe FAQs": ["createTime"],
-                "All FAQs": ["All"],
+                # "All FAQs": ["All"],
                 "Photos": ["createTime", "sourceUrl"],
                 "moreHours": ["All"], 
                 "Logo": ["Logo"],
@@ -583,38 +583,25 @@ async def main():
                     if error_detected:
                             error_info = response.loc[mask, 'error_message'].iloc[0] if mask.any() else f'Error for {i}. Check the logs and restart Streamlit.'
                             locationLog = pd.DataFrame(columns=['ID','Info','Code'])
-                            locationLog.loc[len(locationLog)] = [i, error_info, -1] # Use detected error info
+                            locationLog.loc[len(locationLog)] = [i, error_info, -1]
                             dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
-                            st.write(f'Error detected for {i}: {error_info}. Remove earlier rows and restart Streamlit')
-                            break # Stop processing further IDs on error
+                            st.write(f'{error_info}. Remove earlier rows and restart Streamlit')
+                            break 
                     else:
-                        # Proceed only if no error was detected during fetch
                         dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
-                        if dupeQuestions is not None: # Check if parseQuestions returned successfully
-                            os.write(1,  f"Duplicate questions to delete for {i}: {dupeQuestions}\n".encode())
+                        if dupeQuestions is not None: 
+                            os.write(1,  f"{dupeQuestions}\n".encode())
                             locationLog = await asyncDeleteFaqs(i, dupeQuestions, headers)
                             dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
                         else:
-                            # os.write(1, f"No duplicate questions found or parsing error for {i}.\n".encode())
                             locationLog = pd.DataFrame([{'ID': i, 'Info': 'No duplicates found or parsing error', 'Code': 0}])
                             dfLog = pd.concat([dfLog, locationLog], ignore_index = True)       
-                    # if mask.any():
-                    #         locationLog = pd.DataFrame(columns=['ID','Info','Code'])
-                    #         locationLog.loc[len(locationLog)] = [i, f'Error for {i}. Check the logs and restart Streamlit.', -1]
-                    #         dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
-                    #         st.write(f'Error for {i}. Remove earlier rows and restart Streamlit')
-                    #         break
-                    # else:
-                    #     dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
-                    #     os.write(1,  f"{dupeQuestions}\n".encode())
-                    #     locationLog = await asyncDeleteFaqs(i, dupeQuestions, headers)
-                    #     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
-            elif field == 'All FAQs':
-                for i in listGoogleIds:
-                    response = await loopThroughIds(googleAccountNum, field, i, headers)
-                    locationLog = deleteAllQuestions(response, i, headers)
-                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+            # elif field == 'All FAQs':
+            #     for i in listGoogleIds:
+            #         response = await loopThroughIds(googleAccountNum, field, i, headers)
+            #         locationLog = deleteAllQuestions(response, i, headers)
+            #         dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             elif field == 'Photos':
                 for i in listGoogleIds:
