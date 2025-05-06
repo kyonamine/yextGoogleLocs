@@ -37,8 +37,10 @@ async def getQuestions(id, heads):
 
                     all_data.extend(data)
                     if nextPageToken:
+                        os.write(1,f'Getting next page'.encode())
                         url = f'{call}{str(id)}/questions?pageSize=10&pageToken={nextPageToken}&answersPerQuestion=10'
                     else:
                         url = None
     df = pd.DataFrame(all_data)
+    
     return df
