@@ -2,6 +2,7 @@ import aiohttp
 import asyncio
 import pandas as pd
 import os
+import json
 
 async def getQuestions(id, heads):
     os.write(1,  f"Getting for Location ID: {id}\n".encode())
@@ -33,7 +34,7 @@ async def getQuestions(id, heads):
                 else:
                     response_json = await response.json()
                     data = response_json.get('questions', [])
-                    print(response_json)
+                    os.write(1,json.dumps(response_json).encode())
                     nextPageToken = response_json.get('nextPageToken')
                     all_data.extend(data)
                     if nextPageToken:
