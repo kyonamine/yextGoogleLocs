@@ -131,7 +131,6 @@ async def loopThroughIds(accountId, endpoint, id, headers):
         response = await localPostGet(accountId, id, headers)
     elif endpoint == 'All FAQs' or endpoint == 'Dupe FAQs':
         response = await getQuestions(id, headers)
-        os.write(1,f'questions: {response}'.encode()) # Logging to make sure all questions are being returned
     elif endpoint == 'Photos':
         response = getPhotosCall(accountId, id, headers)
     authStatus = authErrors(response)
