@@ -33,8 +33,8 @@ async def getQuestions(id, heads):
                 else:
                     response_json = await response.json()
                     data = response_json.get('questions', [])
+                    os.write(1,data.encode())
                     nextPageToken = response_json.get('nextPageToken')
-
                     all_data.extend(data)
                     if nextPageToken:
                         os.write(1,f'Getting next page'.encode())
