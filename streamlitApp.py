@@ -92,9 +92,13 @@ def uploadFile(field):
                 st.write(dataframe)
         return dataframe
     
-def parseFile(df):
-    listGoogleIds = df['Google ID'].tolist()
-    listYextIds = df['Yext ID'].tolist()
+def parseFile(df, field):
+    if field != 'Update Primary Category':
+        listGoogleIds = df['Google ID'].tolist()
+        listYextIds = df['Yext ID'].tolist()
+    else:
+        listGoogleIds = df['Google ID'].tolist()
+        listYextIds = []
     return listYextIds, listGoogleIds
 
 def exitApp(inp):
@@ -561,7 +565,7 @@ async def main():
  
         if form_submitted:
             os.write(1,  f"{field}\n".encode())
-            listYextIds, listGoogleIds = parseFile(frame)
+            listYextIds, listGoogleIds = parseFile(frame, field)
             dfLog = pd.DataFrame()
 
             headers = {"Authorization": "Bearer " + token}
