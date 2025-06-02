@@ -60,12 +60,15 @@ def check_password():
         # Password correct.
         return True
 
-def uploadFile():
-    exampleSheet = 'https://docs.google.com/spreadsheets/d/18tJfjrlZFd3qQT5ZTnz3eIw5v6KSILTBN-Ol9G7sFLo/edit#gid=0'
+def uploadFile(field):
+   exampleSheet = 'https://docs.google.com/spreadsheets/d/18tJfjrlZFd3qQT5ZTnz3eIw5v6KSILTBN-Ol9G7sFLo/edit#gid=0'
     # st.info('It\'s recommended to use a Google Sheet [in this format](%s) and download as a CSV.' % exampleSheet, icon = "ℹ️")
     uploaded_file = st.file_uploader("Provide a file with IDs. Make sure the CSV file has headers of \"Yext ID\" (first) and \"Google ID\" (second).", 
                                     type = ['csv', 'txt'],
                                     help = 'It\'s recommended to use a Google Sheet [in this format](%s) and download as a CSV.' % exampleSheet)
+    if field == 'Update Primary Category':
+        df = pd.read_csv(uploaded_file, usecols=['Google ID'])
+        return  df
     if uploaded_file is not None:
         dataframe = pd.read_csv(uploaded_file, dtype = {'Yext ID': str, 'Google ID': str})
         if len(dataframe.columns) != 2:
@@ -461,6 +464,25 @@ def deleteMenu(accountId, externalId, heads):
     df.loc[len(df)] = [externalId, f'PATCH empty menu', response]
     return df
 
+def updatePrimaryCategory(externalId, heads):
+    baseApi = f'https://mybusinessbusinessinformation.googleapis.com/v1/locations/{externalId}?updateMask=categories'
+    df = pd.DataFrame(columns = ['Google Location ID', 'API Response Code'])
+    body = f'''{{
+        "categories": {
+            "primaryCategory": {
+            "name": "categories/gcid:key_duplication_service",
+            "displayName": "Key duplication service"
+    }}'''
+    r_info = requests.patch(baseApi, headers = heads, json = json.loads(body))
+    response = r_info.status_code
+    response_json = r_info.json()
+    if response == 200:
+        responseInfo = response_json.get('name', 'Unknown')
+    else:
+        responseInfo = r_info.text
+    df.loc[len(df)] = [externalId, f'Update Primary Category', response]
+    return df
+
 def varElseNone(var):
     if var:
         return var
@@ -491,7 +513,8 @@ async def main():
                 "moreHours": ["All"], 
                 "Logo": ["Logo"],
                 "Menu": ["All"],
-                "Get Verification Options": ["All"]
+                "Get Verification Options": ["All"],
+                "Update Primary Category": ["All"]
             }
         col1, col2 = st.columns([2, 1])
 
@@ -502,7 +525,7 @@ async def main():
         st.write(fieldSpecificInfo(field))
 
         with st.form("Form"):
-            frame = uploadFile()
+            frame = uploadFile(field)
             filterData = ''
             daterange = ''
             placeActionTypeFilter = ''
@@ -629,6 +652,10 @@ async def main():
 
             elif field == 'Get Verification Options':
                 dfLog = await getVOptions(listGoogleIds, headers)
+
+            elif field == 'Update Primary Category':
+                locationLog = updatePrimaryCategory(listGoogleIds, headers)
+                dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             os.write(1,  f"Done!\n".encode())
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
