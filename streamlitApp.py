@@ -553,6 +553,8 @@ async def main():
                 form_submitted = st.form_submit_button("Update Logos")
             elif field == 'Get Verification Options':
                 form_submitted = st.form_submit_button("Get Verification Options")
+            elif field == 'Update Primary Category':
+                form_submitted = st.form_submit_button("Update Primary Category")
             else:
                 form_submitted = st.form_submit_button("Delete " +  field)
  
