@@ -472,13 +472,15 @@ def deleteMenu(accountId, externalId, heads):
 def updatePrimaryCategory(externalId, heads):
     baseApi = f'https://mybusinessbusinessinformation.googleapis.com/v1/locations/{externalId}?updateMask=categories'
     df = pd.DataFrame(columns = ['Google Location ID', 'API Response Code'])
-    body = f'''{{
+    body = {
         "categories": {
             "primaryCategory": {
-            "name": "categories/gcid:key_duplication_service",
-            "displayName": "Key duplication service"
-    }}'''
-    r_info = requests.patch(baseApi, headers = heads, json = json.loads(body))
+                "name": "categories/gcid:key_duplication_service",
+                "displayName": "Key duplication service"
+            }
+        }
+    }
+    r_info = requests.patch(baseApi, headers = heads, json = body)
     response = r_info.status_code
     response_json = r_info.json()
     if response == 200:
