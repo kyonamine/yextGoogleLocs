@@ -288,6 +288,8 @@ def fieldSpecificInfo(field):
         myStr = f'This only deletes questions posted by the merchant.\nIt will ensure that there is not more than 1 of the same FAQ on each listing. It will NOT delete all FAQs.'
     elif field == 'Logo':
         myStr = f'This will update logos for the provided IDs.'
+    elif field == 'Update Primary Category':
+        myStr = f'This will update the primary category to "Key duplication service" for the provided IDs. Let TPM know if another category is needed. Would not be difficult to update to other categories.'
     else:
         myStr = f'This will delete {field} that match the filter from each listing.'
     return myStr
@@ -470,18 +472,20 @@ def deleteMenu(accountId, externalId, heads):
     return df
 
 def updatePrimaryCategory(externalId, heads):
-    baseApi = f'https://mybusinessbusinessinformation.googleapis.com/v1/locations/{externalId}?updateMask=categories'
+    baseApi = f'https://mybusinessbusinessinformation.googleapis.com/v1/locations/{externalId}?updateMask=categories,categories.additionalCategories,categories.primaryCategory,categories.primaryCategory.name'
     df = pd.DataFrame(columns = ['Google Location ID', 'API Response Code'])
     body = {
         "categories": {
             "primaryCategory": {
                 "name": "categories/gcid:key_duplication_service",
-                "displayName": "Key duplication service"
-            }
+                "displayName": "Key duplication service" 
+                },
+        "additionalCategories":[]
         }
-    }
+}
     r_info = requests.patch(baseApi, headers = heads, json = body)
     response = r_info.status_code
+    os.write(1,  f"{externalId} got {response}\n".encode())
     response_json = r_info.json()
     if response == 200:
         responseInfo = response_json.get('name', 'Unknown')
