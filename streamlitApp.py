@@ -487,7 +487,7 @@ def updatePrimaryCategory(externalId, heads):
         responseInfo = response_json.get('name', 'Unknown')
     else:
         responseInfo = r_info.text
-    df.loc[len(df)] = [externalId, f'Update Primary Category', response]
+    df.loc[len(df)] = [externalId, response]
     return df
 
 def varElseNone(var):
