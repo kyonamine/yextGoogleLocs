@@ -663,7 +663,8 @@ async def main():
                 dfLog = await getVOptions(listGoogleIds, headers)
 
             elif field == 'Update Primary Category':
-                locationLog = updatePrimaryCategory(listGoogleIds, headers)
+                for i in listGoogleIds:
+                    locationLog = updatePrimaryCategory(i, headers)
                 dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             os.write(1,  f"Done!\n".encode())
