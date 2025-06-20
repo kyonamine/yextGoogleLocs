@@ -12,7 +12,7 @@ def removeServiceItems(locationId,token):
 def main(filepath):
     locs = pd.read_csv(filepath)
     locations = locs['googleId']
-    token = 'ya29.a0AW4Xtxh3oKisXThVBg2zW0KK8XlIxshBSmqvpjuRu3tn9wZYDzCmxkZk-UBuKsZQpuPGgMCFcyT1zIts9o1TEpoIMwaBxmJqnO59HCYUdK6WdMd_SD8uHcYpzhmE91LSAGzYVzsfFVhdBvWvqNuA5l4uQ6daSr2u0FARgG1ffkEaCgYKATISARASFQHGX2Mi1VPDsfpkDxHwO8NVbdB4ZQ0178'
+    token = ''
     for location in locations:
         removeServiceItems(location,token)
 

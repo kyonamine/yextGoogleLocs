@@ -70,7 +70,6 @@ def uploadFile(field):
     if uploaded_file is not None:
         if field == 'Update Primary Category':
             df = pd.read_csv(uploaded_file, usecols=['Google ID'])
-        return  df
         dataframe = pd.read_csv(uploaded_file, dtype = {'Yext ID': str, 'Google ID': str})
         if len(dataframe.columns) != 2:
             st.error("Error: CSV file should contain exactly 2 columns.")
@@ -87,10 +86,10 @@ def uploadFile(field):
                             st.error(f"Error: Values in column '{col}' should be numbers and should all be greater than 3 digits in length.")
                             exitApp(2)
 
-                dataframe = dataframe.dropna()
-                dataframe = dataframe.astype(str)
-                st.write(dataframe)
-        return dataframe
+                df = dataframe.dropna()
+                df = df.astype(str)
+                st.write(df)
+        return df
     
 def parseFile(df, field):
     if field != 'Update Primary Category':
