@@ -401,12 +401,10 @@ def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
     accountStr = 'accounts/' + str(accountNum) + '/locations/' + str(externalId) + '/media/'
     
     if 'name' not in df.columns:
-        print("Error: 'name' column does not exist in the DataFrame")
+        os.write(1, f"Error: 'name' column does not exist in the DataFrame".encode())
         return []
 
-    df['name'] = df['name'].str.replace(str(accountStr), '')
-    print(df['name'])
-    
+    df['name'] = df['name'].str.replace(str(accountStr), '')    
     df = dfCols(df, 'name', 'sourceUrl', 'mediaFormat', 'googleUrl', 'thumbnailUrl', 'createTime')
 
     # Search for posts that meet the criteria
@@ -432,6 +430,7 @@ def deleteMedia(accountId, mediaIdList, externalId, heads):
     df = pd.DataFrame(columns = ['Google Location ID', 'Media ID', 'API Response Code'])
     for mediaId in mediaIdList:
         call = f"{baseApi}{mediaId}"
+        os.write(1, f"Deleted {mediaId}\n".encode())
         r_info = requests.delete(call, headers = heads)
         response = r_info.status_code
         df.loc[len(df)] = [externalId, str(mediaId), response]
