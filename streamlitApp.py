@@ -399,6 +399,11 @@ def getPhotosCall(accountId, externalId, headers):
 
 def parseMedia(accountNum, df, externalId, filterType, filterData, myRange):
     accountStr = 'accounts/' + str(accountNum) + '/locations/' + str(externalId) + '/media/'
+    
+    if 'name' not in df.columns:
+        print("Error: 'name' column does not exist in the DataFrame")
+        return []
+
     df['name'] = df['name'].str.replace(str(accountStr), '')
     print(df['name'])
     
