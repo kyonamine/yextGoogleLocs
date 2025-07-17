@@ -30,8 +30,7 @@ async def getQuestions(id, heads):
                     # all_data.append(authCode)
                 if error_message:
                     all_data.append(error_message)
-                    # break
-                    continue
+                    break
                 else:
                     response_json = await response.json()
                     data = response_json.get('questions', [])

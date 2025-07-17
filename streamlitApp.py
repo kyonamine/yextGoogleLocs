@@ -624,8 +624,8 @@ async def main():
                             locationLog = pd.DataFrame(columns=['ID','Info','Code'])
                             locationLog.loc[len(locationLog)] = [i, error_info, -1]
                             dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
-                            st.write(f'{error_info}. Remove earlier rows and restart Streamlit')
-                            break 
+                            # st.write(f'{error_info}. Remove earlier rows and restart Streamlit')
+                            # break 
                     else:
                         dupeQuestions = parseQuestions(response, i, filterOption, filterData, daterange)
                         if dupeQuestions is not None: 
