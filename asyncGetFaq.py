@@ -28,17 +28,15 @@ async def getQuestions(id, heads):
                     authCode = [f'Failed starting with location ID: {id}']
                     error_message = {'error_message': f'Failed starting with location ID: {id}', 'status_code': response.status}
                     # all_data.append(authCode)
-                if error_message:
-                    all_data.append(error_message)
-                    break
+                # if error_message:
+                #     all_data.append(error_message)
+                #     break
                 else:
                     response_json = await response.json()
                     data = response_json.get('questions', [])
-                    os.write(1,json.dumps(response_json).encode())
                     nextPageToken = response_json.get('nextPageToken')
                     all_data.extend(data)
                     if nextPageToken:
-                        os.write(1,f'Getting next page'.encode())
                         url = f'{call}{str(id)}/questions?pageSize=10&pageToken={nextPageToken}&answersPerQuestion=10'
                     else:
                         url = None
