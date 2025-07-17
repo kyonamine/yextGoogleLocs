@@ -28,9 +28,10 @@ async def getQuestions(id, heads):
                     authCode = [f'Failed starting with location ID: {id}']
                     error_message = {'error_message': f'Failed starting with location ID: {id}', 'status_code': response.status}
                     # all_data.append(authCode)
-                # if error_message:
-                #     all_data.append(error_message)
-                #     break
+                if error_message:
+                    all_data.append(error_message)
+                    # break
+                    continue
                 else:
                     response_json = await response.json()
                     data = response_json.get('questions', [])
