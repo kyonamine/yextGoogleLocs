@@ -89,7 +89,7 @@ def uploadFile(field):
                 df = dataframe.dropna()
                 df = df.astype(str)
                 st.write(df)
-        os.write(1, df.to_string().encode() + b"\n")
+        # os.write(1, df.to_string().encode() + b"\n")
         return df
     
 def parseFile(df, field):
