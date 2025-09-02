@@ -622,10 +622,13 @@ async def main():
                             error_detected = True
 
                     if error_detected:
-                            error_info = response.loc[mask, 'error_message'].iloc[0] if mask.any() else f'Error for {i}. Check the logs and restart Streamlit.'
-                            locationLog = pd.DataFrame(columns=['ID','Info','Code'])
-                            locationLog.loc[len(locationLog)] = [i, error_info, -1]
-                            dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                        if mask.any():
+                            error_info = response.loc[mask, 'error_message'].iloc[0]
+                        else:
+                            error_info = f'Error for {i}. Check the logs and restart Streamlit.'
+                        locationLog = pd.DataFrame(columns=['ID','Info','Code'])
+                        locationLog.loc[len(locationLog)] = [i, error_info, -1]
+                        dfLog = pd.concat([dfLog, locationLog], ignore_index=True)
                             # st.write(f'{error_info}. Remove earlier rows and restart Streamlit')
                             # break 
                     else:
