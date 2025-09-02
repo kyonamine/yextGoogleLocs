@@ -89,6 +89,7 @@ def uploadFile(field):
                 df = dataframe.dropna()
                 df = df.astype(str)
                 st.write(df)
+        os.write(1, df.to_string().encode() + b"\n")
         return df
     
 def parseFile(df, field):
@@ -613,6 +614,7 @@ async def main():
                     response = await loopThroughIds(googleAccountNum, field, i, headers)
                     error_detected = False
                     first_col_str = response[response.columns[0]].astype(str)
+                    os.write(1,f'{first_col_str}\n'.encode())
                     mask = first_col_str.str.contains("Failed starting with location", na=False)
                     if 'error_message' in response.columns:
                         mask = response['error_message'].astype(str).str.contains("Failed starting with location", na=False)
