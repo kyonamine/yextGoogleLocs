@@ -475,6 +475,18 @@ def deleteMenu(accountId, externalId, heads):
     df.loc[len(df)] = [externalId, f'PATCH empty menu', response]
     return df
 
+def deleteServiceItems(externalId, heads):
+    baseApi = f'https://mybusinessbusinessinformation.googleapis.com/v1/locations/{externalId}?updateMask=serviceItems'
+    df = pd.DataFrame(columns = ['Google Location ID', 'Menu', 'API Response Code'])
+    body = f'''{{
+        "name": "locations/{externalId}",
+        "serviceItems": []
+    }}'''
+    r_info = requests.patch(baseApi, headers = heads, json = json.loads(body))
+    response = r_info.status_code
+    df.loc[len(df)] = [externalId, f'PATCH empty service items', response]
+    return df
+
 def updatePrimaryCategory(externalId, heads):
     baseApi = f'https://mybusinessbusinessinformation.googleapis.com/v1/locations/{externalId}?updateMask=categories,categories.additionalCategories,categories.primaryCategory,categories.primaryCategory.name'
     df = pd.DataFrame(columns = ['Google Location ID', 'API Response Code'])
@@ -529,7 +541,8 @@ async def main():
                 "Logo": ["Logo"],
                 "Menu": ["All"],
                 "Get Verification Options": ["All"],
-                "Update Primary Category": ["All"]
+                "Update Primary Category": ["All"],
+                "Service Items": ["All"]
             }
         col1, col2 = st.columns([2, 1])
 
@@ -677,6 +690,11 @@ async def main():
             elif field == 'Update Primary Category':
                 for i in listGoogleIds:
                     locationLog = updatePrimaryCategory(i, headers)
+                dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+
+            elif field == 'Service Items':
+                for i in listGoogleIds:
+                    locationLog = deleteServiceItems(i, headers)
                 dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             os.write(1,  f"Done!\n".encode())
