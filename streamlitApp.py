@@ -690,12 +690,12 @@ async def main():
             elif field == 'Update Primary Category':
                 for i in listGoogleIds:
                     locationLog = updatePrimaryCategory(i, headers)
-                dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             elif field == 'Service Items':
                 for i in listGoogleIds:
                     locationLog = deleteServiceItems(i, headers)
-                dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             os.write(1,  f"Done!\n".encode())
             fileName = 'Streamlit_' + str(date.today()) + '_LogOutput.csv'
