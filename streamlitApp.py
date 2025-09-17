@@ -573,7 +573,7 @@ async def main():
             elif filterOption == 'Logo':
                 logoSourceUrl = st.text_input("Enter the URL of the logo you want to upload:")
             else: 
-                if field != 'All FAQs' and field != 'moreHours' and field != 'Menu' and field != 'Get Verification Options' and field != 'Update Primary Category':
+                if field != 'All FAQs' and field != 'moreHours' and field != 'Menu' and field != 'Get Verification Options' and field != 'Update Primary Category' and field != 'Service Items':
                     filterData = st.text_input("Enter filter (this is case sensitive):") # This would be for key text search
 
             token = st.text_input("Enter Google API Authorization token (No 'Bearer' included. Should start with 'ya29.'):")
