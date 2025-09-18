@@ -510,6 +510,20 @@ def updatePrimaryCategory(externalId, heads):
     df.loc[len(df)] = [externalId, response]
     return df
 
+def getVom(externalId, heads):
+    baseApi = f'https://mybusinessverifications.googleapis.com/v1/locations/{externalId}/verificationOptions'
+    df = pd.DataFrame(columns = ['Google Location ID', 'responseBody', 'API Response Code'])
+    r_info = requests.get(baseApi, headers = heads)
+    response = r_info.status_code
+    response_json = r_info.json()
+    if response == 200:
+        # responseInfo = response_json.get('verificationOptions', 'Unknown')
+        responseInfo = response_json
+    else:
+        responseInfo = r_info.text
+    df.loc[len(df)] = [externalId, str(responseInfo), response]
+    return df
+
 def varElseNone(var):
     if var:
         return var
@@ -542,7 +556,8 @@ async def main():
                 "Menu": ["All"],
                 "Get Verification Options": ["All"],
                 "Update Primary Category": ["All"],
-                "Service Items": ["All"]
+                "Service Items": ["All"],
+                "Get VOM": ["All"]
             }
         col1, col2 = st.columns([2, 1])
 
@@ -573,7 +588,7 @@ async def main():
             elif filterOption == 'Logo':
                 logoSourceUrl = st.text_input("Enter the URL of the logo you want to upload:")
             else: 
-                if field != 'All FAQs' and field != 'moreHours' and field != 'Menu' and field != 'Get Verification Options' and field != 'Update Primary Category' and field != 'Service Items':
+                if field != 'All FAQs' and field != 'moreHours' and field != 'Menu' and field != 'Get Verification Options' and field != 'Update Primary Category' and field != 'Service Items' and field != 'Get VOM':
                     filterData = st.text_input("Enter filter (this is case sensitive):") # This would be for key text search
 
             token = st.text_input("Enter Google API Authorization token (No 'Bearer' included. Should start with 'ya29.'):")
@@ -695,6 +710,11 @@ async def main():
             elif field == 'Service Items':
                 for i in listGoogleIds:
                     locationLog = deleteServiceItems(i, headers)
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+
+            elif field == 'Get VOM':
+                for i in listGoogleIds:
+                    locationLog = getVom(i, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             os.write(1,  f"Done!\n".encode())
