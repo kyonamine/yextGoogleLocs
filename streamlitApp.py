@@ -513,7 +513,7 @@ def updatePrimaryCategory(externalId, heads):
     return df
 
 def getVom(externalId, heads):
-    baseApi = f'https://mybusinessverifications.googleapis.com/v1/locations/{externalId}/verificationOptions'
+    baseApi = f'https://mybusinessverifications.googleapis.com/v1/locations/{externalId}/VoiceOfMerchantState'
     df = pd.DataFrame(columns = ['Google Location ID', 'responseBody', 'API Response Code'])
     r_info = requests.get(baseApi, headers = heads)
     response = r_info.status_code
