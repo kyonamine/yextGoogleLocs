@@ -290,6 +290,8 @@ def fieldSpecificInfo(field):
         myStr = f'This will update logos for the provided IDs.'
     elif field == 'Update Primary Category':
         myStr = f'This will update the primary category to "Key duplication service" for the provided IDs. Let TPM know if another category is needed. Would not be difficult to update to other categories.'
+    elif field == 'Get VOM':
+        myStr = f'This will get the verification options for the provided IDs.'
     else:
         myStr = f'This will delete {field} that match the filter from each listing.'
     return myStr
@@ -515,10 +517,10 @@ def getVom(externalId, heads):
     df = pd.DataFrame(columns = ['Google Location ID', 'responseBody', 'API Response Code'])
     r_info = requests.get(baseApi, headers = heads)
     response = r_info.status_code
-    response_json = r_info.json()
+    response_text = r_info.text
     if response == 200:
         # responseInfo = response_json.get('verificationOptions', 'Unknown')
-        responseInfo = response_json
+        responseInfo = response_text
     else:
         responseInfo = r_info.text
     df.loc[len(df)] = [externalId, str(responseInfo), response]
@@ -598,6 +600,8 @@ async def main():
                 form_submitted = st.form_submit_button("Get Verification Options")
             elif field == 'Update Primary Category':
                 form_submitted = st.form_submit_button("Update Primary Category")
+            elif field == 'Get VOM':
+                form_submitted = st.form_submit_button("Get VOM")
             else:
                 form_submitted = st.form_submit_button("Delete " +  field)
  
