@@ -8,7 +8,7 @@ import sys
 from datetime import date
 import os
 import time
-from datetime import datetime
+from datetime import datetime, timezone 
 # import streamlit_analytics2 as streamlit_analytics
 # import streamlit_analytics
 from google.cloud import firestore
@@ -526,6 +526,25 @@ def getVom(externalId, heads):
     df.loc[len(df)] = [externalId, str(responseInfo), response]
     return df
 
+def pushHiltonAttributes(externalId, heads):
+    baseApi = f'https://mybusinesslodging.googleapis.com/v1/locations/{externalId}/lodging?updateMask=pets%2Cpets.petsAllowed%2Cpets.petsAllowedFree%2Cmetadata%2Cmetadata.updateTime'
+    df = pd.DataFrame(columns = ['Google Location ID', 'responseBody', 'API Response Code'])
+    body = {
+        "pets": {
+            "petsAllowed": True,
+            "petsAllowedFree": False
+        },
+        "metadata": {
+            "updateTime": datetime.now(timezone.utc).isoformat() 
+        }
+    }
+    r_info = requests.patch(baseApi, headers = heads, json = body)
+    response = r_info.status_code
+    response_text = r_info.text
+    os.write(1,  f"{externalId} got {response}\n".encode())
+    df.loc[len(df)] = [externalId, str(response_text), response]
+    return df
+
 def varElseNone(var):
     if var:
         return var
@@ -559,7 +578,8 @@ async def main():
                 "Get Verification Options": ["All"],
                 "Update Primary Category": ["All"],
                 "Service Items": ["All"],
-                "Get VOM": ["All"]
+                "Get VOM": ["All"],
+                "Push Hilton Attributes": ["All"]
             }
         col1, col2 = st.columns([2, 1])
 
@@ -590,7 +610,7 @@ async def main():
             elif filterOption == 'Logo':
                 logoSourceUrl = st.text_input("Enter the URL of the logo you want to upload:")
             else: 
-                if field != 'All FAQs' and field != 'moreHours' and field != 'Menu' and field != 'Get Verification Options' and field != 'Update Primary Category' and field != 'Service Items' and field != 'Get VOM':
+                if field != 'All FAQs' and field != 'moreHours' and field != 'Menu' and field != 'Get Verification Options' and field != 'Update Primary Category' and field != 'Service Items' and field != 'Get VOM' and field != 'Push Hilton Attributes':
                     filterData = st.text_input("Enter filter (this is case sensitive):") # This would be for key text search
 
             token = st.text_input("Enter Google API Authorization token (No 'Bearer' included. Should start with 'ya29.'):")
@@ -602,6 +622,8 @@ async def main():
                 form_submitted = st.form_submit_button("Update Primary Category")
             elif field == 'Get VOM':
                 form_submitted = st.form_submit_button("Get VOM")
+            elif field == 'Push Hilton Attributes':
+                form_submitted = st.form_submit_button("Push Hilton Attributes")
             else:
                 form_submitted = st.form_submit_button("Delete " +  field)
  
@@ -719,6 +741,11 @@ async def main():
             elif field == 'Get VOM':
                 for i in listGoogleIds:
                     locationLog = getVom(i, headers)
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+
+            elif field == 'Push Hilton Attributes':
+                for i in listGoogleIds:
+                    locationLog = pushHiltonAttributes(i, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             os.write(1,  f"Done!\n".encode())
