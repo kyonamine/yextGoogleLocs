@@ -146,12 +146,23 @@ async def loopThroughIds(accountId, endpoint, id, headers):
         return response
     return 0
 
-def deleteHours(externalId, headers):
-    fullApi = f'https://mybusinessbusinessinformation.googleapis.com/v1/locations/{str(externalId)}?updateMask=moreHours'
-    patchData = {'moreHours': []}
-    r_info = requests.patch(fullApi, data = patchData, headers = headers)
-    df = pd.DataFrame(columns = ['Google Location ID', 'API Response Code'])
-    df.loc[0] = [externalId, r_info.status_code]
+def clearBusinessInfoField(externalId, headers, fieldName):
+    field_payloads = {
+        'moreHours': [],
+        'serviceItems': [],
+        'regularHours': {'periods': []},
+        'specialHours': {'specialHourPeriods': []}
+    }
+
+    if fieldName not in field_payloads:
+        raise ValueError(f'Unsupported field for clearing: {fieldName}')
+
+    baseApi = f'https://mybusinessbusinessinformation.googleapis.com/v1/locations/{externalId}?updateMask={fieldName}'
+    patchData = {fieldName: field_payloads[fieldName]}
+    r_info = requests.patch(baseApi, headers = headers, json = patchData)
+
+    df = pd.DataFrame(columns = ['Google Location ID', 'Field', 'API Response Code'])
+    df.loc[len(df)] = [externalId, fieldName, r_info.status_code]
     return df
 
 def localPostGetCall(accountId, externalId, headers):
@@ -477,18 +488,6 @@ def deleteMenu(accountId, externalId, heads):
     df.loc[len(df)] = [externalId, f'PATCH empty menu', response]
     return df
 
-def deleteServiceItems(externalId, heads):
-    baseApi = f'https://mybusinessbusinessinformation.googleapis.com/v1/locations/{externalId}?updateMask=serviceItems'
-    df = pd.DataFrame(columns = ['Google Location ID', 'Menu', 'API Response Code'])
-    body = f'''{{
-        "name": "locations/{externalId}",
-        "serviceItems": []
-    }}'''
-    r_info = requests.patch(baseApi, headers = heads, json = json.loads(body))
-    response = r_info.status_code
-    df.loc[len(df)] = [externalId, f'PATCH empty service items', response]
-    return df
-
 def updatePrimaryCategory(externalId, heads):
     baseApi = f'https://mybusinessbusinessinformation.googleapis.com/v1/locations/{externalId}?updateMask=categories,categories.additionalCategories,categories.primaryCategory,categories.primaryCategory.name'
     df = pd.DataFrame(columns = ['Google Location ID', 'API Response Code'])
@@ -572,7 +571,9 @@ async def main():
                 "Dupe FAQs": ["createTime"],
                 # "All FAQs": ["All"],
                 "Photos": ["createTime", "sourceUrl"],
-                "moreHours": ["All"], 
+                "More Hours": ["All"],
+                "Regular Hours": ["All"],
+                "Special Hours": ["All"],
                 "Logo": ["Logo"],
                 "Menu": ["All"],
                 "Get Verification Options": ["All"],
@@ -610,7 +611,7 @@ async def main():
             elif filterOption == 'Logo':
                 logoSourceUrl = st.text_input("Enter the URL of the logo you want to upload:")
             else: 
-                if field != 'All FAQs' and field != 'moreHours' and field != 'Menu' and field != 'Get Verification Options' and field != 'Update Primary Category' and field != 'Service Items' and field != 'Get VOM' and field != 'Push Hilton Attributes':
+                if field != 'All FAQs' and field != 'More Hours' and field != 'Regular Hours' and field != 'Special Hours' and field != 'Menu' and field != 'Get Verification Options' and field != 'Update Primary Category' and field != 'Service Items' and field != 'Get VOM' and field != 'Push Hilton Attributes':
                     filterData = st.text_input("Enter filter (this is case sensitive):") # This would be for key text search
 
             token = st.text_input("Enter Google API Authorization token (No 'Bearer' included. Should start with 'ya29.'):")
@@ -708,9 +709,19 @@ async def main():
                     locationLog = deleteMedia(googleAccountNum, photosToDel, i, headers)
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
-            elif field == 'moreHours':
+            elif field == 'More Hours':
                 for i in listGoogleIds:
-                    locationLog = deleteHours(i, headers)
+                    locationLog = clearBusinessInfoField(i, headers, 'moreHours')
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+
+            elif field == 'Regular Hours':
+                for i in listGoogleIds:
+                    locationLog = clearBusinessInfoField(i, headers, 'regularHours')
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+
+            elif field == 'Special Hours':
+                for i in listGoogleIds:
+                    locationLog = clearBusinessInfoField(i, headers, 'specialHours')
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
                     
             elif field == 'Logo':
@@ -735,7 +746,7 @@ async def main():
 
             elif field == 'Service Items':
                 for i in listGoogleIds:
-                    locationLog = deleteServiceItems(i, headers)
+                    locationLog = clearBusinessInfoField(i, headers, 'serviceItems')
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
 
             elif field == 'Get VOM':
