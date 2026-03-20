@@ -151,7 +151,9 @@ def clearBusinessInfoField(externalId, headers, fieldName):
         'moreHours': [],
         'serviceItems': [],
         'regularHours': {'periods': []},
-        'specialHours': {'specialHourPeriods': []}
+        'specialHours': {'specialHourPeriods': []},
+        'websiteUri': '',
+        'serviceArea': {}
     }
 
     if fieldName not in field_payloads:
@@ -574,6 +576,8 @@ async def main():
                 "More Hours": ["All"],
                 "Regular Hours": ["All"],
                 "Special Hours": ["All"],
+                "Website URI": ["All"],
+                "Service Area": ["All"],
                 "Logo": ["Logo"],
                 "Menu": ["All"],
                 "Get Verification Options": ["All"],
@@ -611,7 +615,7 @@ async def main():
             elif filterOption == 'Logo':
                 logoSourceUrl = st.text_input("Enter the URL of the logo you want to upload:")
             else: 
-                if field != 'All FAQs' and field != 'More Hours' and field != 'Regular Hours' and field != 'Special Hours' and field != 'Menu' and field != 'Get Verification Options' and field != 'Update Primary Category' and field != 'Service Items' and field != 'Get VOM' and field != 'Push Hilton Attributes':
+                if field != 'All FAQs' and field != 'More Hours' and field != 'Regular Hours' and field != 'Special Hours' and field != 'Website URI' and field != 'Service Area' and field != 'Menu' and field != 'Get Verification Options' and field != 'Update Primary Category' and field != 'Service Items' and field != 'Get VOM' and field != 'Push Hilton Attributes':
                     filterData = st.text_input("Enter filter (this is case sensitive):") # This would be for key text search
 
             token = st.text_input("Enter Google API Authorization token (No 'Bearer' included. Should start with 'ya29.'):")
@@ -722,6 +726,16 @@ async def main():
             elif field == 'Special Hours':
                 for i in listGoogleIds:
                     locationLog = clearBusinessInfoField(i, headers, 'specialHours')
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+
+            elif field == 'Website URI':
+                for i in listGoogleIds:
+                    locationLog = clearBusinessInfoField(i, headers, 'websiteUri')
+                    dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
+
+            elif field == 'Service Area':
+                for i in listGoogleIds:
+                    locationLog = clearBusinessInfoField(i, headers, 'serviceArea')
                     dfLog = pd.concat([dfLog, locationLog], ignore_index = True)
                     
             elif field == 'Logo':
