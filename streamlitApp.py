@@ -88,9 +88,8 @@ def parseIdsText(idsText, field):
         return dataframe[['Google ID']]
     return dataframe
 
-def uploadFile(field):
+def uploadFile(field, input_method):
     exampleSheet = 'https://docs.google.com/spreadsheets/d/18tJfjrlZFd3qQT5ZTnz3eIw5v6KSILTBN-Ol9G7sFLo/edit#gid=0'
-    input_method = st.radio("Choose ID input method", ('Upload CSV', 'Paste IDs'), horizontal = True)
 
     if input_method == 'Upload CSV':
         uploaded_file = st.file_uploader("Provide a file with IDs. Make sure the CSV file has headers of \"Yext ID\" (first) and \"Google ID\" (second).", 
@@ -639,9 +638,10 @@ async def main():
         with col2:
             filterOption = st.selectbox("Choose filter option", options = my_dict[field], key = 2)
         st.write(fieldSpecificInfo(field))
+        input_method = st.radio("Choose ID input method", ('Upload CSV', 'Paste IDs'), horizontal = True)
+        frame = uploadFile(field, input_method)
 
         with st.form("Form"):
-            frame = uploadFile(field)
             filterData = ''
             daterange = ''
             placeActionTypeFilter = ''
