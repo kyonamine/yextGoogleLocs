@@ -60,14 +60,46 @@ def check_password():
         # Password correct.
         return True
 
+def parseIdsText(idsText, field):
+    rows = []
+    for raw_line in idsText.splitlines():
+        line = raw_line.strip()
+        if not line:
+            continue
+
+        parts = [part.strip() for part in line.split(',')]
+        if len(parts) != 2:
+            st.error('Error: Each pasted row must contain exactly 2 comma-separated values: Yext ID, Google ID.')
+            exitApp(2)
+
+        yext_id, google_id = parts
+        if (yext_id and not yext_id.isdigit()) or (google_id and not google_id.isdigit()):
+            st.error('Error: Yext ID and Google ID values must be numeric.')
+            exitApp(2)
+
+        rows.append({'Yext ID': yext_id, 'Google ID': google_id})
+
+    if not rows:
+        st.error('Error: Add at least one ID row.')
+        exitApp(2)
+
+    dataframe = pd.DataFrame(rows, columns = ['Yext ID', 'Google ID'])
+    if field == 'Update Primary Category':
+        return dataframe[['Google ID']]
+    return dataframe
+
 def uploadFile(field):
     exampleSheet = 'https://docs.google.com/spreadsheets/d/18tJfjrlZFd3qQT5ZTnz3eIw5v6KSILTBN-Ol9G7sFLo/edit#gid=0'
-    # st.info('It\'s recommended to use a Google Sheet [in this format](%s) and download as a CSV.' % exampleSheet, icon = "ℹ️")
-    uploaded_file = st.file_uploader("Provide a file with IDs. Make sure the CSV file has headers of \"Yext ID\" (first) and \"Google ID\" (second).", 
-                                    type = ['csv', 'txt'],
-                                    help = 'It\'s recommended to use a Google Sheet [in this format](%s) and download as a CSV.' % exampleSheet)
-    
-    if uploaded_file is not None:
+    input_method = st.radio("Choose ID input method", ('Upload CSV', 'Paste IDs'), horizontal = True)
+
+    if input_method == 'Upload CSV':
+        uploaded_file = st.file_uploader("Provide a file with IDs. Make sure the CSV file has headers of \"Yext ID\" (first) and \"Google ID\" (second).", 
+                                        type = ['csv', 'txt'],
+                                        help = 'It\'s recommended to use a Google Sheet [in this format](%s) and download as a CSV.' % exampleSheet)
+
+        if uploaded_file is None:
+            return None
+
         if field == 'Update Primary Category':
             df = pd.read_csv(uploaded_file, usecols=['Google ID'])
         dataframe = pd.read_csv(uploaded_file, dtype = {'Yext ID': str, 'Google ID': str})
@@ -89,10 +121,24 @@ def uploadFile(field):
                 df = dataframe.dropna()
                 df = df.astype(str)
                 st.write(df)
-        # os.write(1, df.to_string().encode() + b"\n")
         return df
+
+    ids_text = st.text_area(
+        "Paste IDs",
+        help = 'Enter one row per location as: Yext ID, Google ID',
+        placeholder = '123456, 98765432101234567890\n234567, 87654321012345678901'
+    )
+    if not ids_text.strip():
+        return None
+
+    df = parseIdsText(ids_text, field)
+    st.write(df)
+    return df
     
 def parseFile(df, field):
+    if df is None:
+        st.error('Need a CSV upload or pasted IDs!')
+        exitApp(2)
     if field != 'Update Primary Category':
         listGoogleIds = df['Google ID'].tolist()
         listYextIds = df['Yext ID'].tolist()
